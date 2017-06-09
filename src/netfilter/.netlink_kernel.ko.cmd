@@ -1,1 +1,0 @@
-cmd_/opt/test/src/netfilter/netlink_kernel.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-3.11.0-12-generic/scripts/module-common.lds --build-id  -o /opt/test/src/netfilter/netlink_kernel.ko /opt/test/src/netfilter/netlink_kernel.o /opt/test/src/netfilter/netlink_kernel.mod.o
