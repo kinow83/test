@@ -1,0 +1,43 @@
+print_type= PRINT_ETHER_ADDR
+scan_local_f=TRUE
+
+
+
+        if(probe_echo_f){
+            if(multi_scan_local(idata.pfd, &idata, &(idata.ip6_local), PROBE_ICMP6_ECHO, ALL_NODES_MULTICAST_ADDR,\
+                        &host_local) == -1){
+                if(idata.verbose_f)
+                    puts("Error while learning link-local addresses with ICMPv6 Echo Requests");
+
+                exit(EXIT_FAILURE);
+            }
+        }
+
+
+        if(probe_unrec_f){
+            if(multi_scan_local(idata.pfd, &idata, &(idata.ip6_local), PROBE_UNREC_OPT, ALL_NODES_MULTICAST_ADDR,\
+                         &host_local) == -1){
+                if(idata.verbose_f)
+                    puts("Error while learning link-local addresses with Unrecognized options");
+
+                exit(EXIT_FAILURE);
+            }
+        }
+
+
+
+int multi_scan_local(
+	pcap_t *pfd, 
+	struct iface_data *idata, 
+	struct in6_addr *srcaddr, 
+	unsigned char type,               
+	const char *ptargetaddr, 
+	struct host_list *hlist)
+{
+
+}
+
+
+
+char iface[IFNAMSIZ] = "eth0";
+int ifindex = if_nametoindex(iface);
