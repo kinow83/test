@@ -10,6 +10,12 @@
 #include <linux/netlink.h>
 #include <linux/skbuff.h>
 
+/**
+ * for
+ * https://www.systutorials.com/docs/linux/man/7-netlink/
+ *
+ */
+
 #define MY_GROUP 0x33
 
 #define MY_PROTO NETLINK_USERSOCK
