@@ -10,15 +10,21 @@
 #include <linux/netlink.h>
 #include <linux/skbuff.h>
 
-#define NF_MULTI
+#define MY_GROUP 0x33
 
-#define NETLINK_USER 31
+#define MY_PROTO NETLINK_USERSOCK
+
+#ifdef MY_GROUP
+	const char *head = "multicast";
+#else
+	const char *head = "unicast";
+#endif
 
 struct sock *nl_sk = NULL;
 
-static void hello_nl_recv_msg(struct sk_buff* skb) {
-	char *msg = "Hello from kernel";
-	int msg_size = strlen(msg);
+static void nl_recv_and_send(struct sk_buff* skb) {
+	const char *message = "I'm Kernel";
+	size_t message_len = strlen(message);
 	struct nlmsghdr *nlh;
 	__u32 pid;
 	int res;
@@ -27,43 +33,54 @@ static void hello_nl_recv_msg(struct sk_buff* skb) {
 	printk(KERN_INFO "Entering: %s\n", __FUNCTION__);
 
 	nlh = (struct nlmsghdr*)skb->data;
-	printk(KERN_INFO "Netlink recv message palyload: %s\n", (char*)nlmsg_data(nlh));
+	printk(KERN_INFO "[%s] Netlink recv pid = %u\n", head, nlh->nlmsg_pid);
+	printk(KERN_INFO "[%s] Netlink recv len = %u\n", head, nlh->nlmsg_len);
+	printk(KERN_INFO "[%s] Netlink recv message palyload: %s\n", head, (char*)nlmsg_data(nlh));
+
 	pid = nlh->nlmsg_pid; // pid of sending process
 
-	skb_out = nlmsg_new(msg_size, 0);
+	skb_out = nlmsg_new(message_len, 0);
 	if (!skb_out) {
 		printk(KERN_ERR "Failed to allocate new skb\n");
 		return;
 	}
 
-	nlh = nlmsg_put(skb_out, 0, 0, NLMSG_DONE, msg_size, 0);
-#ifdef NF_MULTI
-	NETLINK_CB(skb_out).dst_group = 1;
+	nlh = nlmsg_put(skb_out, 0, 0, NLMSG_DONE, message_len, 0);
+#ifdef MY_GROUP
+	NETLINK_CB(skb_out).dst_group = MY_GROUP;
 #else
 	NETLINK_CB(skb_out).dst_group = 0; // not in multicast group
 #endif
-	strncpy(nlmsg_data(nlh), msg, msg_size);
+	strncpy(nlmsg_data(nlh), message, message_len);
 
-#ifdef NF_MULTI
+#ifdef MY_GROUP
 	res = nlmsg_multicast(nl_sk, skb_out, 0, 1, GFP_ATOMIC);
+	//res = netlink_broadcast(nl_sk, skb_out, 0, 1, GFP_KERNEL);
 #else
-	res = nlmsg_multic (nl_sk, skb_out, pid);
+	res = netlink_unicast(nl_sk, skb_out, pid, 0 /*MSG_DONTWAIT*/);
 #endif
 	if (res < 0) {
 		printk(KERN_ERR "Error while sending message to user\n");
 		return;
 	}
+	printk(KERN_INFO "[%s] Netlink send message = %s\n", head, message);
 	return;
 }
 
 static int hello_init(void) {
-	printk("Entering: %s\n", __FUNCTION__);
+	printk("[%s] Entering: %s\n", head, __FUNCTION__);
 
 	struct netlink_kernel_cfg cfg = {
-			.input = hello_nl_recv_msg,
+#ifdef MY_GROUP
+			.groups = MY_GROUP,
+#endif
+			.input = nl_recv_and_send,
 	};
 
-	nl_sk = netlink_kernel_create(&init_net, NETLINK_USER, &cfg);
+	///////////////////////////////////////////////////////////////////
+	// netlink_kernel_create
+	///////////////////////////////////////////////////////////////////
+	nl_sk = netlink_kernel_create(&init_net, MY_PROTO, &cfg);
 	if (!nl_sk) {
 		printk(KERN_ALERT "Error creating socket\n");
 		return -10;
