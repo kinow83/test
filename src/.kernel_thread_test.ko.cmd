@@ -1,1 +1,0 @@
-cmd_/root/source/cpp/workspace/test/src/kernel_thread_test.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /root/source/cpp/workspace/test/src/kernel_thread_test.ko /root/source/cpp/workspace/test/src/kernel_thread_test.o /root/source/cpp/workspace/test/src/kernel_thread_test.mod.o
