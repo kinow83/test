@@ -1,0 +1,1 @@
+cmd_/root/git/test/src/kthread_test.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /root/git/test/src/kthread_test.ko /root/git/test/src/kthread_test.o /root/git/test/src/kthread_test.mod.o

@@ -17,43 +17,33 @@
 #include <linux/delay.h>
 #include <linux/time.h>
 #include <linux/kthread.h>
+#include <linux/unistd.h>
 
+#define THREAD_MAX  3
 
-static struct task_struct *tid[] = {
-		NULL,
-		NULL,
-};
+static struct task_struct *tid[THREAD_MAX];
+
+static volatile long count = 0;
 
 static int thread_fn(void *data) {
-	int pid = 0;
-
-	if (!data) {
-		printk(KERN_ALERT "data is NULL\n");
-	} else {
-	    pid = *(int *)data;
-    }
-
+	int i = 0;
 	while (!kthread_should_stop()) {
-#if 0
-		current->state = TASK_INTERRUPTIBLE;
-#else
-        set_current_state(TASK_INTERRUPTIBLE);
-#endif
+		set_current_state(TASK_INTERRUPTIBLE);
 		schedule_timeout(HZ);
-		printk(KERN_INFO "kinow: kthread running [%u]: %s\n",
-				pid, __FUNCTION__);
+		for (i=0; i<1000; i++) {
+			count++;
+			count--;
+		}
+
+		printk(KERN_INFO "kinow: %d kthread running [%ld]: %s\n", current->pid, count, __FUNCTION__);
+
 	}
 	return 0;
 }
 
 static void kthread_release(void) {
 	int i;
-    
-	for (i=0; i<sizeof(tid)/sizeof(struct task_struct *); i++) {
-        printk("kthread stop ? %d\n", task_is_stopped(tid[i]));
-    }
-
-	for (i=0; i<sizeof(tid)/sizeof(struct task_struct *); i++) {
+	for (i=0; i<THREAD_MAX; i++) {
         if (tid[i] && !task_is_stopped(tid[i])) {
 		    kthread_stop(tid[i]);
         }
@@ -64,9 +54,10 @@ static int kthread_init(void) {
 	int i;
 	int err = -EINVAL;
 
-	for (i=0; i<sizeof(tid)/sizeof(struct task_struct *); i++) {
-		tid[i] = kthread_run(thread_fn, NULL, "counter");
-		printk("create pid = %u\n", tid[i]->pid);
+	memset(tid, 0, sizeof(struct task_struct *) * THREAD_MAX);
+
+	for (i=0; i<THREAD_MAX; i++) {
+		tid[i] = kthread_run(thread_fn, NULL, "counter-%d", i+1);
 		if (IS_ERR(tid[i])) {
 			goto out;
 		}
@@ -74,13 +65,13 @@ static int kthread_init(void) {
 	printk(KERN_INFO "init kthread success\n");
 	return 0;
 out:
-    kthread_release();
 	printk(KERN_INFO "init kthread failure\n");
+	kthread_release();
 	return err;
 }
 
 static void kthread_exit(void) {
-    kthread_release();
+	kthread_release();
 	printk(KERN_INFO "exit kthread\n");
 }
 
