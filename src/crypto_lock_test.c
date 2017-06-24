@@ -25,11 +25,13 @@
     if(type) CRYPTO_lock(CRYPTO_UNLOCK|CRYPTO_WRITE,type,__FILE__,__LINE__)
 	#define CRYPTO_atomic_add(addr,amount,result,type) \
     *result = type ? CRYPTO_add(addr,amount,type) : (*addr+=amount)
-
 #else
+#error not support openssl version
+	/*
 	typedef CRYPTO_RWLOCK *TEST_RWLOCK;
 	#define CRYPTO_THREAD_read_unlock(type)  CRYPTO_THREAD_unlock(type)
 	#define CRYPTO_THREAD_write_unlock(type) CRYPTO_THREAD_unlock(type)
+	*/
 #endif
 
 

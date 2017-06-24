@@ -19,6 +19,7 @@
 
 static struct nat_so_opt_t gopt;
 
+
 static int do_nat_set_ctl(struct sock *sk, int cmd, void __user* user, unsigned int len) {
 	int ret;
 	struct nat_so_opt_t opt;
