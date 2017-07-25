@@ -50,6 +50,17 @@ int numChainFuncPoint(Context *context)
 	return num;
 }
 
+void freeChainFuncPoint(ChainFuncPointList *chain)
+{
+	ChainFuncPointList *tmp = chain;
+	while (chain) {
+		tmp = chain->next;
+		free(chain->name);
+		free(chain);
+		chain = tmp;
+	}
+}
+
 int helloChain(Context *context, ChainFuncPointList *chain, void *data)
 {
 	printf("hello\n");
@@ -91,6 +102,10 @@ int main()
 	printf("num: %d\n", numChainFuncPoint(context));
 
 	doChain(context, NULL);
+
+	freeChainFuncPoint(context->chain_func_list);
+
+	free(context);
 
 	return 0;
 }
