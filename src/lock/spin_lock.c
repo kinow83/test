@@ -62,5 +62,5 @@ static void only_spin_lock_init(void)
 	g_th_id1 = kthread_run(thr_spin_lock_1, NULL, "LOCK1");
 	g_th_id2 = kthread_run(thr_spin_lock_2, NULL, "LOCK2");
 
-	return 0;
+	return;
 }
