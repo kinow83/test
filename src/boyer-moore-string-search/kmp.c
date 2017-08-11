@@ -114,4 +114,6 @@ int main(int argc, const char *argv[]) {
 [GCC}
 gcc kmp.c readfile.c bm_timediff.c -o kmp -O3
 
+kmp: source by github
+https://github.com/yaojingguo/c-code/blob/master/algorithm/kmp.c
 */
