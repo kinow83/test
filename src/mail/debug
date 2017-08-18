@@ -1,0 +1,19 @@
+
+tail -f /var/log/mail.log
+
+Aug 18 16:57:40 kinow-mint postfix/pickup[31214]: 01FDB2D60E00: uid=0 from=<kinow@naver.com>
+Aug 18 16:57:40 kinow-mint postfix/cleanup[29766]: 01FDB2D60E00: message-id=<20170818075740.01FDB2D60E00@kinow-mint>
+Aug 18 16:57:40 kinow-mint postfix/qmgr[2472]: 01FDB2D60E00: from=<kinow@naver.com>, size=368, nrcpt=1 (queue active)
+
+Aug 18 16:57:40 kinow-mint postfix/smtp[29768]: connect to gmail-smtp-in.l.google.com[2404:6800:4008:c00::1b]:25: Network is unreachable
+	smtp_connect.c
+		- smtp_connect_unix
+			- smtp_connect_sock()
+		- smtp_connect_addr
+			- smtp_connect_sock()
+
+		- smtp_connect_inet()
+			- smtp_helo(state)
+
+Aug 18 16:57:41 kinow-mint postfix/smtp[29768]: 01FDB2D60E00: to=<kinow83@gmail.com>, relay=gmail-smtp-in.l.google.com[74.125.203.26]:25, delay=1.3, delays=0.09/0/0.81/0.43, dsn=2.0.0, status=sent (250 2.0.0 OK 1503043061 j2si713724pgn.681 - gsmtp)
+Aug 18 16:57:41 kinow-mint postfix/qmgr[2472]: 01FDB2D60E00: removed
