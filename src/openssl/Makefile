@@ -29,8 +29,8 @@ openssl-1.0.1i/.built:	openssl-fips-2.0.8/.built openssl-1.0.1i.tar.gz
 	cd openssl-1.0.1i; \
 	./config fips shared --openssldir=$$PWD/../ssl --with-fipsdir=$$PWD/../ssl/fips2.0; \
 	make depend; \
-	make; \
-	make install; \
+	make; 
+#	make install; \
 	touch .built
 
 
