@@ -1,0 +1,26 @@
+[RCU]
+Read Copy Update
+ref: http://jake.dothome.co.kr/rcu/
+ref: http://summerlight.tistory.com/entry/%EB%8F%99%EA%B8%B0%ED%99%94-%EA%B8%B0%EB%B2%95-Read-Copy-Update
+ref: http://xster.tistory.com/48 (lock free)
+기능
+ - read-side overhead를 최소화하는데 목적,
+   동기화 로직이 읽기 동작에 더 많은 비율로 사용되는 경우에만 사용 (수정 동작 10%미만 권장)
+   
+장점
+ - 성능향샹 (특히 read)
+    zero wait, zero overhead
+ - 확장성 ??
+ - deadlock X
+ - priority inversion X (우선순위 뒤바꿈??) : ref: http://jake.dothome.co.kr/priority-inheritance/
+ - unbounded latency X ???
+ - 메모리 leak hazard X ???
+ 
+단점
+ - 사용법 고난도
+ - 쓰기 동작에서는 개선 여지 없음 
+ 
+ 
+ 
+비교
+ - Reader-Writer lock 방식과 비슷
