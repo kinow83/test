@@ -1,0 +1,79 @@
+Thread Local Storage (TLS)
+
+설명: 해당 쓰레드에서만 유효한 변수
+표준:  C99, C++98 표준 __thread 키워드
+정의: #define __thread __declspec( thread )
+
+
+사용법:
+ 1. global, static 변수만 사용가능 (class 멤버 변수도 적용)
+ 2. SO (DLL)과 로컬영역을 넘나들면 뻑난다??
+ 3. 타입에 대한 한정자로 사용이 불가능하다.
+  - const처럼 쓰지말고???, 무조건 타입 앞에 붙이란다.(VS만?) <- 이해 불가
+ 4. 객체 이름과 이름 없는 객체에만 쓸 수 있다.
+ 5. 앞에 불을 수 있는 건 static, extern 뿐이다.
+ 6. 클래스 자체를 TLS에 넣는 경우 생성자, 소멸자가 없어야한다.
+ 
+ 
+예제:
+#include <iostream>
+using namespace std;
+
+__thread int gTest1;      // 성공
+
+__thread void func(void); // 실패
+
+void func(__thread int lTest2) { } // 실패
+
+class A {
+    static __thread int mTest3;   // 성공
+    __thread int mTest4;          // 실패
+};
+
+int func(void) {
+    static __thread int lTest5; // 성공
+    __thread int lTest6;   // 실패
+}
+
+__thread union {
+    int i;
+    char p[sizeof(int)];
+} gTest7;   // 성공
+
+__thread struct {
+    int i;
+    char p[sizeof(int)];
+} gTest8;   // 성공
+
+class MyClass {
+public:
+    int i;
+    MyClass() i(0) {}
+};
+
+__thread MyClass cTest9; // 실패 ?? 왜?? 전역 변수 아닌가?? >>> 생성자를 주석처리하면 성공
+============================================================================
+ ‘t3’ cannot be thread-local because it has non-POD type ‘TestClass’
+ POD란? Plain Old Data의 약어. 즉, ANSI C와 호환되는 타입들을 뜻함.
+ 반대로 ANSI와 호환 될수 없는 타입은???
+ - 단순한 예로 클래스에 private이나 protected 멤버(non-static)가 있다면 
+    그 클래스는 POD 타입이 될 수 없다.
+	
+ POD 타입이 될 수 없는 예를 살펴보면 다음과 같다.
+ 1. POD 타입이 아닌 멤버를 갖고 있는 클래스
+ 2. 어떤 클래스의 멤버를 가리키는 포인터를 갖고 있는 클래스 (i.e. T C::* 타입을 갖고 있는 클래스)
+ 3. 어떤 클래스의 멤버함수를 가리키는 포인터를 갖고 있는 클래스 (i.e. T (C::*)(...) 타입을 갖고 있는 클래스)
+ 4. 참조타입의 멤버를 갖고 있는 클래스 (i.e. T& 타입을 갖고 있는 클래스)
+ 5. 사용자 정의 대입연산자 또는 파괴자를 갖고 있는 클래스
+ 6. 사용자 선언의 생성자를 갖고 있는 클래스
+ 7. 가상함수를 갖고 있는 클래스
+ 8. 기반클래스를 갖고 있는 클래스
+============================================================================ 
+
+int __thread * gTest9; // gcc 성공
+
+int
+main(int,char**)
+{
+    return 0;
+}
