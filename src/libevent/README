@@ -1,0 +1,159 @@
+
+==========================================
+1. Libevent R1: Setting up the Libevent library
+==========================================
+Ref-URL: http://wiki.pchero21.com/wiki/Libevent_R1:_Setting_up_the_Libevent_library#cite_note-1
+
+1-1. Log messages in Libevent (>= Libevent 2.1.1-alpha)
+ 
+typedef	void (*event_log_cb)(int severity, const char *msg);
+void event_set_log_callback(event_log_cb cb);
+
+!!NOTE!!
+사용자가 작성한 event_log_cb callback() 함수 안에서 Libevent 함수를 호출하면 안된다. 예를 들어, bufferevents 를 사용해서 네트워크 소켓으로 경고 메시지를 보내는 로그 콜백 함수가 있다고 하면, 제대로 동작하지 않을뿐더러 어디가 문제인지 찾아내기도 쉽지 않을 것이다. 나중 버전의 Libevent 에서는 이런 제약이 사라질 수도 있겠지만, 지금은 호출하면 안된다.
+
+1-2. Handling fatal errors (>= Libevent 2.0.3-alpha 버전)
+Libevent에서 치명적인 내부 에러가 발생했을때는, 기본적으로 exit()를 호출하거나 abort()를 호출하여 동작중인 프로세스를 정지시킨다. 이런 상황에서는 항상 어딘가에 버그가 있다는 것을 의미한다. 여러분의 코드 혹은 Libevent 자체에..
+만약 원한다면 exit() 혹은 abort() 호출하는 것 대신에 정상적인 프로그램 종료를 하도록 재설정할 수도 있다.
+
+typedef void (*event_fatal_cb)(int err);
+void event_set_fatal_callback(event_fatal_cb cb);
+
+!!NOTE!!
+새로운 함수 생성시, 절대로 Libevent 관련 핸들러를 리턴하면 안되다. 만약 그렇게 하면 이상한 동작을 일으키거나 프로그램이 자동 종료될 수가 있다.
+
+1-3. Memory management
+
+
+
+1-4. Locks and threading
+이미 알고 있드시, 멀티 스레드 환경에서의 데이터 접근은 그리 안전하지가 못하다.
+Libevent에서는 다음의 세 가지 데이터 방식을 가진다.
+ - 싱글 스레드 데이터 방식 : 멀티 스레드 환경에서는 절대로 안전하지 않다.
+ - optionally-locked 데이터 방식 : 데이터에 접근하고 나올때마다 Lock 설정을 해주어야 한다.
+ - always-locked : 항상 lock 방식으로 동작되며 멀티 스레드 환경에서 안전하다.
+
+Libevent 에서 Locking 을 사용하고자 한다면, 어떤 방식의 Locking 을 사용하고자 하는지 설정해줘야 한다. 반드시 Libevent 최초 설정시 이를 지정해주어야 한다. 그래야만 지정된 방식으로 Libevent 데이터 방식으로 메모리가 관리될 수 있기 때문이다. 또한 pthread 라이브러리 혹은 Windows threading 방식을 사용한다면, 이를 위해 미리 지정되어 있는 방식을 사용할 수 있다.
+
+<interface>
+#ifdef WIN32
+	int evthread_use_windows_threads(void);
+	#define EVTHREAD_USE_WINDOWS_THREADS_IMPLEMENTED
+#endif
+#ifdef _EVENT_HAVE_PTHREADS
+	int evthread_use_pthreads(void);
+	#define EVTHREAD_USE_PTHREADS_IMPLEMENTED
+#endif
+
+ - Locks
+ - locking
+ - unlocking
+ - lock allocation
+ - lock destruction
+ - Conditions
+ - condition variable creation
+ - condition variable destruction
+ - waiting on a condition variable
+ - signaling/broadcasting to a condition variable
+ - Threads
+ - thread ID detection
+그런 다음 evthread_set_lock_callbacks() 와 evthread_set_id_callback 인터페이스를 통해 설정을 해주어야 한다.
+
+
+1-5. Freeing global Lievent structures
+Libevent 와 관련된 모든 Object 들을 free 했다고 하더라도, 여전히 global 변수 몇개는 남아있게 된다. 이는 별로 문제 될 건 없는데(프로그램 종료시, 자동으로 모두 clean 된다), 다만 프로그램 디버깅시 아직 메모리가 남아있는 것에 혼란할 수 있다. 이를 해결하고 싶다면, 다음의 함수를 호출하면 된다.
+
+void libevent_global_shutdown(void);
+
+
+
+==========================================
+2.Libevent R2: Getting an event base
+==========================================
+Ref: http://wiki.pchero21.com/wiki/Libevent_R2:_Getting_an_event_base
+
+Libevent 를 사용하기전, 하나 이상의 event_base_structure를 생성해야 한다. 
+
+각각의 event_base_structure 는 설정된 이벤트를 감시하며, Poll 한다.
+
+만약 event_base 가 Locking 을 사용한다면 멀티 스레드 환경에서도 사용이 가능하지만, 
+
+만약 사용하지 않는다면 반드시 싱글 스레드 환경에서만 사용해야 한다. 
+
+그리고 멀티 스레드 IO polling 을 하고자 한다면, 각각의 스레드마다 event_base 를 생성해 주어야 한다.
+
+각각의 event_base는 어떤 이벤트들이 준비됐는지 확인하기 위해 "메소드" 혹은 "백엔드"를 사용한다. 다음과 같은 메소드들이 있다.
+
+    - select
+    - poll
+    - epoll
+    - kqueue
+    - devpoll
+    - evport
+    - win32
+
+사용자는 환경 변수를 통해서 특정 백엔드/메소드 를 비활성화 시킬 수 있다. 예를 들어 kqueue 를 비활성화 시키고 싶다면 EVENT_NOKQUEUE 환경변수를 설정하면 된다. 만약 프로그램 내에서 특정 백엔드/메소드를 비활성화 시키고 싶다면 event_config_avoid_method() 를 사용하면 된다. 
+
+
+2-1. Setting up a default event_base
+event_base_new() 함수는 새로운 event base를 기본 설정상태로 생성하고 리턴한다. 환경 변수를 검사하고 새로 생성한 event_base 포인터를 넘겨주는데, 만약 에러가 발생하면 NULL을 리턴한다.
+만약 여러 개의 메소드가 있다면, 동작 OS 에서 가장 빨리 작동하는 메소드를 자동으로 선택한다. 
+
+struct event_base *event_base_new(void);
+
+2-2. Setting up a complicated event_base
+만약 event_base 에 대해 더 세밀한 설정을 하고 싶다면 event_config 를 사용할 수 있다. event_config 에 원하는 내용을 설정하고, event_base 생성시 인자값으로 사용할 수 있다. 
+
+struct event_config *event_config_new(void);
+struct event_base *event_base_new_with_config(const struct event_config *cfg);
+void event_config_free(struct event_config *cfg);
+
+위 함수들을 event_base 와 함께 사용하고자 한다면 먼저 event_config_new() 를 사용해 event_config 를 생성하고, 다른 함수들을 통해 event_config 를 원하는 내용으로 설정한다. 그 후에, event_base_new_with_config() 함수와 함께 사용하여 event_base 를 생성하면 된다. 그리고, 사용이 끝난 event_config 는 event_config_free() 로 해제하면 된다. 
+
+!!NOTE!!
+event_config 를 설정할 때, 설정사항을 만족하지 못하는 메소드를 찾기가 그리 어렵지 않다. 예를 들면 Libevent 2.0.1-alpha 버전을 사용할 때, 윈도우즈에서 O(1)을 만족하는 백엔드는 없다. 그리고 리눅스에서 EV_FEATURE_FDS 와 EV_FEATURE_O1을 동시에 만족하는 백엔드는 없다. 만약 Libevent에서 설정 사항을 만족하는 메소드를 찾지 못할 경우, NULL 을 리턴한다.
+
+
+
+
+
+
+
+
+
+
+
+
+1. void event_init();
+libevent를 사용하기에 앞서서 초기화 해주기 위하여 event_init 함수를 호출해주어야 합니다. 이는 전역 event base를 초기화 하는 역할을 수행하는데 libevent는 전역 event base를 사용하는 함수군과 할당 event base를 사용하는 함수군이 나뉘어져 있습니다. 일반적으로 전역 event base만 사용해도 크게 불편함이 없습니다.
+
+2. int event_dispatch();
+event를 실제로 처리하는 함수가 event_dispatch 함수입니다. 이 함수는 event_loop(0) 을 호출하는 것과 같은 기능을 하는데 event 처리중에 오류가 발생할때에만 반환을 하게 됩니다.
+
+3. int event_loop(int flags);
+event들에 대한 1회의 실행루프를 제공하며 flags 인자로 EVLOOP_ONCE, EVLOOP_NONBLOCK을 지정할수 있습니다. 만약 flags를 0으로 지정하면 event_dispatch함수와 동일한 역할을 합니다.
+
+EVLOOP_NONBLOCK: 
+
+4. void event_set(struct event ∗ev, int fd, short event, void (∗fn)(int, short, void ∗), void ∗arg);
+ev 구조체를 초기화 하는 역할을 합니다. 함수의 event 인자로는 EV_READ, EV_WRITE, EV_PERSIST 등이 지정될수 있으며 감시하고자 하는 event의 성격이라고 할수 있습니다. 해당 event가 발생하면 호출될 fn도 지정하게 되는게 이게 가장 중요한 역할을 실제로 수행하도록 우리가 짜 넣어야 하는 함수가 되겠습니다.
+#define EV_TIMEOUT      0x01
+#define EV_READ            0x02
+#define EV_WRITE          0x04
+#define EV_SIGNAL        0x08
+#define EV_PERSIST      0x10
+#define EV_ET                0x20
+
+<The event flags>
+EV_TIMEOUT: 같이 설정한 시간뒤에 active 된다.
+EV_READ: 등록한 파일 디스크립터가 Read 가능한 상태일 때 active 된다.
+EV_WRITE: 등록한 파일 디스크립터가 Write 가능한 상태일 때 active 된다.
+EV_SIGNAL: 등록한 시그널이 감지될 때 active 된다.
+EV_PERSIST: 해당 이벤트는 "영구적"임을 나타낸다.
+EV_ET:  event_base 의 백엔드가 Edge-trigger 를 지원할 때, 해당 이벤트가 Edge-triggered 를 사용한다는 것을 나타낸다. EV_READ/EV_WRITE 의 Edge-trigger 버전이다.
+
+기본적으로 이벤트가 pending 상태에서 active 상태가 되면, 등록된 callback 함수가 실행된 직후, non-pending 상태가 된다. 따라서 만약 해당 이벤트를 다시금 pending 상태로 만들고 싶다면, 콜백 함수 내에서 event_add() 통해 다시금 이벤트를 등록시켜주어야 한다.
+하지만 만약 EV_PERSIST 플래그가 세팅되어 있다면, 이벤트는 영구적이 된다. 무슨 말이냐면, 이벤트가 active 상태가 되어 콜백을 실행시킨 이후에 다시 pending 상태로 돌아온다는 뜻이다. 만약 non-pending 상태로 만들고 싶다면, event_del() 를 사용하면 된다.
+timeout과 persistent 옵션을 같이 사용하게 되면, timout 와 trigger 를 공유하는 형태가 된다. 예를 들어 EV_READ|EV_PERSIST 와 timeout 5초를 함께 설정하게 되면 다음과 같이 된다.
+    - 소켓이 read 가능하면 active된다.
+    - 마지막으로 active 된 지 매 5 초 후마다 active 된다.
