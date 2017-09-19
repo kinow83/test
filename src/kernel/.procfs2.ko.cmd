@@ -1,0 +1,1 @@
+cmd_/home/kinow/git/common/foolib/src/kernel/procfs2.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/kinow/git/common/foolib/src/kernel/procfs2.ko /home/kinow/git/common/foolib/src/kernel/procfs2.o /home/kinow/git/common/foolib/src/kernel/procfs2.mod.o

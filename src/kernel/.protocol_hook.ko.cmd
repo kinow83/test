@@ -1,0 +1,1 @@
+cmd_/home/kinow/git/common/foolib/src/kernel/protocol_hook.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/kinow/git/common/foolib/src/kernel/protocol_hook.ko /home/kinow/git/common/foolib/src/kernel/protocol_hook.o /home/kinow/git/common/foolib/src/kernel/protocol_hook.mod.o

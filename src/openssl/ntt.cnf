@@ -1,0 +1,59 @@
+[ ca ]
+default_ca = CA_default
+
+
+[ CA_default ]
+dir = ./CA
+database = $dir/index.txt
+new_certs_dir = $dir/certs
+certificate = $dir/rootcert.pem
+serial = $dir/serial
+private_key = $dir/rootkey.pem
+default_days = 365
+default_crl_days = 30
+default_md = sha1
+policy = policy_match
+x509_extensions = v3_ca
+
+
+[ policy_match ]
+countryName = supplied
+stateOrProvinceName = supplied
+organizationName = supplied
+organizationalUnitName = supplied
+commonName = supplied
+emailAddress = supplied
+
+
+[ v3_ca ]
+basicConstraints = CA:false
+
+
+[ req ]
+default_bits = 1024
+default_keyfile = privkey.pem
+default_md = sha1
+default_days = 365
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+
+
+[ req_distinguished_name ]
+countryName = Country Name (2 letter code)
+	countryName_default = KR
+	countryName_min = 2
+	countryName_max = 2
+	stateOrProvinceName = State or Province Name (full name)
+	stateOrProvinceName_default = SEOUL
+	localityName = Locality Name (eg, city)
+	localityName_default = SOCHO
+	organizationName = Organization Name (eg, company)
+	organizationName_default = SearchCast
+	organizationalUnitName = Web Dev
+	organizationalUnitName_default = Web Dev
+	commonName = NTT_Test_CA
+	commonName_default = NTT_Test_CA
+	commonName_max = 64
+	emailAddress = ntt@searchcast.net
+	emailAddress_default = ntt@searchcast.net
+	emailAddress_max = 40

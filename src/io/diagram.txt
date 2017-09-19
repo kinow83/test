@@ -1,0 +1,28 @@
+
+
+NetSock
+- m_sock
+- getSock()
+- closeSock()
+- option()
+
+
+NetServerSock
+- 
+
+
+
+
+------------------------------------------
+InputStream
+- read()
+- close()
+
+OutputStream
+- write()
+- close()
+
+
+NetInputStream : InputStream
+
+NetOutputStream : OutputStream

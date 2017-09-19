@@ -1,0 +1,107 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BIPBUFFER_H	bipbuffer.h	2;"	d
+CC	Makefile	/^CC     = gcc$/;"	m
+CCFLAGS	Makefile	/^CCFLAGS = -I. -Itests -g -O2 -Wall -Werror -W -fno-omit-frame-pointer -fno-common -fsigned-char $(GCOV_CCFLAGS)$/;"	m
+CU_ALLOC	tests/CuTest.h	12;"	d
+CU_TEST_H	tests/CuTest.h	2;"	d
+CuAssert	tests/CuTest.h	73;"	d
+CuAssertDblEquals	tests/CuTest.h	80;"	d
+CuAssertDblEquals_LineMsg	tests/CuTest.c	/^void CuAssertDblEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message, $/;"	f
+CuAssertDblEquals_Msg	tests/CuTest.h	81;"	d
+CuAssertIntEquals	tests/CuTest.h	78;"	d
+CuAssertIntEquals_LineMsg	tests/CuTest.c	/^void CuAssertIntEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message, $/;"	f
+CuAssertIntEquals_Msg	tests/CuTest.h	79;"	d
+CuAssertPtrEquals	tests/CuTest.h	82;"	d
+CuAssertPtrEquals_LineMsg	tests/CuTest.c	/^void CuAssertPtrEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message, $/;"	f
+CuAssertPtrEquals_Msg	tests/CuTest.h	83;"	d
+CuAssertPtrNotNull	tests/CuTest.h	85;"	d
+CuAssertPtrNotNullMsg	tests/CuTest.h	86;"	d
+CuAssertStrEquals	tests/CuTest.h	76;"	d
+CuAssertStrEquals_LineMsg	tests/CuTest.c	/^void CuAssertStrEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message, $/;"	f
+CuAssertStrEquals_Msg	tests/CuTest.h	77;"	d
+CuAssertTrue	tests/CuTest.h	74;"	d
+CuAssert_Line	tests/CuTest.c	/^void CuAssert_Line(CuTest* tc, const char* file, int line, const char* message, int condition)$/;"	f
+CuFail	tests/CuTest.h	72;"	d
+CuFailInternal	tests/CuTest.c	/^static void CuFailInternal(CuTest* tc, const char* file, int line, CuString* string)$/;"	f	file:
+CuFail_Line	tests/CuTest.c	/^void CuFail_Line(CuTest* tc, const char* file, int line, const char* message2, const char* message)$/;"	f
+CuStrAlloc	tests/CuTest.c	/^char* CuStrAlloc(int size)$/;"	f
+CuStrCopy	tests/CuTest.c	/^char* CuStrCopy(const char* old)$/;"	f
+CuString	tests/CuTest.h	/^} CuString;$/;"	t	typeref:struct:__anon2
+CuStringAppend	tests/CuTest.c	/^void CuStringAppend(CuString* str, const char* text)$/;"	f
+CuStringAppendChar	tests/CuTest.c	/^void CuStringAppendChar(CuString* str, char ch)$/;"	f
+CuStringAppendFormat	tests/CuTest.c	/^void CuStringAppendFormat(CuString* str, const char* format, ...)$/;"	f
+CuStringInit	tests/CuTest.c	/^void CuStringInit(CuString* str)$/;"	f
+CuStringInsert	tests/CuTest.c	/^void CuStringInsert(CuString* str, const char* text, int pos)$/;"	f
+CuStringNew	tests/CuTest.c	/^CuString* CuStringNew(void)$/;"	f
+CuStringResize	tests/CuTest.c	/^void CuStringResize(CuString* str, int newSize)$/;"	f
+CuSuite	tests/CuTest.h	/^} CuSuite;$/;"	t	typeref:struct:__anon3
+CuSuiteAdd	tests/CuTest.c	/^void CuSuiteAdd(CuSuite* testSuite, CuTest *testCase)$/;"	f
+CuSuiteAddSuite	tests/CuTest.c	/^void CuSuiteAddSuite(CuSuite* testSuite, CuSuite* testSuite2)$/;"	f
+CuSuiteDetails	tests/CuTest.c	/^void CuSuiteDetails(CuSuite* testSuite, CuString* details)$/;"	f
+CuSuiteInit	tests/CuTest.c	/^void CuSuiteInit(CuSuite* testSuite)$/;"	f
+CuSuiteNew	tests/CuTest.c	/^CuSuite* CuSuiteNew(void)$/;"	f
+CuSuiteRun	tests/CuTest.c	/^void CuSuiteRun(CuSuite* testSuite)$/;"	f
+CuSuiteSummary	tests/CuTest.c	/^void CuSuiteSummary(CuSuite* testSuite, CuString* summary)$/;"	f
+CuTest	tests/CuTest.h	/^struct CuTest$/;"	s
+CuTest	tests/CuTest.h	/^typedef struct CuTest CuTest;$/;"	t	typeref:struct:CuTest
+CuTestInit	tests/CuTest.c	/^void CuTestInit(CuTest* t, const char* name, TestFunction function)$/;"	f
+CuTestNew	tests/CuTest.c	/^CuTest* CuTestNew(const char* name, TestFunction function)$/;"	f
+CuTestRun	tests/CuTest.c	/^void CuTestRun(CuTest* tc)$/;"	f
+GCOV_CCFLAGS	Makefile	/^GCOV_CCFLAGS = -fprofile-arcs -ftest-coverage$/;"	m
+GCOV_OUTPUT	Makefile	/^GCOV_OUTPUT = *.gcda *.gcno *.gcov $/;"	m
+HUGE_STRING_LEN	tests/CuTest.h	14;"	d
+MAX_TEST_CASES	tests/CuTest.h	90;"	d
+RunAllTests	tests/make-tests.sh	/^    RunAllTests();$/;"	f
+STRING_INC	tests/CuTest.h	16;"	d
+STRING_MAX	tests/CuTest.h	15;"	d
+SUITE_ADD_TEST	tests/CuTest.h	92;"	d
+TestFunction	tests/CuTest.h	/^typedef void (*TestFunction)(CuTest *);$/;"	t
+Testbipbuffer_bipbuffers_independant_of_each_other	tests/test_bipbuffer.c	/^void Testbipbuffer_bipbuffers_independant_of_each_other(CuTest * tc)$/;"	f
+Testbipbuffer_bipbuffers_independant_of_each_other_with_no_polling	tests/test_bipbuffer.c	/^void Testbipbuffer_bipbuffers_independant_of_each_other_with_no_polling($/;"	f
+Testbipbuffer_cant_poll_nonexistant	tests/test_bipbuffer.c	/^void Testbipbuffer_cant_poll_nonexistant(CuTest * tc)$/;"	f
+Testbipbuffer_cant_poll_twice_when_released	tests/test_bipbuffer.c	/^void Testbipbuffer_cant_poll_twice_when_released(CuTest * tc)$/;"	f
+Testbipbuffer_cant_read_len_of_what_we_didnt_offer	tests/test_bipbuffer.c	/^void Testbipbuffer_cant_read_len_of_what_we_didnt_offer(CuTest * tc)$/;"	f
+Testbipbuffer_is_empty_after_init	tests/test_bipbuffer.c	/^void Testbipbuffer_is_empty_after_init(CuTest * tc)$/;"	f
+Testbipbuffer_is_empty_after_poll_release	tests/test_bipbuffer.c	/^void Testbipbuffer_is_empty_after_poll_release(CuTest * tc)$/;"	f
+Testbipbuffer_is_not_empty_after_offer	tests/test_bipbuffer.c	/^void Testbipbuffer_is_not_empty_after_offer(CuTest * tc)$/;"	f
+Testbipbuffer_offer_and_poll	tests/test_bipbuffer.c	/^void Testbipbuffer_offer_and_poll(CuTest * tc)$/;"	f
+Testbipbuffer_offer_and_poll_across_boundary	tests/test_bipbuffer.c	/^void Testbipbuffer_offer_and_poll_across_boundary(CuTest * tc)$/;"	f
+Testbipbuffer_set_size_with_init	tests/test_bipbuffer.c	/^void Testbipbuffer_set_size_with_init(CuTest * tc)$/;"	f
+Testbipbuffer_spaceused_is_zero_after_poll_release	tests/test_bipbuffer.c	/^void Testbipbuffer_spaceused_is_zero_after_poll_release(CuTest * tc)$/;"	f
+Txestbipbuffer_cant_offer_if_full	tests/test_bipbuffer.c	/^void Txestbipbuffer_cant_offer_if_full(CuTest * tc)$/;"	f
+__check_for_switch_to_b	bipbuffer.c	/^static void __check_for_switch_to_b(bipbuf_t* me)$/;"	f	file:
+a_end	bipbuffer.h	/^    unsigned int a_start, a_end;$/;"	m	struct:__anon1
+a_start	bipbuffer.h	/^    unsigned int a_start, a_end;$/;"	m	struct:__anon1
+b_end	bipbuffer.h	/^    unsigned int b_end;$/;"	m	struct:__anon1
+b_inuse	bipbuffer.h	/^    int b_inuse;$/;"	m	struct:__anon1
+bipbuf_free	bipbuffer.c	/^void bipbuf_free(bipbuf_t* me)$/;"	f
+bipbuf_init	bipbuffer.c	/^void bipbuf_init(bipbuf_t* me, const unsigned int size)$/;"	f
+bipbuf_is_empty	bipbuffer.c	/^int bipbuf_is_empty(const bipbuf_t* me)$/;"	f
+bipbuf_new	bipbuffer.c	/^bipbuf_t *bipbuf_new(const unsigned int size)$/;"	f
+bipbuf_offer	bipbuffer.c	/^int bipbuf_offer(bipbuf_t* me, const unsigned char *data, const int size)$/;"	f
+bipbuf_peek	bipbuffer.c	/^unsigned char *bipbuf_peek(const bipbuf_t* me, const unsigned int size)$/;"	f
+bipbuf_poll	bipbuffer.c	/^unsigned char *bipbuf_poll(bipbuf_t* me, const unsigned int size)$/;"	f
+bipbuf_size	bipbuffer.c	/^int bipbuf_size(const bipbuf_t* me)$/;"	f
+bipbuf_sizeof	bipbuffer.c	/^size_t bipbuf_sizeof(const unsigned int size)$/;"	f
+bipbuf_t	bipbuffer.h	/^} bipbuf_t;$/;"	t	typeref:struct:__anon1
+bipbuf_unused	bipbuffer.c	/^int bipbuf_unused(const bipbuf_t* me)$/;"	f
+bipbuf_used	bipbuffer.c	/^int bipbuf_used(const bipbuf_t* me)$/;"	f
+buffer	tests/CuTest.h	/^	char* buffer;$/;"	m	struct:__anon2
+count	tests/CuTest.h	/^	int count;$/;"	m	struct:__anon3
+data	bipbuffer.h	/^    unsigned char data[];$/;"	m	struct:__anon1
+failCount	tests/CuTest.h	/^	int failCount;$/;"	m	struct:__anon3
+failed	tests/CuTest.h	/^	int failed;$/;"	m	struct:CuTest
+function	tests/CuTest.h	/^	TestFunction function;$/;"	m	struct:CuTest
+jumpBuf	tests/CuTest.h	/^	jmp_buf *jumpBuf;$/;"	m	struct:CuTest
+length	tests/CuTest.h	/^	int length;$/;"	m	struct:__anon2
+list	tests/CuTest.h	/^	CuTest* list[MAX_TEST_CASES];$/;"	m	struct:__anon3
+message	tests/CuTest.h	/^	const char* message;$/;"	m	struct:CuTest
+name	tests/CuTest.h	/^	const char* name;$/;"	m	struct:CuTest
+ran	tests/CuTest.h	/^	int ran;$/;"	m	struct:CuTest
+size	bipbuffer.h	/^    unsigned long int size;$/;"	m	struct:__anon1
+size	tests/CuTest.h	/^	int size;$/;"	m	struct:__anon2

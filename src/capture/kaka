@@ -1,0 +1,70 @@
+In file included from /usr/include/stdlib.h:42:0,
+                 from CaptureARP.cpp:9:
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:79:27: error: redeclaration of ‘unsigned int wait::<anonymous struct>::__w_retcode’
+  unsigned int __w_retcode:8;
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:74:27: note: previous declaration ‘unsigned int wait::<anonymous struct>::__w_retcode’
+  unsigned int __w_retcode:8; /* Return code if exited normally.  */
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:80:28: error: redeclaration of ‘unsigned int wait::<anonymous struct>::__w_coredump’
+  unsigned int __w_coredump:1;
+                            ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:73:28: note: previous declaration ‘unsigned int wait::<anonymous struct>::__w_coredump’
+  unsigned int __w_coredump:1; /* Set if dumped core.  */
+                            ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:81:27: error: redeclaration of ‘unsigned int wait::<anonymous struct>::__w_termsig’
+  unsigned int __w_termsig:7;
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:72:27: note: previous declaration ‘unsigned int wait::<anonymous struct>::__w_termsig’
+  unsigned int __w_termsig:7; /* Terminating signal.  */
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:93:27: error: redeclaration of ‘unsigned int wait::<anonymous struct>::__w_stopsig’
+  unsigned int __w_stopsig:8; /* Stopping signal.  */
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:88:27: note: previous declaration ‘unsigned int wait::<anonymous struct>::__w_stopsig’
+  unsigned int __w_stopsig:8; /* Stopping signal.  */
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:94:27: error: redeclaration of ‘unsigned int wait::<anonymous struct>::__w_stopval’
+  unsigned int __w_stopval:8; /* W_STOPPED if stopped.  */
+                           ^
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:87:27: note: previous declaration ‘unsigned int wait::<anonymous struct>::__w_stopval’
+  unsigned int __w_stopval:8; /* W_STOPPED if stopped.  */
+                           ^
+In file included from CaptureARP.cpp:20:0:
+/usr/include/netinet/ip.h:114:23: error: redeclaration of ‘unsigned int ip::ip_v’
+     unsigned int ip_v:4;  /* version */
+                       ^
+/usr/include/netinet/ip.h:111:23: note: previous declaration ‘unsigned int ip::ip_v’
+     unsigned int ip_v:4;  /* version */
+                       ^
+/usr/include/netinet/ip.h:115:24: error: redeclaration of ‘unsigned int ip::ip_hl’
+     unsigned int ip_hl:4;  /* header length */
+                        ^
+/usr/include/netinet/ip.h:110:24: note: previous declaration ‘unsigned int ip::ip_hl’
+     unsigned int ip_hl:4;  /* header length */
+                        ^
+/usr/include/netinet/ip.h:144:27: error: redeclaration of ‘unsigned int ip_timestamp::ipt_oflw’
+     unsigned int ipt_oflw:4;  /* overflow counter */
+                           ^
+/usr/include/netinet/ip.h:141:27: note: previous declaration ‘unsigned int ip_timestamp::ipt_oflw’
+     unsigned int ipt_oflw:4;  /* overflow counter */
+                           ^
+/usr/include/netinet/ip.h:145:26: error: redeclaration of ‘unsigned int ip_timestamp::ipt_flg’
+     unsigned int ipt_flg:4;  /* flags, see below */
+                          ^
+/usr/include/netinet/ip.h:140:26: note: previous declaration ‘unsigned int ip_timestamp::ipt_flg’
+     unsigned int ipt_flg:4;  /* flags, see below */
+                          ^
+In file included from CaptureARP.cpp:21:0:
+/usr/include/netinet/tcp.h:97:18: error: redeclaration of ‘u_int8_t tcphdr::<anonymous union>::<anonymous struct>::th_off’
+  u_int8_t th_off:4;  /* data offset */
+                  ^
+/usr/include/netinet/tcp.h:94:18: note: previous declaration ‘u_int8_t tcphdr::<anonymous union>::<anonymous struct>::th_off’
+  u_int8_t th_off:4;  /* data offset */
+                  ^
+/usr/include/netinet/tcp.h:98:17: error: redeclaration of ‘u_int8_t tcphdr::<anonymous union>::<anonymous struct>::th_x2’
+  u_int8_t th_x2:4;  /* (unused) */
+                 ^
+/usr/include/netinet/tcp.h:93:17: note: previous declaration ‘u_int8_t tcphdr::<anonymous union>::<anonymous struct>::th_x2’
+  u_int8_t th_x2:4;  /* (unused) */
+                 ^

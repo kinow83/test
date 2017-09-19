@@ -1,0 +1,1 @@
+cmd_/home/kinow/git/common/foolib/src/kernel/work_queue.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/kinow/git/common/foolib/src/kernel/work_queue.ko /home/kinow/git/common/foolib/src/kernel/work_queue.o /home/kinow/git/common/foolib/src/kernel/work_queue.mod.o
