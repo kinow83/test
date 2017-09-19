@@ -1,0 +1,27 @@
+vagrant
+ubuntu server
+java
+hadoop
+
+sudo apt-cache serach XXX
+sudo apt-get install XXX
+
+oracle java <-> open java (차이?)
+oracle <-> ubuntu (상극)
+AT&T -> ANSI C/C++
+     -> UNIX
+oracle       sun     
+ANSI JAVA -> open java
+             not yet open java 8
+[android is base java]
+google <-> oracle
+open java  require java license
+
+[hadoop download]
+sudo wget http://archive.apache.org/dist/hadoop/core/hadoop-1.0.3/hadoop-1.0.3.tar.gz
+
+
+[hadoop runnig mode]
+1. standalone mode
+2. pseudo distribute
+3. fully distribute
