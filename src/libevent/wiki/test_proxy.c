@@ -208,8 +208,12 @@ void on_accept(int fd, short waht, void *arg)
 			server_to_client,
 			proxy_info);
 
-	event_add(ev_ctos, NULL);
-	event_add(ev_stoc, NULL);
+	struct timeval tv = {
+			.tv_sec = 5,
+			.tv_usec = 0,
+	};
+	event_add(ev_ctos, &tv);
+	event_add(ev_stoc, &tv);
 
 	job = (struct job *)malloc(sizeof(struct job));
 	job->run = proxy_job_run;

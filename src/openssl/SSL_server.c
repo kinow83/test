@@ -35,9 +35,9 @@ void ssl_info_cb( const SSL *s, int where, int ret)
 	w = where & ~SSL_ST_MASK;
 
 	if (w & SSL_ST_CONNECT)
-		write_string = "SSL_connect";
+		write_string = "SSL_connect cccc";
 	else if (w & SSL_ST_ACCEPT)
-		write_string = "SSL_accept";
+		write_string = "SSL_accept kkkk";
 	else
 		write_string = "undefined";
 
@@ -65,7 +65,7 @@ void ssl_info_cb( const SSL *s, int where, int ret)
 
 int main(int argc, char **argv)
 {
-	unsigned short port = 8443;
+	unsigned short port = 443;
 	char * server_address = "10.10.200.150";
 	int socket_type = SOCK_STREAM;
 	struct sockaddr_in server_addr;
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 	// Socket build
 	//##############################################################################
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = inet_addr( server_address );
+	server_addr.sin_addr.s_addr = INADDR_ANY; //inet_addr( server_address );
 	server_addr.sin_port = htons( port );
 
 	server_socket = socket(AF_INET, socket_type, 0);
@@ -172,6 +172,7 @@ int main(int argc, char **argv)
 	// associate socket and SSL
 	SSL_set_fd ( ssl, client_socket );
 
+	printf("SSL_accept >>>>>\n");
 	ret = SSL_accept( ssl );
 	if (ret < 0) {
 		BIO_printf(bio_err, "error SSL_accept\n");

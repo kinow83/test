@@ -27,8 +27,8 @@
 int main(int argc, char **argv)
 {
 	BIO *bio_err = NULL;
-	const char *server_name = "10.10.200.150";
-	unsigned short port = 8443;
+	const char *server_name = "localhost"; //"10.10.200.150";
+	unsigned short port = 443;
 	struct sockaddr_in server_addr;
 	struct hostent *host;
 	int socket_type = SOCK_STREAM;
@@ -120,6 +120,8 @@ int main(int argc, char **argv)
 	}
 
 	SSL_set_fd( ssl, server_socket );
+	printf("<<<<<<<, SSL_connect\n");
+	sleep(5);
 	ret = SSL_connect( ssl );
 	if (ret < 0) {
 		BIO_printf(bio_err, "error SSL_connect\n");

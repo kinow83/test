@@ -1,0 +1,68 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CA_CERT_FILE	cert_verify.c	/^static char CA_CERT_FILE[50] = "CA\/rootcert.pem";$/;"	v	file:
+CERT_FILE	SSL_server.c	26;"	d	file:
+CERT_FILE	cert_verify.c	/^static char CERT_FILE[50] = "CA\/certs\/00.pem";$/;"	v	file:
+CHECK_ERR	openssl_client.c	33;"	d	file:
+CHECK_ERR	openssl_server.c	43;"	d	file:
+CHECK_NULL	openssl_client.c	32;"	d	file:
+CHECK_NULL	openssl_server.c	42;"	d	file:
+CHECK_SSL	openssl_client.c	34;"	d	file:
+CHECK_SSL	openssl_server.c	44;"	d	file:
+CRL_FILE	cert_verify.c	21;"	d	file:
+DEBUG	openssl_client.c	27;"	d	file:
+DEBUG	openssl_server.c	37;"	d	file:
+IN_FILE	test_cipher_dec.c	21;"	d	file:
+IN_FILE	test_cipher_enc.c	19;"	d	file:
+LD_LIBRARY_PATH	Makefile	/^	LD_LIBRARY_PATH=ssl\/lib ssl\/bin\/openssl md5 Makefile$/;"	m
+OPENSSL_FIPS	Makefile	/^	OPENSSL_FIPS=1 LD_LIBRARY_PATH=ssl\/lib ssl\/bin\/openssl md5 Makefile$/;"	m
+OPENSSL_FIPS	Makefile	/^	OPENSSL_FIPS=1 LD_LIBRARY_PATH=ssl\/lib ssl\/bin\/openssl version$/;"	m
+OPENSSL_STRING_UTIL_H_	string_util.h	9;"	d
+OUT_FILE	test_cipher_dec.c	22;"	d	file:
+OUT_FILE	test_cipher_enc.c	20;"	d	file:
+PRIVATE_KEY_ENCRYPTED	openssl_server.c	35;"	d	file:
+PRIVKEY_FILE	SSL_server.c	27;"	d	file:
+REQUIRE_CLIENT_CERT	openssl_server.c	33;"	d	file:
+VERIFY_USE_CA_PATH	openssl_server.c	34;"	d	file:
+append_string	string_util.c	/^uint8_t *append_string(uint8_t *dest, size_t dest_len, const uint8_t *add, int add_len)$/;"	f
+base64_decode	openssl_base64.c	/^int base64_decode(char *b64msg, char **buf)$/;"	f
+base64_decode_length	openssl_base64.c	/^int base64_decode_length(const char *b64_input)$/;"	f
+base64_encode	openssl_base64.c	/^int base64_encode(const char *msg, char **buf)$/;"	f
+bio_err	SSL_server.c	/^BIO * bio_err;$/;"	v
+func_lock	thread_test.c	/^static void func_lock(int mode, int type, char *file, int line)$/;"	f	file:
+func_thread_id	thread_test.c	/^static unsigned long func_thread_id(void)$/;"	f	file:
+genrsa_cb	rsa_test.c	/^void genrsa_cb(int p, int n, void *arg)$/;"	f
+getRand	test_PRNG.c	/^int getRand()$/;"	f
+likely	openssl_client.c	29;"	d	file:
+likely	openssl_server.c	39;"	d	file:
+main	SSL_client.c	/^int main(int argc, char **argv)$/;"	f
+main	SSL_server.c	/^int main(int argc, char **argv)$/;"	f
+main	cert_verify.c	/^int main(int argc, char** argv)$/;"	f
+main	digest.c	/^int main(int argc, char **argv)$/;"	f
+main	fmemopen.c	/^int main()$/;"	f
+main	openssl_base64.c	/^int main()$/;"	f
+main	openssl_client.c	/^int main(int argc, char **argv)$/;"	f
+main	openssl_server.c	/^int main(int argc, char **argv)$/;"	f
+main	rsa_enc.c	/^int main(int argc, char** argv)$/;"	f
+main	rsa_test.c	/^int main(int argc, char** argv)$/;"	f
+main	test_PRNG.c	/^int main(int argc, char* argv[])$/;"	f
+main	test_cipher_dec.c	/^int main(int argc, char* argv[])$/;"	f
+main	test_cipher_enc.c	/^int main(int argc, char* argv[])$/;"	f
+make_key_and_iv	test_PRNG.c	/^int make_key_and_iv()$/;"	f
+my_verify_cert	openssl_server.c	/^static int my_verify_cert(X509_STORE_CTX* ctx, void *arg)$/;"	f	file:
+password_cb	openssl_server.c	/^static int password_cb(char *buf, int size, int rwflag, void *userdata) {$/;"	f	file:
+readFile	test_cipher_dec.c	/^unsigned char *readFile(char *file, int *readLen)$/;"	f
+readFile	test_cipher_enc.c	/^unsigned char *readFile(char *file, int *readLen)$/;"	f
+readFileBio	test_cipher_dec.c	/^unsigned char *readFileBio(BIO *fileBIO, int *readLen)$/;"	f
+readFileBio	test_cipher_enc.c	/^unsigned char *readFileBio(BIO *fileBIO, int *readLen)$/;"	f
+setup_locks	thread_test.c	/^int setup_locks(void)$/;"	f
+ssl_info_cb	SSL_server.c	/^void ssl_info_cb( const SSL *s, int where, int ret)$/;"	f
+test_evp_cipher_ctx	test_PRNG.c	/^int test_evp_cipher_ctx()$/;"	f
+unlikely	openssl_client.c	30;"	d	file:
+unlikely	openssl_server.c	40;"	d	file:
+verify_cb	openssl_server.c	/^static int verify_cb(int ok, X509_STORE_CTX *ctx)$/;"	f	file:
+verify_cb_func	cert_verify.c	/^int verify_cb_func(int ok, X509_STORE_CTX *store)$/;"	f
