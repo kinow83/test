@@ -35,6 +35,15 @@
 #define CHECK_ERR(e,s) {if (unlikely(e!=1)) {perror(s); abort();}}
 #define CHECK_SSL(e) {if (unlikely(e!=1)) {ERR_print_errors_fp(stderr); abort();}}
 
+void hex_encode(unsigned char* readbuf, void *writebuf, size_t len)
+{
+	size_t i;
+	for (i=0; i<len; i++) {
+		char *l = (char *)((intptr_t)writebuf + 2*i);
+		sprintf(l, "%02x", readbuf[i]);
+	}
+}
+
 int _gethostaddr(const char* hostname, struct in_addr *addr)
 {
 	struct hostent *h;
@@ -203,20 +212,93 @@ int main(int argc, char **argv)
 		int i;
 		printf("n = %d\n", n);
 		for (i=0; i<n; i++) {
+
 			X509 *xs = sk_X509_value(sk, i);
 			X509_NAME *sj, *is;
 			sj = X509_get_subject_name(xs);
 			is = X509_get_issuer_name(xs);
+
+			{
+				int version = (X509_get_version(xs)) + 1;
+				printf("version = %d\n", version);
+			}
+			{
+#define SERIAL_NUM_LEN 1000
+				char *tmp = NULL;
+				char serial_number[SERIAL_NUM_LEN+1];
+				ASN1_INTEGER *serial = X509_get_serialNumber(xs);
+				BIGNUM *bn = ASN1_INTEGER_to_BN(serial, NULL);
+				if (!bn) {
+					printf("unable to convert ASN1 INTEGER to BIGNUM\n");
+				} else {
+					tmp = BN_bn2dec(bn);
+					if (!tmp) {
+						printf("unable to convert BIGNUM to decimal string\n");
+					} else {
+						if (strlen(tmp) >= SERIAL_NUM_LEN) {
+							printf("buffer length shorter than serial number\n");
+						} else {
+							printf("serialnum: %s\n", tmp);
+						}
+					}
+				}
+				if (tmp) OPENSSL_free(tmp);
+				if (bn) BN_free(bn);
+			}
+
+
 			if (!sj || !is) {
 				printf("null %d\n", i);
 			} else {
 				printf("%d: %s: %s\n", i, X509_NAME_oneline(sj, 0, 0), X509_NAME_oneline(is, 0, 0));
 			}
 
+			// X509 이름 분리 1방법
+			int k;
+			for (k=0; k<X509_NAME_entry_count(sj); k++) {
+				X509_NAME_ENTRY *e = X509_NAME_get_entry(sj, k);
+				ASN1_STRING *d = X509_NAME_ENTRY_get_data(e);
+				char *str = ASN1_STRING_data(d);
+				printf("\tX509 split name [%d]: %s\n", k, str);
+			}
+
+			// X509 이름 분리 2방법
+			int lastpos = 0;
+			while (1) {
+				lastpos = X509_NAME_get_index_by_NID(sj, NID_commonName, lastpos);
+				printf("\t\tlastpos = %d\n", lastpos);
+				if (lastpos == -1) break;
+				for (k=0; k<=lastpos; k++) {
+					X509_NAME_ENTRY *e = X509_NAME_get_entry(sj, k);
+					ASN1_STRING *d = X509_NAME_ENTRY_get_data(e);
+					char *str = ASN1_STRING_data(d);
+					printf("\t\tX509 split name[%d]: %s\n", k, str);
+				}
+			}
+
+			// fingerprint
+			{
+				#define SHA1LEN 20
+				char buf[SHA1LEN];
+				unsigned len;
+				const EVP_MD *digest = EVP_sha1();
+				int rc = X509_digest(xs, digest, (unsigned char*)buf, &len);
+				if (rc == 0 || len != SHA1LEN) {
+					printf("fingerprint is not SHA1\n");
+				} else {
+					char strbuf[SHA1LEN*2 + 1];
+					hex_encode(buf, strbuf, SHA1LEN);
+					strbuf[SHA1LEN*2] = 0;
+					printf("fingerprint: %s\n", strbuf);
+				}
+			}
+
+			// test X509_push
 			if (i > 0) {
 				sk_X509_push(psk, sk_X509_dup(xs));
 			}
 
+			// X509를 PEM으로 저장
 			BIO *out;
 			char outfile[256];
 			snprintf(outfile, sizeof(outfile), "cert_%d.pem", i);
