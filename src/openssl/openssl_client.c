@@ -35,6 +35,24 @@
 #define CHECK_ERR(e,s) {if (unlikely(e!=1)) {perror(s); abort();}}
 #define CHECK_SSL(e) {if (unlikely(e!=1)) {ERR_print_errors_fp(stderr); abort();}}
 
+int convert_ASN1TIME(ASN1_TIME *t, char* buf, size_t len)
+{
+	int rc;
+	BIO *b = BIO_new( BIO_s_mem() );
+	rc = ASN1_TIME_print(b, t);
+	if (rc <= 0) {
+		printf("ASN1_TIME_print failed to wrote no data.\n");
+		return -1;
+	}
+	rc = BIO_gets(b, buf, len);
+	if (rc <= 0) {
+		printf("BIO_gets call failed to transfer contents to buf\n");
+		return -1;
+	}
+	BIO_free(b);
+	return 0;
+}
+
 void hex_encode(unsigned char* readbuf, void *writebuf, size_t len)
 {
 	size_t i;
@@ -308,6 +326,57 @@ int main(int argc, char **argv)
 			PEM_write_bio_X509(out, xs);
 			BIO_free_all(out);
 
+			// signature algorithm
+			{
+				int pkey_nid = OBJ_obj2nid(xs->cert_info->key->algor->algorithm);
+				if (pkey_nid == NID_undef) {
+					printf("unable to find specified signature algorithm name");
+				} else {
+#define SIG_ALGO_LEN 128
+					char sigalgo_name[SIG_ALGO_LEN+1];
+					const char *sslbuf = OBJ_nid2ln(pkey_nid);
+					snprintf(sigalgo_name, sizeof(sigalgo_name), "%s", sslbuf);
+					printf("signature algorithim = %s\n", sigalgo_name);
+
+			// Public key
+#define PUBKEY_ALGO_LEN	4096
+					char pubkey_algoname[PUBKEY_ALGO_LEN];
+					if (pkey_nid == NID_rsaEncryption || pkey_nid == NID_dsa) {
+						EVP_PKEY *pkey = X509_get_pubkey(xs);
+						RSA *rsa_key;
+						DSA *dsa_key;
+						char *rsa_e_dec, *rsa_n_hex;
+						char *dsa_p_hex, *dsa_q_hex, *dsa_g_hex, *dsa_y_hex;
+
+						switch (pkey_nid) {
+							case NID_rsaEncryption:
+								// extract RSA public key
+								rsa_key = pkey->pkey.rsa;
+								// extract RSA exponent
+								rsa_e_dec = BN_bn2dec(rsa_key->e);
+								// extract RSA modulus
+								rsa_n_hex = BN_bn2hex(rsa_key->n);
+								break;
+							case NID_dsa:
+								break;
+						}
+
+						if (pkey) EVP_PKEY_free(pkey);
+					}
+				}
+			}
+			// valid period
+			{
+				ASN1_TIME *not_before = X509_get_notBefore(xs);
+				ASN1_TIME *not_after = X509_get_notAfter(xs);
+				char not_after_str[128];
+				char not_before_str[128];
+				convert_ASN1TIME(not_after, not_after_str, 128);
+				convert_ASN1TIME(not_before, not_before_str, 128);
+				printf("not before date = %s\n", not_before_str);
+				printf("not after  date = %s\n", not_after_str);
+
+			}
 		}
 
 		printf("psk n = %d==========================================\n", sk_X509_num(psk));
