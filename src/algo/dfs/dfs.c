@@ -18,6 +18,7 @@ void DFS(int v)
 
 	visited[v] = 1; // 정정점 v를 방문했다고 표시
 
+	// 0 인덱스는 무시하고 진행
 	for (i=1; i<=size; i++)
 	{
 		if (map[v][i] == 1 && !visited[i])
@@ -29,6 +30,7 @@ void DFS(int v)
 	}
 }
 
+// 인접행렬
 int main()
 {
 	int start;
@@ -41,8 +43,8 @@ int main()
 
 	while (1)
 	{
-		scanf("%d%d", &v1, &v2);
-		if (v1 == -1 && v2 == -1)
+		scanf("%d %d", &v1, &v2);
+		if (v1 == -1 && v2 == -1) // last
 			break;
 		map[v1][v2] = 1;
 		map[v2][v1] = 1;
