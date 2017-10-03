@@ -23,11 +23,28 @@ void DFS(int v)
 	{
 		if (map[v][i] == 1 && !visited[i])
 		{
-			printf("%d -> %d\n", v, i);
+			printf("[%d,%d] %d -> %d\n", v, i, v, i);
 
 			DFS(i);
 		}
 	}
+}
+
+void print_arr()
+{
+	printf("\n");
+	int i, k;
+	for (i=0; i<size; i++) {
+		printf("%d ", i);
+	}
+	printf("\n");
+	for (i=0; i<size; i++) {
+		for (k=0; k<size; k++) {
+			printf("%d ", map[i][k]);
+		}
+		printf("\n");
+	}
+	printf("\n");
 }
 
 // 인접행렬
@@ -41,6 +58,7 @@ int main()
 	printf("start: ");
 	scanf("%d", &start);
 
+
 	while (1)
 	{
 		scanf("%d %d", &v1, &v2);
@@ -50,6 +68,7 @@ int main()
 		map[v2][v1] = 1;
 	}
 
+	print_arr();
 	DFS(start);
 
 	return 0;
