@@ -89,9 +89,9 @@ int main(int argc, char **argv)
 	SSL *ssl = NULL;
 	X509 *server_cert;
 	const SSL_METHOD *method;
-	const char *ca_file          = "pem/rootca.crt";
-	const char *client_cert_file = "pem/client.crt";
-	const char *client_key_file  = "pem/client.key.without_pass";
+	const char *ca_file          = "cert/all.crt";
+	const char *client_cert_file = "cert/client.crt";
+	const char *client_key_file  = "cert/client.key";
 	int err;
 	int sock;
 	struct sockaddr_in saddr;
@@ -111,11 +111,9 @@ int main(int argc, char **argv)
 		CHECK_NULL(ctx);
 	}
 	// load cert file and key file
-	if (0) {
-#if 0
+	if (1) {
 		err = SSL_CTX_use_certificate_file(ctx, ca_file, SSL_FILETYPE_PEM);
 		CHECK_SSL(err);
-#endif
 		err = SSL_CTX_use_certificate_file(ctx, client_cert_file, SSL_FILETYPE_PEM);
 		CHECK_SSL(err);
 		err = SSL_CTX_use_PrivateKey_file(ctx, client_key_file, SSL_FILETYPE_PEM);
@@ -268,7 +266,8 @@ int main(int argc, char **argv)
 			if (!sj || !is) {
 				printf("null %d\n", i);
 			} else {
-				printf("%d: %s: %s\n", i, X509_NAME_oneline(sj, 0, 0), X509_NAME_oneline(is, 0, 0));
+				printf("i:%d: %s\n", i, X509_NAME_oneline(is, 0, 0));
+				printf("s:%d: %s\n", i, X509_NAME_oneline(sj, 0, 0));
 			}
 
 			// X509 이름 분리 1방법
