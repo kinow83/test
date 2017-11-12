@@ -1,0 +1,56 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -g -Wall -lrt$/;"	m
+SEM_OBJS	Makefile	/^SEM_OBJS = ipcs_sem.o bm_timediff.o$/;"	m
+SOCK_OBJS	Makefile	/^SOCK_OBJS = ipcs_sock.o bm_timediff.o$/;"	m
+_BENCHMARK_TIMEDIFF_	bm_timediff.h	2;"	d
+_IPCS_	ipcs.h	2;"	d
+_IPC_SHM_	ipcs_shm.h	2;"	d
+aligned_size	ipcs_shm.h	4;"	d
+bm_timediff	bm_timediff.h	/^struct bm_timediff$/;"	s
+check_bm_timediff	bm_timediff.c	/^struct timeval check_bm_timediff(const char *desc, struct bm_timediff *td, bool print)$/;"	f
+clifd	ipcs_sock.c	/^int clifd = -1;$/;"	v
+create	ipcs.h	/^	void (*create)(void);$/;"	m	struct:ipcs_ops
+create_sem	ipcs_sem.c	/^static void create_sem(void)$/;"	f	file:
+create_sock	ipcs_sock.c	/^static void create_sock(void)$/;"	f	file:
+destroy	ipcs.h	/^	void (*destroy)(void);$/;"	m	struct:ipcs_ops
+destroy_sem	ipcs_sem.c	/^static void destroy_sem()$/;"	f	file:
+destroy_sock	ipcs_sock.c	/^static void destroy_sock()$/;"	f	file:
+dummy	ipcs_sock.c	/^static int dummy;$/;"	v	file:
+end	bm_timediff.h	/^	struct timeval end;$/;"	m	struct:bm_timediff	typeref:struct:bm_timediff::timeval
+init_bm_timediff	bm_timediff.c	/^void init_bm_timediff(struct bm_timediff *td)$/;"	f
+initilize	ipcs_sock.c	/^static int initilize = 0;$/;"	v	file:
+ipc	ipcs_sem.c	/^struct ipcs_ops ipc = {$/;"	v	typeref:struct:ipcs_ops
+ipc	ipcs_sock.c	/^struct ipcs_ops ipc = {$/;"	v	typeref:struct:ipcs_ops
+ipcs_ops	ipcs.h	/^struct ipcs_ops {$/;"	s
+main	comsumer.c	/^int main(int argc, char **argv)$/;"	f
+main	producer.c	/^int main(int argc, char **argv)$/;"	f
+mysem	ipcs_sem.c	/^sem_t *mysem;$/;"	v
+open	ipcs.h	/^	void (*open)(void);$/;"	m	struct:ipcs_ops
+open_sem	ipcs_sem.c	/^static void open_sem(void)$/;"	f	file:
+open_sock	ipcs_sock.c	/^static void open_sock(void)$/;"	f	file:
+post	ipcs.h	/^	void (*post)(void);$/;"	m	struct:ipcs_ops
+post_sem	ipcs_sem.c	/^static void post_sem(void)$/;"	f	file:
+post_sock	ipcs_sock.c	/^static void post_sock(void)$/;"	f	file:
+shm_data	ipcs.h	/^typedef struct shm_data {$/;"	s
+shm_data_t	ipcs.h	/^} shm_data_t;$/;"	t	typeref:struct:shm_data
+shmid	producer.c	/^static int shmid;$/;"	v	file:
+sig_handler	comsumer.c	/^static void sig_handler(int signo)$/;"	f	file:
+sig_handler	producer.c	/^static void sig_handler(int signo)$/;"	f	file:
+sock_file	ipcs_sock.c	/^const char *sock_file = "shm_uds.sock";$/;"	v
+sockfd	ipcs_sock.c	/^int sockfd = -1;$/;"	v
+start	bm_timediff.h	/^	struct timeval start;$/;"	m	struct:bm_timediff	typeref:struct:bm_timediff::timeval
+timeval2double	bm_timediff.c	/^double timeval2double(struct timeval *tv)$/;"	f
+type	ipcs.h	/^	unsigned int type;$/;"	m	struct:shm_data
+value	ipcs.h	/^	unsigned int value;$/;"	m	struct:shm_data
+wait	ipcs.h	/^	void (*wait)(void);$/;"	m	struct:ipcs_ops
+wait_sem	ipcs_sem.c	/^static void wait_sem(void)$/;"	f	file:
+wait_sock	ipcs_sock.c	/^static void wait_sock(void)$/;"	f	file:
+wait_timeout	ipcs.h	/^	int (*wait_timeout)(uint32_t msec);$/;"	m	struct:ipcs_ops
+wait_timeout_sem	ipcs_sem.c	/^static int wait_timeout_sem(uint32_t msec)$/;"	f	file:
+wait_timeout_sock	ipcs_sock.c	/^static int wait_timeout_sock(uint32_t msec)$/;"	f	file:

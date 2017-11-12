@@ -20,7 +20,7 @@ int tcp_listen_sock(int port)
 
 	s_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (s_sock < 0) {
-		perror("socket()");
+		perror("tcp_listen_sock:socket()");
 		return -1;
 	}
 
@@ -28,12 +28,12 @@ int tcp_listen_sock(int port)
 
 	if (bind(s_sock, (struct sockaddr*)&s_addr, sizeof(s_addr)) < 0) {
 		close(s_sock);
-		perror("bind()");
+		perror("tcp_listen_sock:bind()");
 		return -1;
 	}
 	if (listen(s_sock, 5) < 0) {
 		close(s_sock);
-		perror("listen()");
+		perror("tcp_listen_sock:listen()");
 		return -1;
 	}
 	return s_sock;
@@ -49,22 +49,24 @@ int uds_listen_sock(const char *sofile)
 	s_addr.sun_family = AF_UNIX;
 	strcpy(s_addr.sun_path, sofile);
 
+	unlink(sofile);
+
 	s_sock = socket(PF_FILE, SOCK_STREAM, 0);
 	if (s_sock < 0) {
-		perror("socket()");
+		perror("uds_listen_sock:socket()");
 		return -1;
 	}
 
 	setsockopt(s_sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
 
 	if (bind(s_sock, (struct sockaddr*)&s_addr, sizeof(s_addr)) < 0) {
+		perror("uds_listen_sock:bind()");
 		close(s_sock);
-		perror("bind()");
 		return -1;
 	}
 	if (listen(s_sock, 5) < 0) {
+		perror("uds_listen_sock:listen()");
 		close(s_sock);
-		perror("listen()");
 		return -1;
 	}
 	return s_sock;
@@ -85,8 +87,8 @@ int uds_connect_sock(const char *sofile)
 		return -1;
 	}
 	if (connect(c_sock, (struct sockaddr*)&s_addr, sizeof(s_addr)) < 0) {
-		close(c_sock);
 		perror("listen()");
+		close(c_sock);
 		return -1;
 	}
 	return c_sock;

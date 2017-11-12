@@ -1,0 +1,31 @@
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+read: File exists
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+read: File exists
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+-->[       end]: 8.241344
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+-->[       end]: 8.640011
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+-->[       end]: 8.713977
+[root@localhost ipc]# ./comsumer_sock 1000000
+shm_size = 8003584
+shmget: File exists
+connect ok
+-->[       end]: 8.787695
+

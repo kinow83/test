@@ -3,63 +3,133 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_PROGRAM_VERSION	5.8	//
 CC	Makefile	/^CC = gcc$/;"	m
-IO_SO_FILE	io_link.c	13;"	d	file:
+CC	ipc/sem/Makefile	/^CC = gcc$/;"	m
+CFLAGS	ipc/sem/Makefile	/^CFLAGS = -g -Wall -lrt$/;"	m
+IO_SO_FILE	io_link.c	19;"	d	file:
 Node	queue.c	/^struct Node {$/;"	s	file:
 QUEUE_MAX_SIZE	io_link.c	/^const int QUEUE_MAX_SIZE = 0xFFFF;$/;"	v
 Queue	queue.c	/^struct Queue {$/;"	s	file:
-SENDER_OBJS	Makefile	/^SENDER_OBJS = sender.o queue.o sock.o$/;"	m
+RECEIVER_OBJS	Makefile	/^RECEIVER_OBJS = receiver.o queue.o sock.o io_link.o$/;"	m
+SEM_OBJS	ipc/sem/Makefile	/^SEM_OBJS = ipcs_sem.o bm_timediff.o$/;"	m
+SENDER_OBJS	Makefile	/^SENDER_OBJS   = sender.o queue.o sock.o io_link.o$/;"	m
+SKEY	io_link.c	86;"	d	file:
+SOCK_OBJS	ipc/sem/Makefile	/^SOCK_OBJS = ipcs_sock.o bm_timediff.o$/;"	m
+TEST_LOOP	ipc/sem/ipcs.h	26;"	d
+_BENCHMARK_TIMEDIFF_	ipc/sem/bm_timediff.h	2;"	d
 _IO_ADAPTER_	io_link.h	2;"	d
+_IPCS_	ipc/sem/ipcs.h	2;"	d
+_IPC_SHM_	ipc/sem/ipcs_shm.h	2;"	d
 _MY_SOCK_	sock.h	2;"	d
 __SIMPLE_QUEUE__	queue.h	2;"	d
+accept_thread	receiver.c	/^void* accept_thread(void *arg)$/;"	f
 accept_thread	sender.c	/^void* accept_thread(void *arg)$/;"	f
-cio	io_link.c	/^extern io_link cio = {$/;"	v
-cio_destory	io_link.c	/^void cio_destory(io_link *ctx)$/;"	f
+aligned_size	ipc/sem/ipcs_shm.h	4;"	d
+bm_timediff	ipc/sem/bm_timediff.h	/^struct bm_timediff$/;"	s
+check_bm_timediff	ipc/sem/bm_timediff.c	/^struct timeval check_bm_timediff(const char *desc, struct bm_timediff *td, bool print)$/;"	f
+cio_destroy	io_link.c	/^static void cio_destroy(io_link *ctx)$/;"	f	file:
 cio_init	io_link.c	/^int cio_init(io_link *ctx)$/;"	f
-cio_read	io_link.c	/^int cio_read(io_link *ctx)$/;"	f
-cio_write	io_link.c	/^int cio_write(io_link *ctx)$/;"	f
+cio_linker	io_link.c	/^io_linker cio_linker = {$/;"	v
+cio_read_data	io_link.c	/^static int cio_read_data(io_link *ctx, uint8_t *data)$/;"	f	file:
+cio_read_index	io_link.c	/^static int cio_read_index(io_link *ctx, io_index *ioindex)$/;"	f	file:
+cio_write_data	io_link.c	/^static int cio_write_data(io_link *ctx, uint8_t *data, size_t datalen)$/;"	f	file:
+cio_write_index	io_link.c	/^static int cio_write_index(io_link *ctx, io_index *ioindex)$/;"	f	file:
 clear_queue	io_link.c	/^void clear_queue(void)$/;"	f
+clifd	ipc/sem/ipcs_sock.c	/^int clifd = -1;$/;"	v
+create	ipc/sem/ipcs.h	/^	void (*create)(void);$/;"	m	struct:ipcs_ops
+create_sem	ipc/sem/ipcs_sem.c	/^static void create_sem(void)$/;"	f	file:
+create_sock	ipc/sem/ipcs_sock.c	/^static void create_sock(void)$/;"	f	file:
 csocks_mutex	sender.c	/^pthread_mutex_t csocks_mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 csocks_queue	sender.c	/^struct Queue* csocks_queue;$/;"	v	typeref:struct:Queue
-data	io_link.c	/^	uint8_t data[1500];$/;"	m	struct:io_data	file:
+data	io_link.h	/^	uint8_t data[1500];$/;"	m	struct:io_data
+datalen	io_link.h	/^	size_t datalen;$/;"	m	struct:io_data
 dequeue	queue.c	/^void* dequeue(struct Queue *q)$/;"	f
-destory	io_link.h	/^	void (*destory)(io_link *);$/;"	m	struct:io_linker
+destroy	io_link.h	/^	void (*destroy)    (io_link *);$/;"	m	struct:io_linker
+destroy	ipc/sem/ipcs.h	/^	void (*destroy)(void);$/;"	m	struct:ipcs_ops
+destroy_sem	ipc/sem/ipcs_sem.c	/^static void destroy_sem()$/;"	f	file:
+destroy_sock	ipc/sem/ipcs_sock.c	/^static void destroy_sock()$/;"	f	file:
+dummy	ipc/sem/ipcs_sock.c	/^static int dummy;$/;"	v	file:
+end	ipc/sem/bm_timediff.h	/^	struct timeval end;$/;"	m	struct:bm_timediff	typeref:struct:bm_timediff::timeval
 enqueue	queue.c	/^int enqueue(struct Queue *q, void *value)$/;"	f
 freeQueue	queue.c	/^void freeQueue(struct Queue *q)$/;"	f
-from	io_link.c	/^	struct sockaddr_in from;$/;"	m	struct:io_hello	typeref:struct:io_hello::sockaddr_in	file:
 front	io_link.c	/^static int front = -1;$/;"	v	file:
-get_queue	io_link.c	/^struct io_data * get_queue()$/;"	f
-get_queue_index	io_link.c	/^struct io_data * get_queue_index(uint16_t index)$/;"	f
+get_queue	io_link.c	/^io_data * get_queue()$/;"	f
+get_queue_index	io_link.c	/^io_data * get_queue_index(uint16_t index)$/;"	f
 head	queue.c	/^	struct Node *head;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
-index	io_link.c	/^	uint16_t index;$/;"	m	struct:io_hello	file:
-init	io_link.h	/^	int (*init) (io_link *);$/;"	m	struct:io_linker
+index	io_link.h	/^	uint16_t index;$/;"	m	struct:io_index
+init	io_link.h	/^	int (*init)        (io_link *);$/;"	m	struct:io_linker
+init_bm_timediff	ipc/sem/bm_timediff.c	/^void init_bm_timediff(struct bm_timediff *td)$/;"	f
 init_queue	io_link.c	/^void init_queue(void)$/;"	f
-io_data	io_link.c	/^struct io_data {$/;"	s	file:
-io_hello	io_link.c	/^struct io_hello {$/;"	s	file:
-io_link	io_link.h	/^struct io_link {$/;"	s
-io_linker	io_link.h	/^struct io_linker$/;"	s
+initilize	ipc/sem/ipcs_sock.c	/^static int initilize = 0;$/;"	v	file:
+io_data	io_link.h	/^typedef struct io_data {$/;"	s
+io_data	io_link.h	/^} io_data;$/;"	t	typeref:struct:io_data
+io_index	io_link.h	/^typedef struct io_index {$/;"	s
+io_index	io_link.h	/^} __attribute__((packed)) io_index;$/;"	t	typeref:struct:io_index
+io_link	io_link.h	/^typedef struct io_link {$/;"	s
+io_link	io_link.h	/^} io_link;$/;"	t	typeref:struct:io_link
+io_linker	io_link.h	/^typedef struct io_linker$/;"	s
+io_linker	io_link.h	/^} io_linker;$/;"	t	typeref:struct:io_linker
+iolink	sender.c	/^static io_link iolink;$/;"	v	file:
+ipc	ipc/sem/ipcs_sem.c	/^struct ipcs_ops ipc = {$/;"	v	typeref:struct:ipcs_ops
+ipc	ipc/sem/ipcs_sock.c	/^struct ipcs_ops ipc = {$/;"	v	typeref:struct:ipcs_ops
+ipcs_ops	ipc/sem/ipcs.h	/^struct ipcs_ops {$/;"	s
+main	ipc/sem/comsumer.c	/^int main(int argc, char **argv)$/;"	f
+main	ipc/sem/producer.c	/^int main(int argc, char **argv)$/;"	f
+main	receiver.c	/^int main(int argc, char **argv)$/;"	f
 main	sender.c	/^int main(int argc, char **argv)$/;"	f
 max_size	queue.c	/^	int max_size;$/;"	m	struct:Queue	file:
+mysem	ipc/sem/ipcs_sem.c	/^sem_t *mysem;$/;"	v
 newQueue	queue.c	/^struct Queue* newQueue(int capacity)$/;"	f
 next	queue.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node::Node	file:
-put_queue	io_link.c	/^int put_queue(struct io_data *data, struct io_index *idx)$/;"	f
-queue	io_link.c	/^struct io_data *queue;$/;"	v	typeref:struct:io_data
-read	io_link.h	/^	int (*read) (io_link *);$/;"	m	struct:io_linker
+open	ipc/sem/ipcs.h	/^	void (*open)(void);$/;"	m	struct:ipcs_ops
+open_sem	ipc/sem/ipcs_sem.c	/^static void open_sem(void)$/;"	f	file:
+open_sock	ipc/sem/ipcs_sock.c	/^static void open_sock(void)$/;"	f	file:
+post	ipc/sem/ipcs.h	/^	void (*post)(void);$/;"	m	struct:ipcs_ops
+post_sem	ipc/sem/ipcs_sem.c	/^static void post_sem(void)$/;"	f	file:
+post_sock	ipc/sem/ipcs_sock.c	/^static void post_sock(void)$/;"	f	file:
+put_queue	io_link.c	/^int put_queue(void *data, size_t datalen, io_index *idx)$/;"	f
+queue	io_link.c	/^io_data *queue;$/;"	v
+read_data	io_link.h	/^	int (*read_data  ) (io_link *, uint8_t *);$/;"	m	struct:io_linker
+read_index	io_link.h	/^	int (*read_index)  (io_link *, io_index *);$/;"	m	struct:io_linker
 rear	io_link.c	/^static int rear  = -1;$/;"	v	file:
+shm_data	ipc/sem/ipcs.h	/^typedef struct shm_data {$/;"	s
+shm_data_t	ipc/sem/ipcs.h	/^} shm_data_t;$/;"	t	typeref:struct:shm_data
 shmid	io_link.c	/^static int shmid = -1;$/;"	v	file:
-sio	io_link.c	/^extern io_link sio = {$/;"	v
-sio_destory	io_link.c	/^void sio_destory(io_link *ctx)$/;"	f
-sio_init	io_link.c	/^int sio_init(io_link *ctx)$/;"	f
-sio_read	io_link.c	/^int sio_read(io_link *ctx)$/;"	f
-sio_write	io_link.c	/^int sio_write(io_link *ctx)$/;"	f
+shmid	ipc/sem/producer.c	/^static int shmid;$/;"	v	file:
+sig_handler	ipc/sem/comsumer.c	/^static void sig_handler(int signo)$/;"	f	file:
+sig_handler	ipc/sem/producer.c	/^static void sig_handler(int signo)$/;"	f	file:
+sio_destroy	io_link.c	/^static void sio_destroy(io_link *ctx)$/;"	f	file:
+sio_init	io_link.c	/^static int sio_init(io_link *ctx)$/;"	f	file:
+sio_linker	io_link.c	/^io_linker sio_linker = {$/;"	v
+sio_read_data	io_link.c	/^static int sio_read_data(io_link *ctx, uint8_t *data)$/;"	f	file:
+sio_read_index	io_link.c	/^static int sio_read_index(io_link *ctx, io_index *ioindex)$/;"	f	file:
+sio_write_data	io_link.c	/^static int sio_write_data(io_link *ctx, uint8_t *data, size_t datalen)$/;"	f	file:
+sio_write_index	io_link.c	/^static int sio_write_index(io_link *ctx, io_index *ioindex)$/;"	f	file:
 size	queue.c	/^	int size;$/;"	m	struct:Queue	file:
 sock	io_link.h	/^	int sock;$/;"	m	struct:io_link
+sock_file	ipc/sem/ipcs_sock.c	/^const char *sock_file = "shm_uds.sock";$/;"	v
+sockfd	ipc/sem/ipcs_sock.c	/^int sockfd = -1;$/;"	v
+start	ipc/sem/bm_timediff.h	/^	struct timeval start;$/;"	m	struct:bm_timediff	typeref:struct:bm_timediff::timeval
 tail	queue.c	/^	struct Node *tail;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
 tcp_listen_sock	sock.c	/^int tcp_listen_sock(int port)$/;"	f
+timeval2double	ipc/sem/bm_timediff.c	/^double timeval2double(struct timeval *tv)$/;"	f
+type	ipc/sem/ipcs.h	/^	unsigned int type;$/;"	m	struct:shm_data
 uds_connect_sock	sock.c	/^int uds_connect_sock(const char *sofile)$/;"	f
 uds_listen_sock	sock.c	/^int uds_listen_sock(const char *sofile)$/;"	f
-unused	io_link.c	/^	uint8_t unused;$/;"	m	struct:io_data	file:
+unused	io_link.h	/^	uint8_t unused;$/;"	m	struct:io_data
+value	ipc/sem/ipcs.h	/^	unsigned int value;$/;"	m	struct:shm_data
 value	queue.c	/^	void *value;$/;"	m	struct:Node	file:
+wait	ipc/sem/ipcs.h	/^	void (*wait)(void);$/;"	m	struct:ipcs_ops
+wait_sem	ipc/sem/ipcs_sem.c	/^static void wait_sem(void)$/;"	f	file:
+wait_sock	ipc/sem/ipcs_sock.c	/^static void wait_sock(void)$/;"	f	file:
+wait_timeout	ipc/sem/ipcs.h	/^	int (*wait_timeout)(uint32_t msec);$/;"	m	struct:ipcs_ops
+wait_timeout_sem	ipc/sem/ipcs_sem.c	/^static int wait_timeout_sem(uint32_t msec)$/;"	f	file:
+wait_timeout_sock	ipc/sem/ipcs_sock.c	/^static int wait_timeout_sock(uint32_t msec)$/;"	f	file:
+worker_thread	receiver.c	/^void* worker_thread(void *arg)$/;"	f
 worker_thread	sender.c	/^void* worker_thread(void *arg)$/;"	f
-write	io_link.h	/^	int (*write)(io_link *);$/;"	m	struct:io_linker
+write_data	io_link.h	/^	int (*write_data)  (io_link *, uint8_t *, size_t);$/;"	m	struct:io_linker
+write_index	io_link.h	/^	int (*write_index) (io_link *, io_index *);$/;"	m	struct:io_linker
+xid	io_link.h	/^	uint32_t xid;$/;"	m	struct:io_index
+xid_mutex	receiver.c	/^pthread_mutex_t xid_mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
+xid_queue	receiver.c	/^struct Queue* xid_queue;$/;"	v	typeref:struct:Queue

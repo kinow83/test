@@ -1,0 +1,37 @@
+
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+-->[       end]: 6.817219
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 3.458707
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 2.248808
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 3.066242
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 4.646141
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 2.572329
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 2.159300
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 1.913692
+[root@localhost ipc]# ./comsumer_sem 1000000
+shm_size = 8003584
+shmget: File exists
+-->[       end]: 2.270744
+
