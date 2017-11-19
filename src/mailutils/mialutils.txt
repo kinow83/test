@@ -1,0 +1,62 @@
+[2.2]
+mu_mimehdr_aget_decoded_param
+	- mu_mimehdr_aget_param
+	- mu_mimehdr_decode_param
+		- mu_rfc2047_decode (encoded-word 문법) : "=?문자셋?인코딩 방식?인코드된 데이터?=".
+			
+			Q. 매개변수 이름에 "*"가 들어간 경우
+			1. Parameter Value Continuations: 연속적인 mime 값
+			Content-Type: message/external-body; access-type=URL;
+				URL*0="ftp://";
+				URL*1="cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"			
+			==>
+			Content-Type: message/external-body; access-type=URL;
+				URL="ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+			
+			2. Combining Character Set, Language (RFC 2047)
+			Content-Type: application/x-stuff;
+				title*=us-ascii'en-us'This%20is%20%2A%2A%2Afun%2A%2A%2A
+			
+	
+    Content-Type: application/x-stuff
+    title*0*=us-ascii'en'This%20is%20even%20more%20
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20
+    title*2="isn't it!"
+	
+The following are examples of message headers containing 'encoded-word's:
+From: =?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>
+To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>
+CC: =?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>
+Subject: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=
+=?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
+
+RFC 2045, 2183, 2231.3
+
+
+
+
+filter_list (mu_list_t)
+	- iterator
+		- owner <= struct list_iterator
+		- first
+		- next
+		- getitem
+		...
+		- next_itr = 
+		
+
+		
+filter_list (mu_list_t)
+	-> head: struct list_data                     -> struct list_dat                      -> struct list_dat
+	   itr: mu_iterator_t -> mu_iterator_t -> mu_iterator_t
+			- next_itr
+			- first
+			- next
+			- getitem
+			- owner <- struct list_iterator
+					   list: filter_list
+					   data:
+			
+			
+destroy ( mu_iterator_t )
+	- destory ( mu_iterator_t , mu_iterator_t->owner )
