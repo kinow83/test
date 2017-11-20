@@ -1,3 +1,7 @@
+
+
+
+
 https://chonnom.com/bbs/board.php?bo_table=B17&wr_id=39&page=2
 
 http://www.iwiz.pe.kr/bbs/view/webdev/article_41.html
@@ -8,6 +12,31 @@ https://bluestarblogkr.blogspot.jp/2011/10/blog-post.html
 
 http://maj3sty.tistory.com/980
 
-
-
 subtype: Partial 처리는 제대로 할 수 있나?
+
+The Content-Disposition Header Field
+ - https://tools.ietf.org/html/rfc2183
+ - https://tools.ietf.org/html/rfc2184
+ 
+ 
+From: =?US-ASCII*EN?Q?Keith_Moore?= <moore@cs.utk.edu>
+
+
+[rfc2184]
+Content-Type: message/external-body; access-type=URL;
+ URL*0="ftp://";
+ URL*1="cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+
+is semantically identical to
+
+Content-Type: message/external-body; access-type=URL;
+ URL="ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+      
+      
+특히 매개 변수 이름의 끝에있는 별표는 문자 집합과 언어 정보가 매개 변수 값의 시작 부분에 나타날 수 있음을 나타내는 표시기 역할을합니다. 
+작은 따옴표는 매개 변수 값 문자열의 문자 집합, 언어 및 실제 값 정보를 구분하는 데 사용되며 백분율 기호는 16 진수로 인코딩 된 
+8 진수를 플래그하는 데 사용됩니다. 예 
+Content-Type: application/x-stuff
+ title*1*=us-ascii'en'This%20is%20even%20more%20
+ title*2*=%2A%2A%2Afun%2A%2A%2A%20
+ title*3="isn't it!"
