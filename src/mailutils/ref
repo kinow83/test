@@ -35,8 +35,14 @@ Content-Type: message/external-body; access-type=URL;
       
 특히 매개 변수 이름의 끝에있는 별표는 문자 집합과 언어 정보가 매개 변수 값의 시작 부분에 나타날 수 있음을 나타내는 표시기 역할을합니다. 
 작은 따옴표는 매개 변수 값 문자열의 문자 집합, 언어 및 실제 값 정보를 구분하는 데 사용되며 백분율 기호는 16 진수로 인코딩 된 
-8 진수를 플래그하는 데 사용됩니다. 예 
+8 진수를 플래그하는 데 사용됩니다. 예
+Content-Type: application/x-stuff;
+ title*=us-ascii'en-us'This%20is%20%2A%2A%2Afun%2A%2A%2A
+      
 Content-Type: application/x-stuff
  title*1*=us-ascii'en'This%20is%20even%20more%20
  title*2*=%2A%2A%2Afun%2A%2A%2A%20
+ 
+ 
+ 
  title*3="isn't it!"
