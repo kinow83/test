@@ -1,0 +1,126 @@
+
+
+
+메일 인코딩
+
+[2045]
+Content-Transfer-Encoding: "7bit" / "8bit" / "binary" / "quoted-printable" / "base64" / ietf-token / x-token
+7bit - [1..127]의 ASCII 코드로 이루어진 데이터로 줄 단위로 표현하며 각 줄을 CR, LF로 끝난다. 
+		한 줄의 최대 길이는 CR (ASCII 코드 13), LF (ASCII 코드 10)를 제외하고 998자이다.
+quoted-printable - 약간의 바이너리 데이터가 포함된 US-ASCII로 이루어진 텍스트 데이터를 표현할 때 효과적이다. 
+		US-ASCII는 특별한 변환을 거치지 않고 그대로 표시되기에 효율적이며 인코딩한 데이터를 사람이 이해할 수 있다.
+base64 - 임의의 바이너리 데이터를 7비트 데이터로 변환한다. 고정된 오버헤드가 발생하고 비 텍스트 데이터의 변환 시 사용한다.
+8bit - 8비트로 표현된 데이터로 한 줄 당 998자로 표현하며 CR, LF로 끝난다. (8BITMIME 지원하는 SMTP 서버에 사용 가능)
+binary - 일련의 octets. SMTP에서는 사용할 수 없다. (8BITMIME 지원하는 SMTP 서버에 사용 가능)
+
+[2047]************************************
+MIME Part Three: Message Header Extensions for Non-ASCII Text
+
+1) encoded-word 문법: encoded-word = "=?" charset "?" encoding "?" encoded-text "?="
+	charset과 encoding은 대소문자 구분 안함
+	길이 75자 초과 안됨. (charset + encoding + encoded-text 합쳐서)
+	길이가 75자 이상이면 (CRLF SPACE)로 여러줄로 표시함.
+	여러 줄의 길이 제한은 없음.
+	
+	1-1) SP(공백) 허용 X
+	[X] =?iso-8859-1?q?this is some text?=
+	[O] =?iso-8859-1?q?this=20is=20some=20text?=
+	
+	1-2) The "Q" encoding
+	"=" 문자 인코딩 => "=3D", hex문자는 반드시 대문자로!
+	SPACE(공백) 문자 인코딩 => "=20"
+	hex값 20 (e.g., ISO-8859-1 SPACE) => "_" (underscore, ASCII 95.)
+	"=", "?", "_" 이 외에는 ASCII문자에 해당하는 8비트 값으로 표시 가능.
+	특히 SPACE와 TAB은 인코딩된 단어 안에 있으면 안됨.
+	1-3) encoded-word 제약사항
+	+ An 'encoded-word' MUST NOT appear in any portion of an 'addr-spec'.
+	+ An 'encoded-word' MUST NOT appear within a 'quoted-string'.
+	+ An 'encoded-word' MUST NOT be used in a Received header field.
+	+ An 'encoded-word' MUST NOT be used in parameter of a MIME Content-Type or Content-Disposition field, 
+				or in any structured field body except within a 'comment' or 'phrase'.
+	1-4) 예시
+	From: =?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>
+	To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>
+	CC: =?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>
+	Subject: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=
+		=?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
+
+	From: =?ISO-8859-1?Q?Olle_J=E4rnefors?= <ojarnef@admin.kth.se>
+	To: ietf-822@dimacs.rutgers.edu, ojarnef@admin.kth.se
+	Subject: Time for ISO 10646?
+
+	To: Dave Crocker <dcrocker@mordor.stanford.edu>
+	Cc: ietf-822@dimacs.rutgers.edu, paf@comsol.se
+	From: =?ISO-8859-1?Q?Patrik_F=E4ltstr=F6m?= <paf@nada.kth.se>
+	Subject: Re: RFC-HDR care and feeding
+	   
+	From: Nathaniel Borenstein <nsb@thumper.bellcore.com>
+		 (=?iso-8859-8?b?7eXs+SDv4SDp7Oj08A==?=)
+	To: Greg Vaudreuil <gvaudre@NRI.Reston.VA.US>, Ned Freed
+	  <ned@innosoft.com>, Keith Moore <moore@cs.utk.edu>
+	Subject: Test of new header generator
+	MIME-Version: 1.0
+	Content-type: text/plain; charset=ISO-8859-1
+	   
+	1-5) 예시2
+	인코딩                                       출력
+	(=?ISO-8859-1?Q?a?= b)                      (a b)
+	(=?ISO-8859-1?Q?a?=  =?ISO-8859-1?Q?b?=)    (ab)
+	(=?ISO-8859-1?Q?a?=                         (ab)
+       =?ISO-8859-1?Q?b?=)
+	(=?ISO-8859-1?Q?a_b?=)                      (a b)
+
+	   
+
+	   
+[2183] - Content-Disposition
+Communicating Presentation Information in Internet Messages: The Content-Disposition Header Field
+1) inline	   
+	Content-Type: image/jpeg
+	Content-Disposition: inline
+2) filename
+	Content-Type: image/jpeg
+	Content-Disposition: attachment; filename=genome.jpeg;
+		modification-date="Wed, 12 Feb 1997 16:29:51 -0500";
+
+3) 길이 78자 이하
+   만약 78자 초과이거나, non-ASCII이면 RFC 2184를 따름
+
+   
+[2184] - MIME 인코딩 확장: 문자셋, 문자집합, 연속된 문자
+MIME Parameter Value and Encoded Word Extensions: Character Sets, Languages, and Continuations
+
+1) Parameter Value Continuations 예시
+*뒤에 숫자는 연속된 파라메터를 뜻하며 0부터 순차적으로 시작된다. "" (따옴표)로 감쌀 수는 있지만 값은 아니다.
+Content-Type: message/external-body; access-type=URL;
+  URL*0="ftp://";
+  URL*1="cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+
+  아래와 위는 동일하다.
+  
+Content-Type: message/external-body; access-type=URL;
+  URL="ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+
+2) Parameter Value Character Set and Language Information 예시
+*는 인코딩과 문자셋이 있음을 뜻한다.
+문자 집합이나 언어 필드를 비워 두는 것은 전적으로 허용됩니다.
+필드 값 중 하나가 생략 된 경우에도 작은 따옴표 구분 기호가 있어야합니다 .
+Content-Type: application/x-stuff;
+  title*=us-ascii'en-us'This%20is%20%2A%2A%2Afun%2A%2A%2A
+
+3) Combining Character Set, Language, and Parameter Continuations 예시
+	Content-Type: application/x-stuff
+	 title*1*=us-ascii'en'This%20is%20even%20more%20
+	 title*2*=%2A%2A%2Afun%2A%2A%2A%20
+	 title*3="isn't it!"
+	 
+언어 및 문자 세트 정보는 주어진 매개 변수 값의 시작 부분에만 나타납니다.
+여러 연속을 사용하여 제시된 값은 인코딩 된 세그먼트와 인코딩되지 않은 세그먼트가 혼합되어 있습니다.
+연속 매개 변수 값의 첫 번째 세그먼트가 인코딩 된 경우 필드가 비어있는 경우에도 언어 및 문자 집합 필드 구분 기호가 있어야합니다 (MUST).
+pct-encoded = "%" HEXDIG HEXDIG 인코딩 => RFC 3986 (hex값 대소문자 구분 X)
+%20%20%41%42 = <SP><SP>AB
+
+[용어]  
+linear whitespace (LWSP) = [CRLF] 1*( SP | HT )
+
+
