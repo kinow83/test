@@ -1,0 +1,55 @@
+From test1@kaka.com  Wed Nov 22 20:22:15 2017
+Return-Path: <test1@kaka.com>
+X-Original-To: kaka@kaka.com
+Delivered-To: kaka@kaka.com
+Received: from [192.168.83.1] (unknown [192.168.83.1])
+	by mail.kaka.com (Postfix) with ESMTP id 5793212346F
+	for <kaka@kaka.com>; Wed, 22 Nov 2017 20:22:15 +0900 (KST)
+To: kaka@kaka.com
+From: test1 <test1@kaka.com>
+Subject: =?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WBLnR4dA==?=
+Subject1: =?iso-8859-1?q?this is some text?=
+Subject2: =?iso-8859-1?q?this=20is=20some=20text?=
+Subject3: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=
+    =?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
+Subject4: (=?ISO-8859-1?Q?a?=)
+Subject5: (=?ISO-8859-1?Q?a?= b)
+Subject6: (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)
+Subject7: (=?ISO-8859-1?Q?a?=  =?ISO-8859-1?Q?b?=)
+Subject8: (=?ISO-8859-1?Q?a?=
+       =?ISO-8859-1?Q?b?=)
+Subject9: (=?ISO-8859-1?Q?a_b?=)
+Subject10: (=?ISO-8859-1?Q?a?= =?ISO-8859-2?Q?_b?=)
+Subject11: =?US-ASCII*EN?Q?Keith_Moore?= <moore@cs.utk.edu>
+Message-ID: <0d9f43e3-5c83-ced5-fd4b-34cb82fef32f@kaka.com>
+Content-Type: text/plain;
+ name="=?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB44WB?=
+ =?UTF-8?B?44WB44WB44WB44WB44WBLnR4dA==?="
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0*=euc-kr''%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1;
+ filename*1*=%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1;
+ filename*2*=%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1;
+ filename*3*=%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1;
+ filename*4*=%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%A4%B1%2E%74%78%74
+Content-Disposition1: attachment; filename="=?UTF-8?Q?=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81=e3=85=81.txt?="
+Content-Type1: message/external-body; access-type=URL;
+ URL*0="ftp://";
+ URL*1="cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+Content-Type2: application/x-stuff;
+ title*=us-ascii'en-us'This%20is%20%2A%2A%2Afun%2A%2A%2A
+Content-Type3: application/x-stuff
+ title*0*=us-ascii'en'This%20is%20even%20more%20
+ title*1*=%2A%2A%2Afun%2A%2A%2A%20
+ title*2="isn't it!"
+
+UE9QMw0KDQqx4MGkIMDAtOQgOiArT0tfv8m8xyC758fXwMcgwda8rl9DUkxGDQq6zsGkIMDA
+tOQgOiAtRVJSX7/JvMcgu+fH18DHIMHWvK5fQ1JMRg0KK09LILbHtMIgLUVSUrTCILndteW9
+wyC067muwNoNCsPRIMfgwMcgsebAzLTCIENSTEYgxvfH1CA1MTIgwMzHzw0Kv8m8xyC758fX
+wMcgwda8rsC6IL3Ft9rH0iC89iC++LTZLg0Kurm89sfgIMDAtOTAuiC03MDPx+AgwMC05MC4
+t84gsbi8urXHsO0guMcguLbB9ri3wLogQ1JMRi5DUkxGILOhs78NClBPUCDAzsH1uMXEv7TP
