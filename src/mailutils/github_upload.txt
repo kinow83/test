@@ -1,0 +1,50 @@
+
+
+
+hitbub에서 파일 업로드 시 
+
+
+POST https://github-production-upload-manifest-file-7fdce7.s3.amazonaws.com/ HTTP/1.1
+Accept: */*
+Content-Type: multipart/form-data; boundary=---------------------------7e115c32b0380
+Referer: https://github.com/kinow83/test/upload/master/src
+Accept-Language: ko-KR
+Origin: https://github.com
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: github-production-upload-manifest-file-7fdce7.s3.amazonaws.com
+Content-Length: 1230
+DNT: 1
+Connection: Keep-Alive
+Cache-Control: no-cache
+
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="key"
+
+93793741/102216181
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="AWSAccessKeyId"
+
+AKIAIWNJYAX4CSVEH53A
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="acl"
+
+authenticated-read
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="policy"
+
+eyJleHBpcmF0aW9uIjoiMjAxNy0xMS0yNFQwMDoxMTo1M1oiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJnaXRodWItcHJvZHVjdGlvbi11cGxvYWQtbWFuaWZlc3QtZmlsZS03ZmRjZTcifSx7ImtleSI6IjkzNzkzNzQxLzEwMjIxNjE4MSJ9LHsiYWNsIjoiYXV0aGVudGljYXRlZC1yZWFkIn0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsMzQsMzRdLHsiQ29udGVudC1UeXBlIjoidGV4dC9wbGFpbiJ9XX0=
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="signature"
+
+vKbLe7g0tYHtgLQ7zzaVvcq3MJw=
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="Content-Type"
+
+text/plain
+-----------------------------7e115c32b0380
+Content-Disposition: form-data; name="file"; filename="C:\Users\13A1N-0576\Desktop\www.txt"
+Content-Type: text/plain
+
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+-----------------------------7e115c32b0380--

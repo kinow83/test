@@ -1,0 +1,23 @@
+
+
+GMAIL에서 파일 업로드 시 파일이
+메일 본문에 multipart로 들어가는 것이 아니라
+본문 자체가 파일 내용이 된다.
+
+
+POST https://mail.google.com/mail/u/0/?ui=2&ik=43234f19a5&jsver=pityEmMYFJU.ko.&view=up&fcid=jad8rhmx72t0&rt=j&act=fup&at=AF6bupPUM9OUH42NGIh9jJZeNmbrExFmTg&attid=f_jad8rhmx0 HTTP/1.1
+Accept: */*
+Content-Type: application/x-zip-compressed
+Content-Disposition: attachment; filename="=?UTF-8?Q?=ea=b0=95=ec=84=9d=ec=a3=bc.zip?="
+Referer: https://mail.google.com/_/scs/mail-static/_/js/k=gmail.main.ko.pityEmMYFJU.O/m=pds,pdl,pdit,m_i,pdt,t,it/am=74I_QN4PAS4zwDBKMwizP_OQT8OzN7P__gBAoALgC_Bv7gP4OAAAAAAAAAAAAAAAAAAAANCC4hM/rt=h/d=1/rs=AHGWq9Aw_bPDw127s3k0g-GoHXVhGr9BUg
+Accept-Language: ko-KR
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: mail.google.com
+Content-Length: 139
+DNT: 1
+Connection: Keep-Alive
+Cache-Control: no-cache
+Cookie: GMAIL_AT=AF6bupPUM9OUH42NGIh9jJZeNmbrExFmTg; COMPASS=gmail=CmUACWuJV03k36bCGpgJDb4Qt4o-nRla0FaIO4teTCqcMrBBx0SDZyEIh5LzJksYowzBoVsMgPG6W6C8u0reAov_EJFbSApkl61WKlEZRy_RPqFpxVay5F2khX8K91MigrEv6wYwZBCE8d3QBRpuAAlriVe7xdeZ1gBWt3qwmH7LHuh0yYao0c_T8eF8aC_T4bTgxMGCJOPTHypeUSHUM8rkC6i-gaBKMFEyo3lF1zr0Pe1lpv614aaYMpauiiM5puxzELfnfWhZSdgUydyOhlImVYHvTghHZUsGtDE; COMPASS=gmail=CmUACWuJV03k36bCGpgJDb4Qt4o-nRla0FaIO4teTCqcMrBBx0SDZyEIh5LzJksYowzBoVsMgPG6W6C8u0reAov_EJFbSApkl61WKlEZRy_RPqFpxVay5F2khX8K91MigrEv6wYwZBC41N3QBRpuAAlriVe7xdeZ1gBWt3qwmH7LHuh0yYao0c_T8eF8aC_T4bTgxMGCJOPTHypeUSHUM8rkC6i-gaBKMFEyo3lF1zr0Pe1lpv614aaYMpauiiM5puxzELfnfWhZSdgUydyOhlImVYHvTghHZUsGtDE; OSID=cQWUpX3_4y_2QBtIdxwssToCdSQznlAVlPNDlMYGR5MMWzE21W77KPvAHxN-qhu6BmpFGA.; NID=117=jPZQQD18dgRaTW9wyKUauALmD-bTe9ZHhXGhVGrd6oojFX-mJTMKU80DmuGtLnfzJSN6201a9SrjlQKMXvXUNFCavcQ220G8-1TQo1eJS0fBH5e3qPaTlALUmIrQ-IXNgqFCoOYVntlSAeH437owTSPJe3qzBeVbOE9MhjC_zJiG2RQK7aLxrgO5ymIDSY2EVkk; SID=cQWUpaq5wW_vGvUZZOsK71f9koxF3ZlSYm_n8u_uMZ_Okdv-lpOj7kml-bw8MN3qkEmA8Q.; HSID=AaLqCltpOt_Y6z3QN; SSID=AT_Sjs-lDnzQJequR; APISID=qrp-bSGcirwzJBwL/AJTH5ITDgh3W3gJg_; SAPISID=aM5RKvWjYqpZ7Wnn/AMJIh4-4ms5xryh7F; SIDCC=AE4kn793TudzXI-vdZUl8vQwP0C7Rokdhnb6RqoYnhbBHzjxMa-8cYrQdLbLhvVMINvz9EtG8EVoD_61Z34; OGPC=19002273-5:; 1P_JAR=2017-11-24-0
+
+PK     SxK|         	  kinow.txtz         /  PK      SxK|         	               kinow.txtz     PK      ?   6     
