@@ -1,0 +1,90 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+m4_include([testsuite.inc])
+
+m4_define([MH_SETUP],[
+test -d Mail || mkdir Mail
+HOME=`pwd`
+export HOME
+MH=$HOME/mh_profile
+export MH
+cat > $MH <<EOT
+Path: $HOME/Mail
+mhetcdir: $abs_top_srcdir/mh/etc
+moreproc: /bin/cat
+EOT
+MTSTAILOR=$HOME/mtstailor
+export MTSTAILOR
+exec <&-
+])
+
+m4_define([MH_MTSTAILOR],[
+cat > $MTSTAILOR <<EOT
+localname: darkstar
+localdomain: example.net
+username: mhtester
+url: sendmail://$abs_top_builddir/examples/mta
+EOT
+
+MTA_DIAG=$HOME/mta.diag
+export MTA_DIAG
+MTA_DOMAIN=example.net
+export MTA_DOMAIN
+])
+
+m4_define([MH_KEYWORDS])
+
+dnl --------------------------------------------------------------
+dnl MH_CHECK(DESCR, [KW = `'], COMMANDS, [STATUS = `0'],
+dnl          [STDOUT = `'], [STDERR = `']
+dnl
+m4_define([MH_CHECK],[
+AT_SETUP($1)
+AT_KEYWORDS([MH_KEYWORDS $2])
+MH_SETUP
+AT_CHECK([$3],[$4],[$5],[$6])
+AT_CLEANUP
+])
+
+AT_INIT
+
+m4_include([install-mh.at])
+m4_include([fmtcomp.at])
+m4_include([fmtfunc.at])
+m4_include([mhseq.at])
+m4_include([ali.at])
+m4_include([folder.at])
+m4_include([inc.at])
+m4_include([scan.at])
+m4_include([rmm.at])
+m4_include([rmf.at])
+m4_include([mark.at])
+m4_include([mhparam.at])
+m4_include([refile.at])
+m4_include([mhpath.at])
+m4_include([mhl.at])
+m4_include([anno.at])
+m4_include([pick.at])
+m4_include([burst.at])
+m4_include([comp.at])
+m4_include([forw.at])
+m4_include([repl.at])
+m4_include([mhn.at])
+m4_include([send.at])
+m4_include([sortm.at])
+
+m4_include([fmtcnd00.at])

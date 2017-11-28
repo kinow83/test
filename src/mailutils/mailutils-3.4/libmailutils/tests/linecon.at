@@ -1,0 +1,89 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([linecon filter])
+AT_KEYWORDS([filter decode linecon])
+sed 's/\$//' > input <<\EOT
+input line 1
+input line 2
+a very\
+ long logical\
+ line spl\
+it over several physical\
+ ones
+a li\ne with \escapes
+backslash followed by a space \ $
+EOT
+sed 's/\$//' > expout <<\EOT
+input line 1
+input line 2
+a very long logical line split over several physical ones
+a li\ne with \escapes
+backslash followed by a space \ $
+EOT
+
+AT_CHECK([fltst linecon decode read < input],
+[0],
+[expout])
+
+AT_CHECK([fltst linecon decode write < input],
+[0],
+[expout])
+
+AT_CLEANUP
+
+dnl ---------------------------------------------------------------
+
+AT_SETUP([linecon filter: line info facility])
+AT_KEYWORDS([filter decode linecon line-info])
+sed 's/\$//' > input <<\EOT
+input line 1
+input line 2
+a very\$
+ long logical\
+ line spl\
+it over several physical\
+ ones
+a li\ne with \escapes
+backslash followed by a space \ $
+another\
+ split line\\\n
+end of test 
+EOT
+sed 's/\$//' > expout <<\EOT
+input line 1
+input line 2
+a very long logical line split over several physical ones
+;line 8
+a li\ne with \escapes
+backslash followed by a space \ $
+another split line\\\n
+;line 12
+end of test
+EOT
+
+AT_CHECK([fltst linecon decode read -- -i ';line' < input],
+[0],
+[expout])
+
+AT_CHECK([fltst linecon decode write -- -i ';line' < input],
+[0],
+[expout])
+
+AT_CLEANUP
+
+
+

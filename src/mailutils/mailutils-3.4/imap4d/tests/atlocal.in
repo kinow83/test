@@ -1,0 +1,80 @@
+# @configure_input@                                     -*- shell-script -*-
+# Configurable variable values for Mailutils test suite.
+# Copyright (C) 2011-2012, 2014-2017 Free Software Foundation, Inc.
+
+PATH=@abs_builddir@:@abs_top_builddir@/imap4d:$top_srcdir:$srcdir:$PATH
+MU_ULONG_MAX_1=@MU_ULONG_MAX_1@
+
+make_config() {
+    CWD=`pwd`
+    HOMEDIR=${CWD}${1:+/}$1
+    cat > imap4d.conf <<EOT
+logging {
+	syslog off;
+	severity notice;
+}
+
+gsasl {
+	enable off;
+}
+
+namespace personal {
+	prefix "" {
+		directory "$HOMEDIR";
+	}
+	prefix "#archive:" {
+		directory "$CWD/archive";
+		delimiter ".";
+	}
+	prefix "archive." {
+		directory "$CWD/archive";
+		delimiter ".";
+	}
+}
+
+namespace other {
+	prefix "~" {
+		directory "$CWD/home/\$user";
+	}
+	prefix "other/" {
+		directory "$CWD/home/\$user";
+	}
+}
+
+mailbox {
+	folder "$CWD";
+	mailbox-pattern "$CWD/INBOX";
+	mailbox-type mbox;
+}	
+EOT
+}
+
+remove_untagged() {
+  sed '/^\*/d'
+}
+
+filter_untagged() {
+  sed 's/\(^\* \(OK\|BAD\|NO\|PREAUTH\)\).*/\1/'
+}
+
+remove_uidvalidity() {
+  sed '/^\* OK \[UIDVALIDITY/d'
+}
+
+remove_select_untagged() {
+  sed '/^\* [0-9][0-9]* EXISTS/,/^1 OK.*SELECT Completed/d'
+}
+
+fixup_tz() {
+  sed '/^\* [0-9][0-9]* FETCH/s/ [+-][0-9][0-9][0-9][0-9]"/ +0000"/'
+}
+
+sorted_list_output() {
+  sed '/^\* PREAUTH/d
+       /^\* OK/d
+       /^\* BYE/d
+       /^\* [0-9][0-9]* EXISTS/d
+       /^\* [0-9][0-9]* RECENT/d
+       /^\* FLAGS/d
+       /^[0-9X][0-9]* OK/d' | sort
+}       

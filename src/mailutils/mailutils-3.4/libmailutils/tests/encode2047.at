@@ -1,0 +1,69 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2007-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+dnl ------------------------------------------------------------
+dnl TESTENC2047([NAME], [KW = `'], [OPT], [INPUT], [STDOUT = `'])
+dnl
+m4_pushdef([TESTENC2047],[
+m4_pushdef([MU_TEST_GROUP],[Encode 2047])
+m4_pushdef([MU_TEST_KEYWORDS],[encode2047 encode])
+m4_pushdef([MU_TEST_COMMAND],[encode2047 $3])
+MU_GENERIC_TEST([$1],[$2],[$4],[],[$5
+])
+m4_popdef([MU_TEST_COMMAND])
+m4_popdef([MU_TEST_KEYWORDS])
+m4_popdef([MU_TEST_GROUP])
+])
+
+TESTENC2047([8-bit input],[enc01],
+            [-eB -c koi8-r -o],
+            [\345\326\305\304\316\305\327\316\331\312\040\317\324\336\305\324],
+            [=?koi8-r?B?5dbFxM7F187ZyiDP1N7F1A==?=])
+	    
+TESTENC2047([padding 1],[enc02],
+            [-eB],
+            [abcd],
+	    [=?iso-8859-1?B?YWJjZA==?=])
+	    
+TESTENC2047([padding 2],[enc03],
+            [-eB],
+            [abcdef],
+	    [=?iso-8859-1?B?YWJjZGVm?=])
+
+TESTENC2047([padding 3],[enc04],
+            [-eB -cUTF-8],
+	    [Wichtige Mitteilung zur Schaltung Ihres Anschlusses],
+	    [=?UTF-8?B?V2ljaHRpZ2UgTWl0dGVpbHVuZyB6dXIgU2NoYWx0dW5nIElocmVzIEFuc2NobHV?=
+ =?UTF-8?B?zc2Vz?=])
+
+TESTENC2047([specials],[enc05],
+            [-eQ],
+	    [_?=],
+	    [=?iso-8859-1?Q?=5F=3F=3D?=])
+
+TESTENC2047([length limit],[enc06],
+            [-cUTF-8 -eQ],
+	    [J'interdis aux marchands de vanter trop leur marchandises. Car ils se font vite pédagogues et t'enseignent comme but ce qui n'est par essence qu'un moyen, et te trompant ainsi sur la route à suivre les voilà bientôt qui te dégradent, car si leur musique est vulgaire ils te fabriquent pour te la vendre une âme vulgaire.],
+	    [=?UTF-8?Q?J'interdis_aux_marchands_de_vanter_trop_leur_marchandises._Car_?=
+ =?UTF-8?Q?ils_se_font_vite_p=C3=A9dagogues_et_t'enseignent_comme_but_ce_q?=
+ =?UTF-8?Q?ui_n'est_par_essence_qu'un_moyen,_et_te_trompant_ainsi_sur_la_r?=
+ =?UTF-8?Q?oute_=C3=A0_suivre_les_voil=C3=A0_bient=C3=B4t_qui_te_d=C3=A9gr?=
+ =?UTF-8?Q?adent,_car_si_leur_musique_est_vulgaire_ils_te_fabriquent_pour_?=
+ =?UTF-8?Q?te_la_vendre_une_=C3=A2me_vulgaire.?=])
+	    
+m4_popdef([TESTENC2047])
+
+

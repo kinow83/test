@@ -1,0 +1,115 @@
+#! /bin/sh
+# A deprecated interface to GNU Mailutils configuration facilities.
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+# Despite being deprecated, this script is retained as an intermediate
+# layer between mu and the AM_GNU_MAILUTILS macro.  This is important,
+# because some distros prefer to rename mu when installing.  Using this 
+# script allows AM_GNU_MAILUTILS to find mu even if it was renamed.
+
+mode=
+file=
+dir=`expr "$0" : '\(.*\)/.*'`
+muname=mailutils
+
+test -n "$dir" && PATH=$PATH:$dir
+
+usage() {
+    cat <<EOT
+This is a deprecated interface to GNU Mailutils configuration facilities.
+It will be removed in future versions.  Please, consider using these
+alternatives instead:
+
+       Traditional usage          |   Use instead
+    ------------------------------+-------------------
+    mailutils-config --compile    | $muname cflags
+    mailutils-config --link       | $muname ldflags
+    mailutils-config --info       | $muname info
+    mailutils-config --query      | $muname query
+    mailutils-config --query=FILE | $muname query -f FILE
+
+For more information, try \`$muname --help'.
+
+EOT
+    exit 0
+}
+
+while test $# -ne 0
+do
+  arg=$1
+  shift
+  case $arg in
+  -c|--c|--co|--com|--comp|--compil|--compile)
+    mode=cflags
+    break
+    ;;
+  -i|--i|--in|--inf|--info)
+    mode=info
+    break
+    ;;
+  -l|--l|--li|--lin|--link)
+    mode=ldflags
+    break
+    ;;
+  --)
+    break
+    ;;
+  -q*=*|--q*=*)
+    opt=`expr "$arg" : '\(.*\)='`
+    arg=`expr "$arg" : '.*=\(.*\)'`
+    case $opt in
+    -q|--q|--qu|--que|--quer|--query)
+      mode=query
+      file=arg
+      break
+      ;;
+    *)
+      echo >&2 "$0: invalid option: $1"
+      exit 1
+    esac
+    ;;
+  -q|--q|--qu|--que|--quer|--query)
+    mode=query
+    break
+    ;;
+  -q*)
+    mode=query
+    file=`expr "$arg" : '-q\(.*\)'`
+    break
+    ;;
+  --usage|--u|--us|--usa|--usag|--help|--hel|--he|--h)
+    usage
+    ;;
+  -V|--version|--versio|--versi|--vers|--ver|--ve|--v)
+    $muname --version | sed -n '1{s/^mailutils/mailutils-config/;s/(\(GNU Mailutils\)) \([0-9][0-9.]*\).*/(\1 \2)/;p}'
+    exit 0
+    ;;
+  *)
+    echo >&2 "$0: unexpected argument; try \`$0 --usage' for help"
+    exit 1
+    ;;
+  esac
+done
+
+if test -z "$mode"; then
+  usage
+fi
+
+if test -n "$file"; then
+  set -- -f"$file" $*
+fi
+
+$muname $mode $*

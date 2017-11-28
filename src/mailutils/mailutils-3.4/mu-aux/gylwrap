@@ -1,0 +1,539 @@
+eval '(exit $?0)' && eval 'exec perl -wS "$0" "$@"'
+  & eval 'exec perl -wS "$0" $argv:q'
+    if 0;
+
+# This file is part of GNU Mailutils.
+# Copyright (C) 2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+use Getopt::Long qw(:config gnu_getopt no_ignore_case require_order auto_version);
+use File::Basename;
+use File::Temp qw(tempdir tempfile);
+use Pod::Man;
+use Pod::Usage;
+use Cwd 'abs_path';
+
+=head1 NAME
+
+gylwrap - wrapper for yacc, lex and similar programs
+
+=head1 SYNOPSIS
+
+B<gylwrap>
+[B<-?>]    
+[B<--reset>]    
+[B<--yyrepl=>I<PREFIX>]
+[B<--yysym=>I<STRING>]
+[B<--help>]
+[B<--version>]    
+I<INPUT>
+[I<OUTPUT> I<DESIRED>]...
+B<--> I<PROGRAM> [I<ARGS>]    
+
+B<gylwrap>
+B<--dump>
+[B<--reset>]    
+[B<--yyrepl=>I<PREFIX>]
+[I<OUTFILE>]
+  
+=head1 DESCRIPTION
+
+Wraps B<lex> and B<yacc> invocations to rename their output files.  
+It also ensures that multiple I<COMMAND> instances can be invoked
+in a single directory in parallel and allows for renaming global
+symbols to avoid clashes when multiple parsers and/or lexers are
+linked in a single executable.
+
+To achieve this, B<gylwrap> creates a temporary directory, changes
+to it, and runs I<PROGRAM>, with I<ARGS> and I<INPUT> as its arguments.
+Upon successful exit from I<PROGRAM>, B<gylwrap> processes the
+I<OUTPUT>-I<DESIRED> pairs.  Each I<OUTPUT> file is then renamed
+to the file I<DESIRED>, taking care to fix up any eventual B<#line>
+directives.
+
+If B<--yyrepl=I<PREFIX>> is given, the global symbols that can cause
+name clashes are renamed by replacing the initial B<yy> with I<PREFIX>.
+For a list of symbols that are subject for replacement, inspect the
+B<@sym> variable at the start of the script.  Additional names can be
+added to this list using the B<--yysym> option.
+
+Prior to running the I<PROGRAM>, B<gylwrap> program checks whether the
+file named B<gylwrap.conf> exists in directory of the I<INPUT> file.
+If found, it is parsed as follows.  Empty lines and comments (introduced
+by the hash sign) are ignored.  Rest of lines are either option
+assignements, or section headings.
+
+Option assignements have the form B<I<OPTION> = I<VALUE>>, and generally,
+have the same meaning as the corresponding command line option without
+the leading two dashes:
+
+=over 4
+
+=item B<yyrepl => I<PREFIX>
+
+Replace the B<yy> prefix with I<PREFIX> in the identifiers.
+
+=item B<yysym => I<NAME>
+
+Add I<NAME> to the list of symbols suitable for prefix replacement.
+This keyword can appear multiple times.
+
+=item B<flags => I<STRING>
+
+Add I<STRING> to the invocation of I<COMMAND>.  This is useful, if you
+have several parsers in the same directory, and some of them require
+the B<-d> option, while others don't.    
+    
+=back
+
+Section headers have the form B<[I<FILE>]>.  The settings under a
+section header have effect only if I<FILE> is the same as the I<INPUT>
+command line argument.    
+    
+=head1 OPTIONS
+
+=over 4
+
+=item B<--dump>
+
+Dumps the entire program (after applying any eventual B<--yysym> options)
+to I<OUTFILE>.  If I<OUTFILE> is not given, rewrite the program file with
+the output.  Use this option to hardcode more replaceable symbols into
+this program.  See the BOOTSTRAP section for an example.    
+
+=item B<--reset>
+
+Clears the yysym array.     
+    
+=item B<--yyrepl=>I<PREFIX>
+
+Replace the B<yy> prefix in global symbols with I<PREFIX>.
+
+=item B<--yysym=>I<SYMBOL>
+
+Add I<SYMBOL> to the list of symbols subject for replacement.
+
+=item B<-?>, B<--help>
+
+Displays help text and exit
+
+=item B<--version>
+
+Displays program version and exits.
+    
+=back
+
+=head1 NOTE
+
+This script is an improved version of the B<ylwrap> script, included
+in the GNU Automake distribution.    
+
+=head1 BOOTSTRAP
+
+This version of gylwrap was bootstrapped as follows:
+
+  gylwrap --dump --reset  --yysym=yymaxdepth --yysym=yyparse\
+          --yysym=yylex --yysym=yyerror --yysym=yylval\
+          --yysym=yychar --yysym=yydebug --yysym=yypact\
+          --yysym=yyr1 --yysym=yyr2 --yysym=yydef --yysym=yychk\
+          --yysym=yypgo --yysym=yyact --yysym=yyexca\
+          --yysym=yyerrflag --yysym=yynerrs --yysym=yyps\
+          --yysym=yypv --yysym=yys --yysym=yy_yys\
+          --yysym=yystate --yysym=yytmp --yysym=yyv\
+          --yysym=yy_yyv --yysym=yyval --yysym=yylloc\
+          --yysym=yyreds --yysym=yytoks --yysym=yylhs\
+          --yysym=yylen --yysym=yydefred --yysym=yydgoto\
+          --yysym=yysindex --yysym=yyrindex --yysym=yygindex\
+          --yysym=yytable --yysym=yycheck --yysym=yyname\
+          --yysym=yyrule --yysym=yy_create_buffer\
+          --yysym=yy_delete_buffer --yysym=yy_flex_debug\
+          --yysym=yy_init_buffer --yysym=yy_flush_buffer\
+          --yysym=yy_load_buffer_state\
+          --yysym=yy_switch_to_buffer --yysym=yyin\
+          --yysym=yyleng --yysym=yylex --yysym=yylineno\
+          --yysym=yyout --yysym=yyrestart --yysym=yytext\
+          --yysym=yywrap --yysym=yyalloc --yysym=yyrealloc\
+          --yysym=yyfree --yysym=yy_scan_buffer\
+          --yysym=yy_scan_bytes --yysym=yy_scan_string\
+          --yysym=yyget_debug --yysym=yyget_in\
+          --yysym=yyget_leng --yysym=yyget_lineno\
+          --yysym=yyget_out --yysym=yyget_text\
+          --yysym=yylex_destroy --yysym=yypop_buffer_state\
+          --yysym=yypush_buffer_state --yysym=yyset_debug\
+          --yysym=yyset_in --yysym=yyset_lineno\
+          --yysym=yyset_out
+
+=cut    
+
+# List of symbols suitable for prefix replacements.  See the
+# options --yyrepl and --yysym, and similar statements in the configuration
+# file.
+my @yysym = qw(
+     yymaxdepth
+     yyparse
+     yylex
+     yyerror
+     yylval
+     yychar
+     yydebug
+     yypact
+     yyr1
+     yyr2
+     yydef
+     yychk
+     yypgo
+     yyact
+     yyexca
+     yyerrflag
+     yynerrs
+     yyps
+     yypv
+     yys
+     yy_yys
+     yystate
+     yytmp
+     yyv
+     yy_yyv
+     yyval
+     yylloc
+     yyreds
+     yytoks
+     yylhs
+     yylen
+     yydefred
+     yydgoto
+     yysindex
+     yyrindex
+     yygindex
+     yytable
+     yycheck
+     yyname
+     yyrule
+     yy_create_buffer
+     yy_delete_buffer
+     yy_flex_debug
+     yy_init_buffer
+     yy_flush_buffer
+     yy_load_buffer_state
+     yy_switch_to_buffer
+     yyin
+     yyleng
+     yylex
+     yylineno
+     yyout
+     yyrestart
+     yytext
+     yywrap
+     yyalloc
+     yyrealloc
+     yyfree
+     yy_scan_buffer
+     yy_scan_bytes
+     yy_scan_string
+     yyget_debug
+     yyget_in
+     yyget_leng
+     yyget_lineno
+     yyget_out
+     yyget_text
+     yylex_destroy
+     yypop_buffer_state
+     yypush_buffer_state
+     yyset_debug
+     yyset_in
+     yyset_lineno
+     yyset_out
+);
+
+my @addsym;
+
+our $VERSION = '1.01';
+
+# If prefix replacement is requested, the list above is assembled into
+# a single regular expression, stored here.
+my $yyrx = q{(?:_(?:(?:crea|dele)te_buffer|fl(?:ex_debug|ush_buffer)|init_buffer|load_buffer_state|s(?:can_(?:b(?:uffer|ytes)|string)|witch_to_buffer)|yy[sv])|a(?:ct|lloc)|ch(?:ar|(?:ec)?k)|d(?:e(?:bug|f(?:red)?)|goto)|e(?:rr(?:flag|or)|xca)|free|g(?:et_(?:debug|in|l(?:eng|ineno)|(?:ou|tex)t)|index)|(?:le|i)n|l(?:e(?:ng|x(?:_destroy)?)|hs|ineno|loc|val)|maxdepth|n(?:ame|errs)|(?:ou|pac)t|p(?:arse|go|op_buffer_state|ush_buffer_state|[sv])|r(?:e(?:alloc|ds|start)|index|ule|[12])|s(?:et_(?:debug|in|lineno|out)|index|tate)?|t(?:able|ext|mp|oks)|v(?:al)?|wrap)};
+
+# String to replace the "yy" prefix with.
+my $yyrepl;
+
+# Input directory with special characters escaped, for "#line" directive
+# fixup.
+my $input_rx;
+
+# Configuration settings from the "gylwrap.conf" file.  Indexed by
+# input file name.  Default entry is ''.
+my %config;
+
+# Name of the first output file.  This is used to avoid bailing out if
+# one of the output files (except the principal one) does not exist.
+my $parser;
+
+# Name this program was invoked as.
+my $progname = basename($0);
+
+# List of files created during the run, for cleanup purposes.
+my @created;
+
+sub filter {
+    my ($from, $to) = @_;
+    my $target = basename($to);
+    my $ifd;
+    unless (open($ifd, '<', $from)) {
+	return if $from ne $parser;
+	die "can't open input file $from: $!";
+    }
+    open(my $ofd, '>', $to)
+	or die "can't open output file $to: $!";
+    push @created, $to;
+    while (<$ifd>) {
+	if (/^#/) {
+	    s{$input_rx/}{};
+	    s{"$from"}{"$target"};
+	}
+	if ($yyrepl) {
+	    s{\byy($yyrx)\b}{${yyrepl}$1}g;
+	}
+	print $ofd $_
+    }
+    close $ifd;
+    close $ofd;
+}
+
+sub readconf {
+    my $file = shift;
+    open(my $fd, '<', $file)
+	or die "can't open $file: $!";
+    my $key = '';
+    while (<$fd>) {
+	chomp;
+	s/^\s+//;
+	if (/^#/ || /^$/) {
+	    next;
+	} elsif (/^\[(.+)\]/) {
+	    $key = $1;
+	} elsif (m/(.+?)\s*=\s*(.+)$/) {
+	    if ($1 eq 'yysym' || $1 eq 'flags') {
+		push @{$config{$key}{$1}}, (split /\s+/, $2);
+	    } else {
+		$config{$key}{$1} = $2;
+	    }
+	} else {
+	    print STDERR "$file:$.: unrecognized line\n";
+	}
+    }
+    close($fd);
+}
+
+sub mkrx {
+    my $ret = eval {
+	require List::Regexp;
+	List::Regexp::regexp_opt({ type => 'pcre' }, map { s/^yy//; $_ } @yysym);
+    };
+    if ($@) {	
+	if ($@ =~ /^Can't locate.*Regexp\.pm/) {
+	    die "Perl module List::Regexp is not installed.  Please install it and try again";
+	} else {
+	    die $@;
+	}
+    }
+    return $ret;
+}
+
+sub backup {
+    my $file = shift;
+    my $level = shift || 0;
+    my $bak = "$file~";
+
+    if (-e $bak) {
+	if ($level == 3) {
+	    unlink $bak
+		or die "can't unlink outdated backup file $bak: $!";
+	} else {
+	    backup($bak, $level + 1);
+	}
+    }
+    rename $file, $bak
+	or die "can't rename $file to $bak";
+}
+
+sub dumpme {
+    my $outname = shift || $0;
+    die "too many arguments for --dump option" if @_;
+    open(my $in, '<', $0)
+	or die "can't open $0 for reading: $!";
+    my ($out, $tempname) = tempfile(basename($outname) . ".XXXXXX",
+				    DIR => dirname($outname));
+    push @yysym, @addsym;
+    my $skip;
+    while (<$in>) {
+	chomp;
+	if ($skip) {
+	    next unless /^=/;
+	    $skip = 0;
+	}
+	
+	if (/^(my\s+\$yyrx)\s*(?=.*)?;\s*?/) {
+	    my $rx = mkrx;
+	    print $out "$1 = q{$rx};\n";
+	} elsif (s/^(my \@yysym\s+=).*/$1/) {
+	    my $start = $.;
+	    print $out "$_ qw(\n"
+		  . join("\n", map { "     $_" } @yysym) . "\n";
+	    while (<$in>) {
+		if (/^\);/) {
+		    $start = undef;
+		    last;
+		}
+	    }
+
+	    die "can't find closing parenthesis in definition at $0:$start"
+		if defined $start;
+	    redo;
+	} elsif (/^=head1\s+BOOTSTRAP/) {
+	    print $out "$_\n\n";
+	    print $out "This version of gylwrap was bootstrapped as follows:\n\n";
+	    my $s = "  gylwrap --dump --reset ";
+	    print $out $s;
+	    my $len = length($s);
+	    foreach my $sym (@yysym) {
+		my $opt = "--yysym=$sym";
+		my $l = length($opt);
+		if ($len + $l + 1 > 64) {
+		    print $out "\\\n          ";
+		    $len = 10;
+		} else {
+		    $opt = " $opt";
+		}
+		print $out $opt;
+		$len += length($opt);
+	    }
+	    print $out "\n\n";
+	    $skip = 1;
+	} else {
+	    print $out "$_\n";
+	}
+    }
+    close($in);
+    close($out);
+
+    if (-e $outname) {
+	backup($outname);
+    }
+    
+    rename $tempname, $outname
+	or die "can't rename $tempname to $outname: $!";
+    chmod 0755, $outname;
+    
+    exit(0);
+}
+
+my $input;
+my @output;
+my $dump;
+
+GetOptions("yyrepl=s" => \$yyrepl,
+	   "yysym=s@" => \@addsym,
+	   "reset" => sub { $yyrx = undef; @yysym = () },
+	   "dump" => \$dump,
+	   "help|?" => sub {
+	       pod2usage(-exitstatus => 0, -verbose => 2);
+	   }	   
+    ) or exit(1);
+
+die "some --yysym arguments don't start with yy"
+    if @addsym && grep(!/^yy/, @addsym);
+
+dumpme(@ARGV) if $dump;
+
+$input = shift @ARGV;
+while (my $arg = shift @ARGV) {
+    last if ($arg eq '--');
+    push @output, $arg;
+}
+
+pod2usage(-exitstatus => 1, -verbose => 0, -output => \*STDERR)
+    unless (@output && (@output % 2) == 0);
+
+# Make sure input file name is absolute
+$input = abs_path($input);
+
+my $input_dir = dirname($input);
+$input_rx = qr($input_dir);
+
+my $confile = "$input_dir/gylwrap.conf";
+readconf($confile) if -r $confile;    
+
+my $input_base = basename($input);
+unless ($yyrepl) {
+    $yyrepl = $config{$input_base}{yyrepl} || $config{''}{yyrepl};
+}
+if ($yyrepl) {
+    push @addsym, @{$config{$input_base}{yysym}}
+        if exists $config{$input_base}{yysym};
+    push @addsym, @{$config{''}{yysym}}
+        if exists $config{''}{yysym};
+    if (@addsym) {
+	push @yysym, @addsym;
+	$yyrx = undef;
+    }
+}
+$yyrx = mkrx unless defined($yyrx);
+
+if (my $flags = $config{$input_base}{flags} || $config{''}{flags}) {
+    push @ARGV, @$flags;
+}
+push @ARGV, $input;
+
+$parser = $output[0];
+
+# Create working directory
+my $wd = tempdir("ylXXXXXX", DIR => '.', CLEANUP => 1)
+    or die "cannot create temporary directory";
+chdir $wd
+    or die "cannot change to the temporary directory";
+END {
+    if ($?) {
+	unlink @created;
+    }
+    chdir "..";
+}
+
+system(@ARGV);
+if ($? == -1) {
+    print STDERR "$ARGV[0]: $!\n";
+    exit(127);
+} elsif ($? & 127) {
+    print STDERR "$ARGV[0] died with signal ".($? & 127)."\n";
+    exit(127);
+} else {
+    my $code = $? >> 8;
+    exit($code) if $code;
+}
+
+while (my $from = shift @output) {
+    my $to = shift @output;
+    $to = '../' . $to unless $to =~ m{^/};
+    filter($from, $to);
+}
+    
+exit 0;
+
+# Local Variables:
+# mode: perl
+# End:
+
+

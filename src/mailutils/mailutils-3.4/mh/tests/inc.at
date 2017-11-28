@@ -1,0 +1,105 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER(inc)
+m4_pushdef([MH_KEYWORDS],[inc])
+
+MH_CHECK([inc -notruncate],[inc00 inc-notruncate],[
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+inc -notruncate -file ./mbox1 | sed 's/ *$//'
+cmp $abs_top_srcdir/testsuite/spool/mbox1 mbox1
+],
+[0],
+[   1+ 12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+   2  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+   3  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   4  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   5  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+])
+
+MH_CHECK([inc -truncate],[inc01 inc-truncate],[
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+inc -truncate -file ./mbox1 | sed 's/ *$//'
+echo "Next"
+inc -truncate -file ./mbox1 | sed 's/ *$//'
+],
+[0],
+[   1+ 12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+   2  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+   3  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   4  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   5  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+Next    
+])
+
+MH_CHECK([inc -folder],[inc02 inc-folder],[
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+mkdir Mail/new
+inc +new -file ./mbox1 | sed 's/ *$//'
+],
+[0],
+[   1+ 12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+   2  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+   3  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   4  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   5  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+])
+
+MH_CHECK([inc -changecur],[inc03 inc-changecur],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+inc -changecur -file ./mbox1 | sed 's/ *$//'
+],
+[0],
+[   6+ 12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+   7  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+   8  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   9  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+  10  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+])
+
+MH_CHECK([inc -nochangecur],[inc04 inc-nochangecur],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+echo "cur: 1" > Mail/inbox/.mh_sequences
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+inc -nochangecur -file ./mbox1 | sed 's/ *$//'
+grep ^cur: Mail/inbox/.mh_sequences
+],
+[0],
+[   6  12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+   7  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+   8  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+   9  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+  10  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+cur: 1  
+])
+
+MH_CHECK([sparse numbering],[inc05 inc-sparse],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+mv Mail/inbox/5 Mail/inbox/20
+MUT_MBCOPY([$abs_top_srcdir/testsuite/spool/mbox1])
+inc -changecur -file ./mbox1 | sed 's/ *$//'
+],
+[0],
+[  21+ 12/28 Foo Bar            Jabberwocky<<`Twas brillig, and the slithy toves
+  22  12/28 Bar                Re: Jabberwocky<<It seems very pretty, but it's
+  23  07/13 Sergey Poznyakoff  Simple MIME<<------- =_aaaaaaaaaa0 Content-Type:
+  24  07/13 Sergey Poznyakoff  Nested MIME<<------- =_aaaaaaaaaa0 Content-Type:
+  25  07/13 Sergey Poznyakoff  Empty MIME Parts<<------- =_aaaaaaaaaa0 Content-
+])
+
+m4_popdef[MH_KEYWORDS])
+# End of inc.at

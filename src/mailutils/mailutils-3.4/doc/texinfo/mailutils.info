@@ -1,0 +1,320 @@
+This is mailutils.info, produced by makeinfo version 5.9.93 from
+mailutils.texi.
+
+Published by the Free Software Foundation, 51 Franklin Street, Fifth
+Floor Boston, MA 02110-1301, USA
+
+   Copyright (C) 1999-2004, 2008-2012, 2014-2017 Free Software
+Foundation, Inc.
+
+   Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover, and no Back-Cover texts.  A copy of
+the license is included in the section entitled "GNU Free Documentation
+License".
+INFO-DIR-SECTION Email
+START-INFO-DIR-ENTRY
+* Mailutils: (mailutils).       GNU Mail Utilities.
+END-INFO-DIR-ENTRY
+
+INFO-DIR-SECTION Individual utilities
+START-INFO-DIR-ENTRY
+* comsatd: (mailutils) comsatd.          Comsat Daemon.
+* frm: (mailutils) frm.                  List Headers from a Mailbox.
+* guimb: (mailutils) guimb.              Mailbox Processing Language.
+* imap4d: (mailutils) imap4d.            IMAP4 Daemon.
+* mail: (mailutils) mail.                Send and Receive Mail.
+* maidag: (mailutils) maidag.            A General-Purpose Mail Delivery Agent.
+* messages: (mailutils) messages.        Count Messages in a Mailbox.
+* movemail: (mailutils) movemail.        Move Mail between Mailboxes.
+* pop3d: (mailutils) pop3d.              POP3 Daemon.
+* readmsg: (mailutils) readmsg.          Extract Messages from a Folder.
+* sieve: (mailutils) sieve.              Mail Filtering Utility.
+* mimeview: (mailutils) mimeview.        View MIME Messages.
+* mailutils: (mailutils) mailutils.      Mailutils Multi-Purpose Tool
+END-INFO-DIR-ENTRY
+
+
+Indirect:
+mailutils.info-1: 1685
+mailutils.info-2: 302482
+
+Tag Table:
+(Indirect)
+Node: Top1685
+Node: Introduction10421
+Node: Book Contents14039
+Node: History15520
+Node: Mailbox16436
+Node: Local Mailboxes17456
+Ref: mbox18012
+Node: Remote Mailboxes19442
+Node: SMTP Mailboxes22564
+Node: Program Mailboxes24965
+Node: Programs26135
+Node: command line27741
+Node: Option Basics28001
+Node: Common Options31134
+Node: configuration34428
+Node: conf-syntax40283
+Node: Comments40827
+Node: Statements41503
+Ref: boolean value42147
+Ref: backslash-interpretation42713
+Ref: here-document44076
+Ref: list values45647
+Node: Paths46489
+Ref: the --set option48319
+Node: Variables50074
+Node: include52863
+Ref: Include53028
+Node: program statement53772
+Node: logging statement54889
+Ref: Logging Statement55070
+Ref: syslog facility55969
+Node: debug statement56843
+Ref: Debug Statement57020
+Node: mailbox statement57703
+Ref: Mailbox Statement57884
+Ref: local URL parameters59185
+Ref: mailbox-type63505
+Node: locking statement64141
+Ref: Locking Statement64323
+Node: mailer statement66602
+Ref: Mailer Statement66778
+Node: acl statement68091
+Ref: ACL Statement68268
+Node: tcp-wrappers statement72988
+Ref: Tcp-wrappers Statement73182
+Node: Server Settings75174
+Node: General Server Configuration76151
+Ref: server mode76890
+Node: Server Statement79237
+Node: auth statement84065
+Ref: Auth Statement84235
+Node: pam statement89376
+Ref: PAM Statement89537
+Node: virtdomain statement90006
+Ref: Virtdomain Statement90195
+Node: radius statement92251
+Ref: Radius Statement92432
+Node: sql statement97200
+Ref: SQL Statement97369
+Ref: getpw column names100290
+Node: ldap statement102384
+Ref: LDAP Statement102552
+Ref: ldap statement-Footnote-1105187
+Node: tls statement105325
+Ref: TLS Statement105503
+Node: tls-file-checks statement106516
+Node: gsasl statement108166
+Ref: GSASL Statement108327
+Node: debugging108849
+Node: Level Syntax110011
+Node: Level BNF111357
+Node: Debugging Categories112307
+Node: frm and from116842
+Node: mail120262
+Node: Invoking Mail122141
+Node: Specifying Messages126705
+Node: Composing Mail129664
+Node: Quitting Compose Mode130898
+Node: Getting Help on Compose Escapes131791
+Node: Editing the Message132206
+Node: Modifying the Headers132899
+Node: Enclosing Another Message133607
+Node: Adding a File to the Message134329
+Node: Attaching a File to the Message134743
+Node: Printing And Saving the Message136154
+Node: Signing the Message136598
+Node: Printing Another Message137207
+Node: Inserting Value of a Mail Variable137855
+Node: Executing Other Mail Commands138217
+Node: Executing Shell Commands139174
+Node: MIME139822
+Node: Reading Mail148818
+Node: Quitting the Program151045
+Node: Obtaining Online Help151829
+Node: Moving Within a Mailbox152417
+Node: Changing mailbox/directory152809
+Node: Controlling Header Display153550
+Node: Displaying Information154732
+Node: Displaying Messages156037
+Node: Marking Messages158173
+Node: Disposing of Messages158825
+Node: Saving Messages159595
+Node: Editing Messages161846
+Node: Aliasing162540
+Node: Replying163617
+Node: Controlling Sender Fields166262
+Node: Incorporating New Mail167322
+Node: Shell Escapes167727
+Node: Scripting168227
+Ref: Setting and Unsetting the Variables168774
+Node: Mail Variables172373
+Ref: byname174098
+Ref: datefield174447
+Ref: fromfield179182
+Ref: return-address190255
+Node: Mail Configuration Files193202
+Node: messages194098
+Node: movemail195302
+Node: Movemail Configuration196703
+Ref: movemail-program-id197593
+Ref: mailbox-ownership-methods198921
+Ref: movemail-onerror199698
+Node: Ownership200850
+Node: Summary201360
+Ref: Summary-Footnote-1203716
+Node: readmsg203756
+Node: Opt-readmsg205121
+Ref: weedlist option205752
+Node: Conf-readmsg205978
+Node: sieve207228
+Node: sieve interpreter207904
+Node: Invoking Sieve208476
+Node: Sieve Configuration211167
+Node: Logging and Debugging213871
+Node: Extending Sieve215861
+Node: guimb219081
+Node: Specifying Scheme Program to Execute221193
+Node: Specifying Mailboxes to Operate Upon222226
+Node: Passing Options to Scheme223391
+Node: Command Line Option Summary224735
+Node: maidag225843
+Node: Sendmail-maidag227560
+Node: Exim-maidag228905
+Node: MeTA1-maidag229501
+Node: Mailbox Quotas230496
+Node: DBM Quotas231736
+Node: SQL Quotas233129
+Node: Maidag Scripting235210
+Node: Sieve Maidag Filters236180
+Node: Scheme Maidag Filters237022
+Node: Python Maidag Filters237495
+Node: Forwarding238906
+Node: Url-mode240581
+Node: Remote Mailbox Delivery240987
+Node: Conf-maidag243748
+Node: mimeview246688
+Ref: mimeview-Footnote-1247925
+Node: Mimeview Invocation248140
+Node: Mimeview Config251788
+Node: pop3d252314
+Node: Login delay253030
+Node: Auto-expire255074
+Node: Bulletins256842
+Node: Conf-pop3d258358
+Node: Command line options260487
+Node: imap4d261170
+Node: Namespace261604
+Node: Conf-imap4d268027
+Node: Starting imap4d273360
+Node: comsatd274428
+Node: Starting comsatd274893
+Node: Configuring comsatd275620
+Node: General Settings276258
+Node: Security Settings276707
+Node: dot.biffrc277472
+Node: mh280430
+Node: Diffs281096
+Node: Format String Diffs281968
+Ref: decode function282168
+Ref: reply_regex function283358
+Ref: isreply MH function284051
+Node: Profile Variable Diffs286133
+Ref: Charset variable286319
+Ref: Reply-Regex variable286513
+Node: Program Diffs286799
+Node: mailutils295724
+Node: mailutils invocation syntax297057
+Node: mailutils help298232
+Node: mailutils info298906
+Node: mailutils cflags302482
+Node: mailutils ldflags302854
+Node: mailutils stat304427
+Node: mailutils query306793
+Node: mailutils 2047308488
+Node: mailutils filter310199
+Node: mailutils acl312226
+Node: mailutils wicket315063
+Node: mailutils dbm316786
+Node: Create a Database317555
+Node: Add Records to a Database319754
+Node: Delete Records320511
+Node: List the Database322099
+Node: Dump the Database322853
+Node: Dump Formats323853
+Ref: dump version 0.0324400
+Ref: dump version 1.0325146
+Node: Dbm Exit Codes326560
+Node: mailutils logger327893
+Node: mailutils pop329829
+Node: mailutils imap335860
+Ref: mailutils imap-Footnote-1340779
+Ref: mailutils imap-Footnote-2340832
+Ref: mailutils imap-Footnote-3340880
+Ref: mailutils imap-Footnote-4340939
+Ref: mailutils imap-Footnote-5340998
+Ref: mailutils imap-Footnote-6341057
+Node: mailutils send341116
+Node: mailutils smtp342152
+Node: Libraries345548
+Node: Sieve Language345901
+Node: Lexical Structure346306
+Node: Syntax351443
+Node: Commands351748
+Node: Actions Described353286
+Node: Control Flow353850
+Node: Tests and Conditions355288
+Node: Preprocessor356386
+Node: #include357033
+Node: #searchpath357705
+Node: Require Statement358075
+Node: Comparators361843
+Node: Tests362469
+Node: Built-in Tests366410
+Node: External Tests371836
+Node: Actions378148
+Node: Built-in Actions378561
+Ref: fileinto379616
+Node: External Actions385122
+Node: Extensions391682
+Node: encoded-character392031
+Node: relational394281
+Node: variables395965
+Node: environment399452
+Node: numaddr401351
+Node: editheader401576
+Node: list403030
+Node: moderator403201
+Node: pipe403470
+Node: spamd403764
+Node: timestamp404026
+Node: vacation404415
+Node: GNU Extensions404729
+Node: Reporting Bugs406904
+Node: News407504
+Node: Acknowledgement408071
+Node: References408663
+Node: Date Input Formats409028
+Node: General date syntax411371
+Node: Calendar date items414323
+Node: Time of day items416326
+Node: Time zone items418529
+Node: Day of week items419768
+Node: Relative items in date strings420762
+Node: Pure numbers in date strings423570
+Node: Seconds since the Epoch424557
+Node: Specifying time zone rules426185
+Node: Authors of get_date428556
+Node: Usage Vars429314
+Node: GNU FDL434956
+Node: Function Index457385
+Node: Variable Index481249
+Node: Keyword Index487370
+Node: Program Index508424
+Node: Concept Index509597
+
+End Tag Table

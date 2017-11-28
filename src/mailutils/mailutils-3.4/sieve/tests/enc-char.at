@@ -1,0 +1,61 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2016-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([encoded-character])
+AT_KEYWORDS([encoded-character enc-char])
+
+AT_CHECK([
+AT_DATA([prog],[[require ["reject", "encoded-character"];
+reject "$${hex:40}";
+reject "${hex: 40 }";
+reject "${HEX: 40}";
+reject "${hex:40";
+reject "${hex:400}";
+reject "${hex:4${hex:30}}";
+reject "${unicode:40}";
+reject "${ unicode:40}";
+reject "${UNICODE:40}";
+reject "${UnICoDE:0000040}";
+reject "${Unicode:40}";
+reject "${Unicode:Cool}";
+reject "Now ${hex: 69 73 20}the${unicode:20 74}${hex:69 6d}e";
+reject "Unbalanced ${hex: 73 65 71 uence";
+reject "Nested ${hex: 73 65 71 ${hex: 75 65 6E}}ce";
+reject "Invalid ${hex: 73 RE}";
+]])
+
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -D prog | sed -n 's/.*ACTION: //p'
+],
+[0],
+[reject "$@"
+reject "@"
+reject "@"
+reject "${hex:40"
+reject "${hex:400}"
+reject "${hex:40}"
+reject "@"
+reject "${ unicode:40}"
+reject "@"
+reject "@"
+reject "@"
+reject "${Unicode:Cool}"
+reject "Now is the time"
+reject "Unbalanced ${hex: 73 65 71 uence"
+reject "Nested ${hex: 73 65 71 uen}ce"
+reject "Invalid ${hex: 73 RE}"
+])
+
+AT_CLEANUP

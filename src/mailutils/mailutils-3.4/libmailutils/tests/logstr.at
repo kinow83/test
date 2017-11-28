@@ -1,0 +1,77 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP(Logger stream)
+AT_KEYWORDS([logstream])
+AT_CHECK([logstr],
+[0],
+[00. simple print
+hello world
+01. severity
+info: one
+emerg: two
+mode was: 0x0001
+02. suppress severity
+info: this message is seen
+emerg: and this one as well
+03. suppress severity name
+info: this message is seen
+emerg: and this one as well
+04. severity mask
+one
+two
+emerg: three
+05. locus: file, line
+input:1: file, line
+06. locus: file, line, col
+input:1.1-10: file, line, col
+07. locus: file, line-range
+input:1-2: file, line-range
+08. locus: file, line-range, col
+input:1.1-2.10: file, line-range, col
+09. locus: file-range, line-range, col-range
+input:1.1-next:2.10: file-range, line-range, col-range
+10. set locus line
+input:1.1-next:2.10: initial
+input:8.1-next:2.10: locus line changed
+11. advance locus line
+input:1.1-next:5.10: initial
+input:3.1-next:5.10: locus line advanced
+12. set locus column
+input:1.1-next:2.10: initial
+input:1.8-next:2.10: locus column changed
+13. advance locus column
+input:1.1-next:5.10: initial
+input:1.5-next:5.10: locus line advanced
+14. fmt: severity
+info: severity
+15. fmt: locus (file, line)
+a:10: one
+16. fmt: locus (file, line, column)
+a:10.5: one
+17. fmt: locus (range)
+a:10.5-b:14.8: one
+18. fmt: locus; restore defaults
+a:10.5-b:14.8: one
+default
+19. fmt: locus; restore defaults, display locus
+a:10.5-b:14.8: one
+input:1.1-next:5.10: default
+20. fmt: set locus
+a:10.5-b:14.8: one
+a:10.5-b:14.8: default
+])
+AT_CLEANUP

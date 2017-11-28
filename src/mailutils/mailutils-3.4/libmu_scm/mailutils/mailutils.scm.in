@@ -1,0 +1,58 @@
+;;;; -*- scheme -*-
+;;;; GNU Mailutils -- a suite of utilities for electronic mail
+;;;; Copyright (C) 2002-2004, 2006-2007, 2009-2012, 2014-2017 Free
+;;;; Software Foundation, Inc.
+;;;;
+;;;; GNU Mailutils is free software; you can redistribute it and/or modify
+;;;; it under the terms of the GNU General Public License as published by
+;;;; the Free Software Foundation; either version 3, or (at your option)
+;;;; any later version.
+;;;; 
+;;;; GNU Mailutils is distributed in the hope that it will be useful,
+;;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;;; GNU General Public License for more details.
+;;;; 
+;;;; You should have received a copy of the GNU General Public License along
+;;;; with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+;;;;
+changequote([,])dnl
+
+(define-module (mailutils mailutils)
+  #:use-module (ice-9 documentation))
+
+(set! documentation-files (append documentation-files 
+                                  (list "SITEDIR/guile-procedures.txt")))
+
+(define mu-libs (list (cons "libmailutils"     "libmailutils")
+		      (cons "libmu_auth"       "libmu_auth")
+		      (cons "libproto/mbox"    "libmu_mbox")
+ifdef([MU_SUPPORT_MH],dnl
+		      [(cons "libproto/mh"      "libmu_mh")])
+ifdef([MU_SUPPORT_MAILDIR],dnl
+		      [(cons "libproto/maildir" "libmu_maildir")])
+ifdef([MU_SUPPORT_POP],dnl
+		      [(cons "libproto/pop"     "libmu_pop")])
+ifdef([MU_SUPPORT_IMAP],dnl
+		      [(cons "libproto/imap"    "libmu_imap")])))
+
+(cond
+ ((getenv "MAILUTILS_SCM_LIBRARY_ROOT") =>
+  (lambda (root)
+    (for-each
+     (lambda (lib)
+       (dynamic-link (string-append root "/" (car lib) "/" (cdr lib))))
+     mu-libs)
+    (load-extension (string-append root "/libmu_scm/libmu_scm")
+		    "mu_scm_init")))
+ (else
+  (let ((lib-path "LIBDIR/"))
+    (for-each
+     (lambda (lib)
+       (dynamic-link (string-append lib-path (cdr lib))))
+     mu-libs)
+    (load-extension (string-append
+		     lib-path "libguile-mailutils-v-VERSION")
+		    "mu_scm_init"))))
+
+;;;; End of mailutils.scm

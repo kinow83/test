@@ -1,0 +1,22 @@
+%; This is the default replgroupcomps file for Mailutils MH.
+%;
+%; GNU Mailutils -- a suite of utilities for electronic mail
+%; Copyright (C) 2003, 2010-2012, 2014-2017 Free Software Foundation,
+%; Inc.
+%; Distributed under GPL.
+%;
+%(lit)%(formataddr{mail-followup-to})\
+%<(nonnull)%(void(width))%(putaddr To: )\n\
+%|\
+%(lit)%(formataddr %<{mail-reply-to}%?{reply-to}%?{from}%?{sender}%?{return-path}%>)\
+%<(nonnull)%(void(width))%(putaddr To: )\n%>\
+%(lit)%<(rcpt to)%(formataddr{to})%>%<(rcpt cc)%(formataddr{cc})%>%<(rcpt me)%(formataddr(localmbox))%>\
+%<(nonnull)%(void(width))%(putaddr cc: )\n%>%>\
+%;
+%<(mymbox{from})%<{fcc}Fcc: %{fcc}\n%>%>\
+Subject: %<{subject}%(putstr %<(profile reply-prefix)%|\
+%(void Re:)%>) %(void(unre{subject}))%(trim)%(putstr)%>
+%(lit)%<(in_reply_to)%(void(width))%(printhdr In-reply-to: )\n%>\
+%(lit)%<(references)%(void(width))%(printhdr References: )\n%>\
+--------
+

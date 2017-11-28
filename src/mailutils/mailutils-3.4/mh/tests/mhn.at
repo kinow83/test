@@ -1,0 +1,1056 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER(mhn)
+m4_pushdef([MH_KEYWORDS],[mhn])
+
+dnl -------------------------------------------------------------------
+dnl 1. List mode
+dnl -------------------------------------------------------------------
+
+MH_CHECK([mhn -list],[mhn00 mhn-list],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+mhn +inbox -list all
+],
+[0],
+[ msg part type/subtype              size  description
+   1      text/plain                 937
+   2      text/plain                 215
+   3      multipart/mixed             2K
+     1    text/plain                 230 How doth
+     2    application/octet-stream   462 Father William Part I
+   4      multipart/mixed             3K
+     1    text/plain                 341 Father William Part I
+     2    multipart/mixed             3K
+     2.1  application/octet-stream   479 Father William Part II
+     2.2  multipart/mixed             2K
+     2.2.1 application/octet-stream   483 Father William Part III
+     2.2.2 application/octet-stream   495 Father William Part IV
+   5      multipart/mixed            355
+     1    text/plain                   0 Empty part
+     2    text/plain                   1 Single line part
+])
+
+MH_CHECK([mhn -list -realsize],[mhn01 mhn-list-realsize],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+mhn +inbox -list -realsize all
+],
+[0],
+[ msg part type/subtype              size  description
+   1      text/plain                 937
+   2      text/plain                 215
+   3      multipart/mixed             2K
+     1    text/plain                 230 How doth
+     2    application/octet-stream   341 Father William Part I
+   4      multipart/mixed             3K
+     1    text/plain                 341 Father William Part I
+     2    multipart/mixed             3K
+     2.1  application/octet-stream   352 Father William Part II
+     2.2  multipart/mixed             2K
+     2.2.1 application/octet-stream   357 Father William Part III
+     2.2.2 application/octet-stream   366 Father William Part IV
+   5      multipart/mixed            355
+     1    text/plain                   0 Empty part
+     2    text/plain                   1 Single line part
+])
+
+dnl -------------------------------------------------------------------
+dnl 2. Store mode
+dnl -------------------------------------------------------------------
+
+MH_CHECK([mhn -store],[mhn02 mhn-store],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+mhn +inbox -store 4 || exit $?
+for file in 4.1.plain 4.2.1.octet-stream 4.2.2.1.octet-stream 4.2.2.2.octet-stream
+do
+  echo == $file ==
+  cat $file
+done
+],
+[0],
+[storing message 4 part 1 as file 4.1.plain
+storing message 4 part 2.1 as file 4.2.1.octet-stream
+storing message 4 part 2.2.1 as file 4.2.2.1.octet-stream
+storing message 4 part 2.2.2 as file 4.2.2.2.octet-stream
+== 4.1.plain ==
+`You are old, Father William,' the young man said,
+`And your hair has become very white;
+And yet you incessantly stand on your head--
+Do you think, at your age, it is right?'
+
+`In my youth,' Father William replied to his son,
+`I feared it might injure the brain;
+But, now that I'm perfectly sure I have none,
+Why, I do it again and again.'
+
+== 4.2.1.octet-stream ==
+`You are old,' said the youth, `as I mentioned before,
+And have grown most uncommonly fat;
+Yet you turned a back-somersault in at the door--
+Pray, what is the reason of that?'
+
+`In my youth,' said the sage, as he shook his grey locks,
+`I kept all my limbs very supple
+By the use of this ointment--one shilling the box--
+Allow me to sell you a couple?'
+== 4.2.2.1.octet-stream ==
+`You are old,' said the youth, `and your jaws are too weak
+For anything tougher than suet;
+Yet you finished the goose, with the bones and the beak--
+Pray how did you manage to do it?'
+
+`In my youth,' said his father, `I took to the law,
+And argued each case with my wife;
+And the muscular strength, which it gave to my jaw,
+Has lasted the rest of my life.'
+== 4.2.2.2.octet-stream ==
+`You are old,' said the youth, `one would hardly suppose
+That your eye was as steady as ever;
+Yet you balanced an eel on the end of your nose--
+What made you so awfully clever?'
+
+`I have answered three questions, and that is enough,'
+Said his father; `don't give yourself airs!
+Do you think I can listen all day to such stuff?
+Be off, or I'll kick you down stairs!'
+])
+
+MH_CHECK([mhn -store -auto],[mhn03 mhn-store-auto],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+mhn +inbox -store -auto 4 | cwdrepl || exit $?
+],
+[0],
+[storing message 4 part 1 as file ./msg.21
+storing message 4 part 2.1 as file ./msg.22
+storing message 4 part 2.2.1 as file ./msg.23
+storing message 4 part 2.2.2 as file ./msg.24
+])
+
+MH_CHECK([mhn -store -auto -part],[mhn04 mhn-store-auto-part],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+mhn +inbox -store -auto -part 2.2.1 4 | cwdrepl || exit $?
+],
+[0],
+[storing message 4 part 2.2.1 as file ./msg.23
+])
+
+MH_CHECK([mhn -store -auto (pathname safety)],[mhn05 mhn-store-auto-safety],[
+mkdir Mail/inbox
+sed 's|; *name="msg|; name="../msg|' \
+  $abs_top_srcdir/testsuite/mh/mbox1/4 > Mail/inbox/4
+MUT_MBCHMOD(Mail/inbox, 700)
+mhn +inbox -store -auto -part 2.1 4 || echo $?
+echo == 4.2.1.octet-stream ==
+cat 4.2.1.octet-stream
+],
+[0],
+[storing message 4 part 2.1 as file 4.2.1.octet-stream
+== 4.2.1.octet-stream ==
+`You are old,' said the youth, `as I mentioned before,
+And have grown most uncommonly fat;
+Yet you turned a back-somersault in at the door--
+Pray, what is the reason of that?'
+
+`In my youth,' said the sage, as he shook his grey locks,
+`I kept all my limbs very supple
+By the use of this ointment--one shilling the box--
+Allow me to sell you a couple?'
+])
+
+MH_CHECK([mhn-storage],[mhn06 mhn-store-auto],[
+mkdir Mail/inbox
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail/inbox, 700)
+
+mkdir out
+echo "mhn-storage: $HOME/out" >> $MH
+
+mhn +inbox -store 4 | cwdrepl || echo $?
+],
+[0],
+[storing message 4 part 1 as file ./out/4.1.plain
+storing message 4 part 2.1 as file ./out/4.2.1.octet-stream
+storing message 4 part 2.2.1 as file ./out/4.2.2.1.octet-stream
+storing message 4 part 2.2.2 as file ./out/4.2.2.2.octet-stream
+])
+
+MH_CHECK([mhn-store-: all escapes],[mhn07 mhn-store_escapes],[
+mkdir Mail/inbox
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail/inbox, 700)
+
+echo "mhn-store-application: %%-%m%P.%s-%p" >> $MH
+mhn +inbox -store 4 || exit $?
+find . -name '%*' | sort
+],
+[0],
+[storing message 4 part 1 as file 4.1.plain
+storing message 4 part 2.1 as file %4.2.1.octet-stream-2.1
+storing message 4 part 2.2.1 as file %4.2.2.1.octet-stream-2.2.1
+storing message 4 part 2.2.2 as file %4.2.2.2.octet-stream-2.2.2
+./%4.2.1.octet-stream-2.1
+./%4.2.2.1.octet-stream-2.2.1
+./%4.2.2.2.octet-stream-2.2.2
+])
+
+MH_CHECK([mhn-store-: absolute path],[mhn08 mhn-store_abspath],[
+mkdir Mail/inbox
+mkdir out
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail/inbox, 700)
+
+echo "mhn-store-application: $HOME/out/%m%P.%s" >> $MH
+mhn +inbox -store 4 | cwdrepl || exit $?
+],
+[0],
+[storing message 4 part 1 as file 4.1.plain
+storing message 4 part 2.1 as file ./out/4.2.1.octet-stream
+storing message 4 part 2.2.1 as file ./out/4.2.2.1.octet-stream
+storing message 4 part 2.2.2 as file ./out/4.2.2.2.octet-stream
+])
+
+MH_CHECK([mhn-store-: +folder],[mhn09 mhn-store+folder],[
+mkdir Mail/inbox
+mkdir Mail/app
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail, 700)
+
+echo "mhn-store-application: +app" >> $MH
+mhn +inbox -store 4 | cwdrepl || exit $?
+],
+[0],
+[storing message 4 part 1 as file 4.1.plain
+storing message 4 part 2.1 to folder +app as message 1
+storing message 4 part 2.2.1 to folder +app as message 2
+storing message 4 part 2.2.2 to folder +app as message 3
+])
+
+MH_CHECK([mhn-store-: +],[mhn10 mhn-store+],[
+mkdir Mail/inbox
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail/inbox, 700)
+
+echo "Current-Folder: inbox" > Mail/context
+cat >> $MH <<EOT
+mhn-store-application/octet-stream: +
+EOT
+mhn +inbox -store -part 2.2.1 4 | cwdrepl || exit $?
+],
+[0],
+[storing message 4 part 2.2.1 to folder inbox as message 5
+])
+
+MH_CHECK([mhn-store-: pipe],[mhn11 mhn-store-pipe],[
+mkdir Mail/inbox
+cp $abs_top_srcdir/testsuite/mh/mbox1/4 Mail/inbox
+MUT_MBCHMOD(Mail/inbox, 700)
+
+echo "Current-Folder: inbox" > Mail/context
+echo "mhn-store-text: | $abs_top_srcdir/mh/tests/mhed -" >> $MH
+dnl ! Note extra quoting in the sed argument below, necessary because of
+dnl ! unbalanced parentheses.
+mhn +inbox -store -part 1 4 | sed ["s|$abs_top_srcdir/mh/tests/||g;s|(cd \(.*\)\;|(cd home\;|;s|  *$||"] || exit $?
+],
+[0],
+[-- Editor invocation: -
+-- Input file:
+`You are old, Father William,' the young man said,
+`And your hair has become very white;
+And yet you incessantly stand on your head--
+Do you think, at your age, it is right?'
+
+`In my youth,' Father William replied to his son,
+`I feared it might injure the brain;
+But, now that I'm perfectly sure I have none,
+Why, I do it again and again.'
+
+-- Input file end
+storing msg 4 part 1 using command (cd home; mhed -)
+])
+
+dnl -------------------------------------------------------------------
+dnl 3. Show mode
+dnl -------------------------------------------------------------------
+MH_CHECK([mhn-show msg1],[mhn12 mhn-show-msg1],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+mhn -show 1 | sed /^X-IMAPbase/d
+],
+[0],
+[Date:    Fri, 28 Dec 2001 22:18:08 +0200
+To:      Bar <bar@dontmailme.org>
+From:    Foo Bar <foobar@nonexistent.net>
+Subject: Jabberwocky
+
+X-Envelope-Date: Fri Dec 28 22:18:09 2001
+X-Envelope-Sender: foobar@nonexistent.net
+
+part       text/plain               937
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+`Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jujub bird, and shun
+The frumious Bandersnatch!'
+
+He took his vorpal sword in hand:
+Long time the manxome foe he sought --
+So rested he by the Tumtum gree,
+And stood awhile in thought.
+
+And as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wook,
+And burbled as it came!
+
+One, two!  One, two!  And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+`And has thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day!  Calloh!  Callay!
+He chortled in his joy.
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+])
+
+MH_CHECK([mhn-show type=tar],[mhn13 mhn-show-type=tar],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mime,[Mail/inbox],[700])
+AT_DATA([filter.awk],[
+/^X-IMAPbase/ { next }
+/^-rw-r--r--/ { print $NF; next }
+{ print }
+])
+mhn -show 2 | awk -f filter.awk
+],
+[0],
+[Date:    Mon, 29 Nov 2010 14:04:19 +0200
+To:      <gray@example.net>
+From:    Sergey Poznyakoff <gray@example.net>
+Subject: Verses (type=tar)
+
+MIME-Version: 1.0
+X-Envelope-Date: Mon Nov 29 14:04:19 2010
+X-Envelope-Sender: gray@example.net
+
+part     1 text/plain               15
+Initial text.
+
+Father_William
+Jabberwocky
+])
+
+# FIXME: What about exit code?
+# FIXME: See comment about the error message, near mhn.c:792
+MH_CHECK([mhn-show unsupported type],[mhn14 mhn-show-unsupported-type],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mime,[Mail/inbox],[700])
+mhn -show 1 | sed /^X-IMAPbase/d
+],
+[0],
+[Date:    Mon, 29 Nov 2010 14:00:03 +0200
+To:      <gray@example.net>
+From:    Sergey Poznyakoff <gray@example.net>
+Subject: Verses (x-tar)
+
+MIME-Version: 1.0
+X-Envelope-Date: Mon Nov 29 14:00:03 2010
+X-Envelope-Sender: gray@example.net
+
+part     1 text/plain               15
+Initial text.
+
+],
+[mhn: don't know how to display content (content application/x-tar in message 1, part 2)
+])
+
+MH_CHECK([mhn-show- variable (with subtype)],
+[mhn15 mhn-show-with-subtype],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mime,[Mail/inbox],[700])
+echo "mhn-show-application/x-tar: %ltar tvf '%F'" >> $MH
+AT_DATA([filter.awk],[
+/^X-IMAPbase/ { next }
+/^-rw-r--r--/ { print $NF; next }
+{ sub(/  *$/,"");  print }
+])
+mhn -show 1 | awk -f filter.awk
+],
+[0],
+[Date:    Mon, 29 Nov 2010 14:00:03 +0200
+To:      <gray@example.net>
+From:    Sergey Poznyakoff <gray@example.net>
+Subject: Verses (x-tar)
+
+MIME-Version: 1.0
+X-Envelope-Date: Mon Nov 29 14:00:03 2010
+X-Envelope-Sender: gray@example.net
+
+part     1 text/plain               15
+Initial text.
+
+part     2 application/x-tar        13835
+Father_William
+Jabberwocky
+])
+
+MH_CHECK([mhn-show- variable (without subtype)],
+[mhn16 mhn-show-without-subtype],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mime,[Mail/inbox],[700])
+echo "mhn-show-application: %ltar tvf '%F'" >> $MH
+AT_DATA([filter.awk],[
+/^X-IMAPbase/ { next }
+/^-rw-r--r--/ { print $NF; next }
+{ sub(/  *$/,"");  print }
+])
+mhn -show 1 | awk -f filter.awk
+],
+[0],
+[Date:    Mon, 29 Nov 2010 14:00:03 +0200
+To:      <gray@example.net>
+From:    Sergey Poznyakoff <gray@example.net>
+Subject: Verses (x-tar)
+
+MIME-Version: 1.0
+X-Envelope-Date: Mon Nov 29 14:00:03 2010
+X-Envelope-Sender: gray@example.net
+
+part     1 text/plain               15
+Initial text.
+
+part     2 application/x-tar        13835
+Father_William
+Jabberwocky
+])
+
+dnl -------------------------------------------------------------------
+dnl 4. Compose mode
+dnl -------------------------------------------------------------------
+MH_CHECK([mhn-compose: adjacent plain text],
+[mhn17 mhn-compose mhn-compose-01],[
+AT_DATA([input],
+[From: gray@example.net
+Subject: Adjacent plain text contexts
+------
+this is the first content
+#
+and this is the second
+])
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Adjacent plain text contexts
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-1"
+
+--BOUNDARY-1
+Content-Type: text/plain
+Content-ID: 1
+
+this is the first content
+
+--BOUNDARY-1
+Content-Type: text/plain
+Content-ID: 2
+
+and this is the second
+
+--BOUNDARY-1--
+])
+
+MH_CHECK([mhn-compose: plain text content types],
+[mhn18 mhn-compose mhn-compose-02],[
+AT_DATA([input],
+[From: gray@example.net
+Subject: Plaintext content types
+------
+#<text/enriched [First part]
+this content will be tagged as text/enriched
+#
+and this content will be tagged as text/plain
+#
+#<application/x-patch [this is a patch]
+and this content will be tagged as application/x-patch
+])
+mhn -build -file ./input||exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Plaintext content types
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-1"
+
+--BOUNDARY-1
+Content-Type: text/enriched
+Content-ID: 1
+Content-Description: First part
+
+this content will be tagged as text/enriched
+
+--BOUNDARY-1
+Content-Type: text/plain
+Content-ID: 2
+
+and this content will be tagged as text/plain
+
+--BOUNDARY-1
+Content-Type: application/x-patch
+Content-ID: 3
+Content-Description: this is a patch
+
+and this content will be tagged as application/x-patch
+
+--BOUNDARY-1--
+])
+
+MH_CHECK([mhn-compose: sharp at the beginning of a line],
+[mhn19 mhn-compose mhn-compose-03],[
+AT_DATA([input],
+[From: gray@example.net
+Subject: Sharp at the beginning of a line
+------
+##when sent, this line will start with only one #
+])
+
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Sharp at the beginning of a line
+MIME-Version: 1.0
+Content-Type: text/plain
+
+#when sent, this line will start with only one #
+
+])
+
+MH_CHECK([mhn-compose: charset],
+[mhn20 mhn-compose mhn-compose-04],[
+AT_DATA([input],
+[From: gray@example.net
+Subject: Charset
+------
+#<text/plain; charset=utf-8
+Cześć
+])
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Charset
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Cze=C5=9B=C4=87
+
+])
+
+MH_CHECK([mhn-compose: forward],
+[mhn21 mhn-compose mhn-compose-05],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+AT_DATA([input],
+[From: gray@example.net
+Subject: Forwards
+------
+#forw [forwarded messages] +inbox 1 2 5
+])
+
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Forwards
+MIME-Version: 1.0
+Content-Type: multipart/digest; boundary="BOUNDARY-1"
+Content-Description: forwarded messages
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Received: (from foobar@nonexistent.net)
+	by nonexistent.net id fBSKI8N04906
+	for bar@dontmailme.org; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 22:18:08 +0200
+From: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112282018.fBSKI8N04906@nonexistent.net>
+To: Bar <bar@dontmailme.org>
+Subject: Jabberwocky
+X-Envelope-Date: Fri Dec 28 22:18:09 2001
+X-Envelope-Sender: foobar@nonexistent.net
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+`Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jujub bird, and shun
+The frumious Bandersnatch!'
+
+He took his vorpal sword in hand:
+Long time the manxome foe he sought --
+So rested he by the Tumtum gree,
+And stood awhile in thought.
+
+And as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wook,
+And burbled as it came!
+
+One, two!  One, two!  And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+`And has thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day!  Calloh!  Callay!
+He chortled in his joy.
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Received: (from bar@dontmailme.org)
+	by dontmailme.org id fERKR9N16790
+	for foobar@nonexistent.net; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 23:28:08 +0200
+From: Bar <bar@dontmailme.org>
+To: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112232808.fERKR9N16790@dontmailme.org>
+Subject: Re: Jabberwocky
+X-Envelope-Date: Fri Dec 28 23:28:09 2001
+X-Envelope-Sender: bar@dontmailme.org
+
+It seems very pretty, but it's *rather* hard to understand!'
+Somehow it seems to fill my head with ideas -- only I don't
+exactly know what they are!  However, SOMEBODY killed SOMETHING:
+that's clear, at any rate...
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Organization: Mailutils-tests
+Received: from example.net (localhost [[127.0.0.1]])
+	by example.net with ESMTP id g6CLhIb05086
+	for <gray@example.net>; Sat, 13 Jul 2002 00:43:18 +0300
+Message-Id: <200207122143.g6CLhIb05086@example.net>
+To: Foo Bar <foobar@nonexistent.net>
+Subject: Empty MIME Parts
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-2"
+Content-ID: 1
+Date: Sat, 13 Jul 2002 00:43:18 +0300
+From: Sergey Poznyakoff <gray@example.net>
+X-Envelope-Date: Sat Jul 13 00:43:18 2002
+X-Envelope-Sender: gray@example.net
+
+--BOUNDARY-2
+Content-Type: text/plain; name="empty"; charset="us-ascii"
+Content-ID: 2
+Content-Description: Empty part
+
+
+--BOUNDARY-2
+Content-Type: text/plain; name="single.line"; charset="us-ascii"
+Content-ID: 3
+Content-Description: Single line part
+
+
+
+--BOUNDARY-2--
+
+--BOUNDARY-1--
+
+])
+
+MH_CHECK([mhn-compose: forward (current folder)],
+[mhn22 mhn-compose mhn-compose-06],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox])
+echo "Current-Folder: inbox" > Mail/context
+AT_DATA([input],
+[From: gray@example.net
+Subject: Forwards
+------
+#forw [forwarded messages] 1 2 5
+])
+
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Forwards
+MIME-Version: 1.0
+Content-Type: multipart/digest; boundary="BOUNDARY-1"
+Content-Description: forwarded messages
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Received: (from foobar@nonexistent.net)
+	by nonexistent.net id fBSKI8N04906
+	for bar@dontmailme.org; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 22:18:08 +0200
+From: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112282018.fBSKI8N04906@nonexistent.net>
+To: Bar <bar@dontmailme.org>
+Subject: Jabberwocky
+X-Envelope-Date: Fri Dec 28 22:18:09 2001
+X-Envelope-Sender: foobar@nonexistent.net
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+`Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jujub bird, and shun
+The frumious Bandersnatch!'
+
+He took his vorpal sword in hand:
+Long time the manxome foe he sought --
+So rested he by the Tumtum gree,
+And stood awhile in thought.
+
+And as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wook,
+And burbled as it came!
+
+One, two!  One, two!  And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+`And has thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day!  Calloh!  Callay!
+He chortled in his joy.
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Received: (from bar@dontmailme.org)
+	by dontmailme.org id fERKR9N16790
+	for foobar@nonexistent.net; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 23:28:08 +0200
+From: Bar <bar@dontmailme.org>
+To: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112232808.fERKR9N16790@dontmailme.org>
+Subject: Re: Jabberwocky
+X-Envelope-Date: Fri Dec 28 23:28:09 2001
+X-Envelope-Sender: bar@dontmailme.org
+
+It seems very pretty, but it's *rather* hard to understand!'
+Somehow it seems to fill my head with ideas -- only I don't
+exactly know what they are!  However, SOMEBODY killed SOMETHING:
+that's clear, at any rate...
+
+--BOUNDARY-1
+Content-Type: message/rfc822
+
+Organization: Mailutils-tests
+Received: from example.net (localhost [[127.0.0.1]])
+	by example.net with ESMTP id g6CLhIb05086
+	for <gray@example.net>; Sat, 13 Jul 2002 00:43:18 +0300
+Message-Id: <200207122143.g6CLhIb05086@example.net>
+To: Foo Bar <foobar@nonexistent.net>
+Subject: Empty MIME Parts
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-2"
+Content-ID: 1
+Date: Sat, 13 Jul 2002 00:43:18 +0300
+From: Sergey Poznyakoff <gray@example.net>
+X-Envelope-Date: Sat Jul 13 00:43:18 2002
+X-Envelope-Sender: gray@example.net
+
+--BOUNDARY-2
+Content-Type: text/plain; name="empty"; charset="us-ascii"
+Content-ID: 2
+Content-Description: Empty part
+
+
+--BOUNDARY-2
+Content-Type: text/plain; name="single.line"; charset="us-ascii"
+Content-ID: 3
+Content-Description: Single line part
+
+
+
+--BOUNDARY-2--
+
+--BOUNDARY-1--
+
+])
+
+MH_CHECK([mhn-compose: forward (single message)],
+[mhn23 mhn-compose mhn-compose-07],[
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail/inbox],[700])
+AT_DATA([input],
+[From: gray@example.net
+Subject: Forwards
+------
+#forw [forwarded messages] +inbox 1
+])
+
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Forwards
+MIME-Version: 1.0
+Content-Type: message/rfc822
+Content-Description: forwarded messages
+
+Received: (from foobar@nonexistent.net)
+	by nonexistent.net id fBSKI8N04906
+	for bar@dontmailme.org; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 22:18:08 +0200
+From: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112282018.fBSKI8N04906@nonexistent.net>
+To: Bar <bar@dontmailme.org>
+Subject: Jabberwocky
+X-Envelope-Date: Fri Dec 28 22:18:09 2001
+X-Envelope-Sender: foobar@nonexistent.net
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+`Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jujub bird, and shun
+The frumious Bandersnatch!'
+
+He took his vorpal sword in hand:
+Long time the manxome foe he sought --
+So rested he by the Tumtum gree,
+And stood awhile in thought.
+
+And as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wook,
+And burbled as it came!
+
+One, two!  One, two!  And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+`And has thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day!  Calloh!  Callay!
+He chortled in his joy.
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+
+
+])
+
+MH_CHECK([mhn-compose: external data],
+[mhn24 mhn-compose mhn-compose-08],[
+AT_DATA([input],
+[From: gray@example.net
+Subject: External data
+------
+#@application/octet-stream; \
+                type=tar; \
+                conversions=compress \
+	        [[GNU Mailutils distribution]] \
+                name="mailutils-3.0.tar.gz"; \
+                directory="/gnu/mailutils"; \
+                site="ftp.gnu.org"; \
+                access-type=anon-ftp; \
+                mode="image"
+])
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: External data
+MIME-Version: 1.0
+Content-Type: message/external-body; name="mailutils-3.0.tar.gz"; directory="/gnu/mailutils"; site="ftp.gnu.org"; access-type=anon-ftp; mode="image"
+
+Content-Type: application/octet-stream; type=tar; conversions=compress
+Content-ID: 1
+Content-Description: GNU Mailutils distribution
+
+
+])
+
+
+MH_CHECK([mhn-compose: multipart],
+[mhn25 mhn-compose mhn-compose-09],[
+
+MUT_MBCOPY($abs_top_srcdir/testsuite/mh/mbox1,[Mail],[700])
+
+AT_DATA([foo.tar],
+[Not a tarball, really
+])
+
+AT_DATA([input],
+[From: gray@example.net
+Subject: Multipart
+------
+Initial text part.
+
+#begin [Multipart message] mixed
+#forw [forwarded message] +mbox1 1
+Plain text 1
+#<text/x-special
+Plain text 2
+#application/octet-stream; type=tar [Tar archive] ./foo.tar
+#end
+])
+
+mhn -build ./input || exit $?
+mimeflt input
+],
+[0],
+[From: gray@example.net
+Subject: Multipart
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-1"
+
+--BOUNDARY-1
+Content-Type: text/plain
+Content-ID: 1
+
+Initial text part.
+
+
+--BOUNDARY-1
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-2"
+
+--BOUNDARY-2
+MIME-Version: 1.0
+Content-Type: message/rfc822
+Content-ID: 2
+Content-Description: forwarded message
+
+Received: (from foobar@nonexistent.net)
+	by nonexistent.net id fBSKI8N04906
+	for bar@dontmailme.org; Fri, 28 Dec 2001 22:18:08 +0200
+Date: Fri, 28 Dec 2001 22:18:08 +0200
+From: Foo Bar <foobar@nonexistent.net>
+Message-Id: <200112282018.fBSKI8N04906@nonexistent.net>
+To: Bar <bar@dontmailme.org>
+Subject: Jabberwocky
+X-Envelope-Date: Fri Dec 28 22:18:09 2001
+X-Envelope-Sender: foobar@nonexistent.net
+ 
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+`Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jujub bird, and shun
+The frumious Bandersnatch!'
+
+He took his vorpal sword in hand:
+Long time the manxome foe he sought --
+So rested he by the Tumtum gree,
+And stood awhile in thought.
+
+And as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wook,
+And burbled as it came!
+
+One, two!  One, two!  And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+`And has thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day!  Calloh!  Callay!
+He chortled in his joy.
+
+`Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+
+
+--BOUNDARY-2
+Content-Type: text/plain
+Content-ID: 3
+
+Plain text 1
+
+--BOUNDARY-2
+Content-Type: text/x-special
+Content-ID: 4
+
+Plain text 2
+
+--BOUNDARY-2
+Content-Type: application/octet-stream; type=tar
+Content-ID: 5
+Content-Description: Tar archive
+Content-Transfer-Encoding: base64
+
+Tm90IGEgdGFyYmFsbCwgcmVhbGx5Cg==
+--BOUNDARY-2--
+
+--BOUNDARY-1--
+])
+
+m4_popdef[MH_KEYWORDS])
+# End of mhn.at
+
+# Local Variables:
+# coding: utf-8
+# End:

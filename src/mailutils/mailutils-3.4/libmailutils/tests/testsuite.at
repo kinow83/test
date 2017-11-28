@@ -1,0 +1,216 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2007-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+m4_include([testsuite.inc])
+
+dnl ------------------------------------------------------------
+m4_define([MU_TEST_GROUP],[generic])
+dnl ------------------------------------------------------------
+m4_define([MU_TEST_KEYWORDS])
+dnl ------------------------------------------------------------
+m4_define([MU_TEST_COMMAND])
+
+m4_define([mu_trimstr],[m4_if([$2],-1,[$1],[m4_substr([$1],0,$2)...])])
+m4_define([mu_firstline],[mu_trimstr([$1],m4_index([$1],[
+]))])
+
+dnl ------------------------------------------------------------
+dnl MU_GENERIC_TEST([NAME], [KW = `'], [INPUT],
+dnl                 [CODE], [STDOUT = `'], [STDERR = `'],
+dnl                 [RUN-IF-FAIL], [RUN-IF-PASS])
+dnl
+dnl NAME        $1
+dnl KW          $2
+dnl INPUT       $3
+dnl CODE        $4
+dnl STDOUT      $5
+dnl STDERR      $6
+dnl RUN-IF-FAIL $7
+dnl RUN-IF-PASS $8
+dnl
+m4_define([MU_GENERIC_TEST],[
+AT_SETUP([m4_if(MU_TEST_GROUP,[],,MU_TEST_GROUP: )m4_if([$1],[],[mu_firstline([$3])],[$1])])
+AT_KEYWORDS([MU_TEST_KEYWORDS $2])
+AT_CHECK([
+AT_DATA([input],[$3
+])
+MU_TEST_COMMAND < input],[$4],[$5],[$6],[$7],[$8])
+AT_CLEANUP
+])
+
+dnl ------------------------------------------------------------
+dnl MU_GENERIC_TEST_CMD([NAME], [KW = `'], [ARGS],
+dnl                     [CODE], [STDOUT = `'], [STDERR = `'],
+dnl                     [RUN-IF-FAIL], [RUN-IF-PASS])
+dnl
+dnl NAME        $1
+dnl KW          $2
+dnl ARGS        $3
+dnl CODE        $4
+dnl STDOUT      $5
+dnl STDERR      $6
+dnl RUN-IF-FAIL $7
+dnl RUN-IF-PASS $8
+dnl
+m4_define([MU_GENERIC_TEST_CMD],[
+AT_SETUP([m4_if(MU_TEST_GROUP,[],,MU_TEST_GROUP: )m4_if([$1],[],[mu_firstline([$3])],[$1])])
+AT_KEYWORDS([MU_TEST_KEYWORDS $2])
+AT_CHECK([
+MU_TEST_COMMAND $3],[$4],[$5],[$6],[$7],[$8])
+AT_CLEANUP
+])
+
+AT_INIT
+
+AT_BANNER([Conversions])
+m4_include([strtoc.at])
+
+AT_BANNER([Word wrapper])
+m4_include([wordwrap00.at])
+m4_include([wordwrap01.at])
+m4_include([wordwrap02.at])
+m4_include([wordwrap03.at])
+
+AT_BANNER([Command line parser])
+m4_define([PARSEOPT_DEFAULT],[
+unset ARGP_HELP_FMT
+unset MU_PARSEOPT_ARGV0
+unset MU_PARSEOPT_IGNORE_ERRORS
+unset MU_PARSEOPT_IN_ORDER
+unset MU_PARSEOPT_NO_STDOPT
+unset MU_PARSEOPT_NO_ERREXIT
+unset MU_PARSEOPT_IMMEDIATE
+unset MU_PARSEOPT_NO_SORT
+
+unset MU_PARSEOPT_PROG_NAME
+unset MU_PARSEOPT_PROG_DOC
+unset MU_PARSEOPT_PROG_ARGS
+unset MU_PARSEOPT_BUG_ADDRESS
+unset MU_PARSEOPT_PACKAGE_NAME
+unset MU_PARSEOPT_PACKAGE_URL
+])
+
+m4_include([parseopt00.at])
+m4_include([parseopt01.at])
+m4_include([parseopt02.at])
+m4_include([parseopt03.at])
+m4_include([parseopt04.at])
+m4_include([parseopt05.at])
+m4_include([parseopt06.at])
+m4_include([parseopt07.at])
+m4_include([parseopt08.at])
+m4_include([parseopt09.at])
+m4_include([parseopt10.at])
+m4_include([parseopt11.at])
+m4_include([parseopt12.at])
+m4_include([parseopt13.at])
+m4_include([parseopt14.at])
+m4_include([parseopt15.at])
+m4_include([parseopt16.at])
+m4_include([parseopt17.at])
+m4_include([parseopt18.at])
+m4_include([parseopt19.at])
+m4_include([parseopt20.at])
+m4_include([parseopt21.at])
+m4_include([parseopt22.at])
+m4_include([parseopt23.at])
+m4_include([parseopt24.at])
+m4_include([parseopt25.at])
+m4_include([parseopt26.at])
+m4_include([parseopt27.at])
+m4_include([parseopt28.at])
+
+AT_BANNER([Command line help output])
+m4_include([parseopt_help00.at])
+m4_include([parseopt_help01.at])
+m4_include([parseopt_help02.at])
+m4_include([parseopt_help03.at])
+m4_include([parseopt_help04.at])
+m4_include([parseopt_help05.at])
+m4_include([parseopt_help06.at])
+m4_include([parseopt_help07.at])
+m4_include([parseopt_help08.at])
+m4_include([parseopt_help09.at])
+m4_include([parseopt_help10.at])
+m4_include([parseopt_help11.at])
+m4_include([parseopt_help12.at])
+
+AT_BANNER([Standard streams])
+m4_include([strin.at])
+m4_include([strout.at])
+m4_include([strerr.at])
+
+AT_BANNER([Streams])
+m4_include([logstr.at])
+m4_include([xscript.at])
+
+m4_include([list.at])
+m4_include([address.at])
+m4_include([wordsplit.at])
+m4_include([exp.at])
+m4_include([url.at])
+m4_include([url-comp.at])
+m4_include([mailcap.at])
+m4_include([wicket.at])
+m4_include([prop.at])
+
+AT_BANNER(File-system folder)
+m4_include([fsfolder00.at])
+m4_include([fsfolder01.at])
+m4_include([fsfolder02.at])
+
+AT_BANNER(Base64)
+m4_include([base64e.at])
+m4_include([base64d.at])
+
+AT_BANNER(RFC 2047)
+m4_include([decode2047.at])
+m4_include([encode2047.at])
+
+AT_BANNER(Filters)
+m4_include([fromflt.at])
+m4_include([inline-comment.at])
+m4_include([hdrflt.at])
+m4_include([linecon.at])
+m4_include([htmlent.at])
+m4_include([xml.at])
+
+AT_BANNER(Debug Specification)
+m4_include([debugspec.at])
+
+AT_BANNER([IMAP IO])
+m4_include([imapio.at])
+
+AT_BANNER(Message modification)
+m4_include([modmesg00.at])
+m4_include([modmesg01.at])
+m4_include([modmesg02.at])
+m4_include([modmesg03.at])
+
+m4_include([scantime.at])
+m4_include([strftime.at])
+
+m4_include([fsaf.at])
+m4_include([fsaftomod.at])
+m4_include([modtofsaf.at])
+
+m4_include([mimehdr.at])
+
+m4_include([msgset.at])
+
+m4_include([globtest.at])
+
+m4_include([linetrack.at])

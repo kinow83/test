@@ -1,0 +1,398 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2015-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER([vacation])
+m4_pushdef([MUT_SIEVE_EXT_NAME],[vacation])
+
+MUT_SIEVE_EXT_TEST([default],[vac00],
+[require "vacation";
+
+vacation :database "vacation.db" "I'm on vacation";
+],
+[MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: I'm on vacation
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([aliases],[vac01],
+[require "vacation";
+
+vacation :database "vacation.db" :aliases [[ "roadrunner@acme.example.com" ]] "I'm on vacation";
+],
+[MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: roadrunner@acme.example.com
+ENVELOPE TO: <coyote@desert.example.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: coyote@desert.example.org
+   4: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   5: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   6:
+   7: I'm on vacation
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: I'm on vacation
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([always_reply],[vac02],
+[require "vacation";
+
+vacation :database "vacation.db" :always_reply "I'm on vacation";
+],
+[MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <coyote@desert.example.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: coyote@desert.example.org
+   4: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   5: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   6:
+   7: I'm on vacation
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <b1ff@de.res.example.com>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: b1ff@de.res.example.com
+   4: Subject: =?UTF-8?Q?Re:_$$$_YOU,_TOO,_CAN_BE_A_MILLIONAIRE!_$$$?=
+   5: In-Reply-To: Your message of TBD
+   6:
+   7: I'm on vacation
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: I'm on vacation
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([database matching],[vac03],
+[require "vacation";
+
+vacation :database "vacation.db" :always_reply "I'm on vacation";
+],
+[MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <coyote@desert.example.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: coyote@desert.example.org
+   4: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   5: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   6:
+   7: I'm on vacation
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <b1ff@de.res.example.com>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: b1ff@de.res.example.com
+   4: Subject: =?UTF-8?Q?Re:_$$$_YOU,_TOO,_CAN_BE_A_MILLIONAIRE!_$$$?=
+   5: In-Reply-To: Your message of TBD
+   6:
+   7: I'm on vacation
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: I'm on vacation
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([mime],[vac04],
+[require "vacation";
+
+vacation :database "vacation.db" :always_reply :mime "I'm on vacation.";
+],
+[MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <coyote@desert.example.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: base64
+   3: To: coyote@desert.example.org
+   4: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   5: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   6:
+   7: SSdtIG9uIHZhY2F0aW9uLg==
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <b1ff@de.res.example.com>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: base64
+   3: To: b1ff@de.res.example.com
+   4: Subject: =?UTF-8?Q?Re:_$$$_YOU,_TOO,_CAN_BE_A_MILLIONAIRE!_$$$?=
+   5: In-Reply-To: Your message of TBD
+   6:
+   7: SSdtIG9uIHZhY2F0aW9uLg==
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: base64
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: SSdtIG9uIHZhY2F0aW9uLg==
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([reply from RFC2822 file],[vac05],
+[require "vacation";
+
+vacation :database "vacation.db" :always_reply :rfc2822 :file "reply";
+],
+[AT_DATA([reply],[X-Mail-Processor: sieve
+
+I'm on vacation right now.
+I will attend to your message as soon as I'm back.
+
+Best regards,
+Ty Coon
+])
+MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <coyote@desert.example.org>
+   0: X-Mail-Processor: sieve
+   1: To: coyote@desert.example.org
+   2: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   3: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   4:
+   5: I'm on vacation right now.
+   6: I will attend to your message as soon as I'm back.
+   7:
+   8: Best regards,
+   9: Ty Coon
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <b1ff@de.res.example.com>
+   0: X-Mail-Processor: sieve
+   1: To: b1ff@de.res.example.com
+   2: Subject: =?UTF-8?Q?Re:_$$$_YOU,_TOO,_CAN_BE_A_MILLIONAIRE!_$$$?=
+   3: In-Reply-To: Your message of TBD
+   4:
+   5: I'm on vacation right now.
+   6: I will attend to your message as soon as I'm back.
+   7:
+   8: Best regards,
+   9: Ty Coon
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: X-Mail-Processor: sieve
+   1: To: bar@dontmailme.org
+   2: Subject: =?UTF-8?Q?Re:_Coffee?=
+   3: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   4: 	<200112232808.fERKR9N16790@dontmailme.org>
+   5: References: <200112232808.fERKR9N16790@dontmailme.org>
+   6:
+   7: I'm on vacation right now.
+   8: I will attend to your message as soon as I'm back.
+   9:
+  10: Best regards,
+  11: Ty Coon
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+MUT_SIEVE_EXT_TEST([reply body from file],[vac06],
+[require "vacation";
+
+vacation :database "vacation.db" :always_reply :file "reply";
+],
+[AT_DATA([reply],[I'm on vacation right now.
+I will attend to your message as soon as I'm back.
+
+Best regards,
+Ty Coon
+])
+MUT_MBCOPY($abs_top_srcdir/testsuite/spool/sieve.mbox,mailbox)
+MTA_DIAG=`pwd`/mta.diag
+MTA_APPEND=1
+export MTA_DIAG MTA_APPEND
+sieve MUT_SIEVE_CMDLINE MUT_SIEVE_OPTIONS -f ./mailbox prog || exit 1
+cat ./mta.diag
+],
+[ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <coyote@desert.example.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: coyote@desert.example.org
+   4: Subject: =?UTF-8?Q?Re:_I_have_a_present_for_you?=
+   5: In-Reply-To: Your message of Sun May  6 22:16:47 2001
+   6:
+   7: I'm on vacation right now.
+   8: I will attend to your message as soon as I'm back.
+   9:
+  10: Best regards,
+  11: Ty Coon
+  12:
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <b1ff@de.res.example.com>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: b1ff@de.res.example.com
+   4: Subject: =?UTF-8?Q?Re:_$$$_YOU,_TOO,_CAN_BE_A_MILLIONAIRE!_$$$?=
+   5: In-Reply-To: Your message of TBD
+   6:
+   7: I'm on vacation right now.
+   8: I will attend to your message as soon as I'm back.
+   9:
+  10: Best regards,
+  11: Ty Coon
+  12:
+END OF MESSAGE
+ENVELOPE FROM: foobar@nonexistent.net
+ENVELOPE TO: <bar@dontmailme.org>
+   0: MIME-Version: 1.0
+   1: Content-Type: text/plain;charset=UTF-8
+   2: Content-Transfer-Encoding: 8bit
+   3: To: bar@dontmailme.org
+   4: Subject: =?UTF-8?Q?Re:_Coffee?=
+   5: In-Reply-To: Your message of Fri, 28 Dec 2001 23:28:08 +0200
+   6: 	<200112232808.fERKR9N16790@dontmailme.org>
+   7: References: <200112232808.fERKR9N16790@dontmailme.org>
+   8:
+   9: I'm on vacation right now.
+  10: I will attend to your message as soon as I'm back.
+  11:
+  12: Best regards,
+  13: Ty Coon
+  14:
+END OF MESSAGE
+],
+[VACATION on msg uid 1
+VACATION on msg uid 2
+VACATION on msg uid 3
+])
+
+m4_popdef([MUT_SIEVE_EXT_NAME])
+

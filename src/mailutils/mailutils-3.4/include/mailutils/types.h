@@ -1,0 +1,182 @@
+/* GNU Mailutils -- a suite of utilities for electronic mail  -*- c -*-
+   Copyright (C) 1999-2001, 2005, 2007-2012, 2014-2017 Free Software
+   Foundation, Inc.
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General
+   Public License along with this library.  If not, see
+   <http://www.gnu.org/licenses/>. */
+
+#ifndef _MAILUTILS_TYPES_H
+#define _MAILUTILS_TYPES_H
+
+#include <sys/types.h>
+
+#if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 7)
+#  define __attribute__(x)
+#endif
+ 
+#ifndef MU_ARG_UNUSED
+# define MU_ARG_UNUSED __attribute__ ((__unused__))
+#endif
+
+#ifndef MU_PRINTFLIKE
+# define MU_PRINTFLIKE(fmt,narg) __attribute__ ((__format__ (__printf__, fmt, narg)))
+#endif
+
+#ifndef MU_DEPRECATED
+# define MU_DEPRECATED __attribute__ ((deprecated))
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct mu_core_class;  
+struct mu_core_object;
+  
+struct mu_address;
+struct _mu_attribute;
+struct _mu_authority;
+struct _mu_body;
+struct _mu_envelope;
+struct _mu_filter;
+struct _mu_filter_record;
+struct _mu_folder;
+struct _mu_header;
+struct _mu_iterator;
+struct _mu_list;
+struct _mu_locker;
+struct _mu_mailbox;
+struct _mu_mailer;
+struct _mu_message;
+struct _mu_mime;
+struct _mu_mailcap;
+struct _mu_mailcap_entry;
+struct _mu_refcount;
+struct _mu_observable;
+struct _mu_observer;
+struct _mu_property;
+struct _mu_record;
+struct _mu_stream;
+struct _mu_ticket;
+struct _mu_url;
+struct _mu_wicket;
+struct _mu_assoc;
+struct _mu_acl;  
+struct _mu_server;
+struct _mu_tcp_server;
+struct _mu_dbm_file;
+struct _mu_imapio;
+struct _mu_msgset;
+
+struct mu_sockaddr; /* defined in mailutils/sockaddr.h */  
+struct mu_cidr;     /* defined in mailutils/cidr.h */  
+  
+typedef long long mu_off_t;
+#define MU_PRI_OFF_T "lld"
+  
+typedef struct mu_address *mu_address_t;
+typedef struct _mu_attribute *mu_attribute_t;
+typedef struct _mu_authority *mu_authority_t;
+typedef struct _mu_body *mu_body_t;
+typedef struct _mu_envelope *mu_envelope_t;
+typedef struct _mu_filter *mu_filter_t;
+typedef struct _mu_filter_record *mu_filter_record_t;
+typedef struct _mu_folder *mu_folder_t;
+typedef struct _mu_header * mu_header_t;
+typedef struct _mu_iterator *mu_iterator_t;
+typedef struct _mu_list *mu_list_t;
+typedef struct _mu_locker *mu_locker_t;
+typedef struct _mu_mailbox *mu_mailbox_t;
+typedef struct _mu_mailer *mu_mailer_t;
+typedef struct _mu_message *mu_message_t;
+typedef struct _mu_mime *mu_mime_t;
+typedef struct _mu_mailcap *mu_mailcap_t;
+typedef struct _mu_mailcap_entry *mu_mailcap_entry_t;
+typedef struct _mu_refcount *mu_refcount_t;
+typedef struct _mu_observable *mu_observable_t;
+typedef struct _mu_observer *mu_observer_t;
+typedef struct _mu_property *mu_property_t;
+typedef struct _mu_record *mu_record_t;
+typedef struct _mu_stream *mu_stream_t;
+typedef struct _mu_ticket *mu_ticket_t;
+typedef struct _mu_url *mu_url_t;
+typedef struct _mu_vartab *mu_vartab_t;
+typedef struct _mu_wicket *mu_wicket_t;
+typedef void *mu_transport_t;
+typedef struct _mu_assoc *mu_assoc_t;
+typedef char *mu_message_qid_t;
+typedef int mu_log_level_t;
+typedef struct _mu_acl *mu_acl_t;
+typedef struct _mu_server *mu_server_t;
+typedef struct _mu_ip_server *mu_ip_server_t;
+typedef struct _mu_m_server *mu_m_server_t;
+typedef struct _mu_opool *mu_opool_t;
+typedef struct _mu_progmailer *mu_progmailer_t;
+typedef struct _mu_secret *mu_secret_t;
+typedef struct _mu_mime_io_buffer *mu_mime_io_buffer_t;
+typedef struct _mu_dbm_file *mu_dbm_file_t;
+typedef struct _mu_imapio *mu_imapio_t;
+typedef struct _mu_msgset *mu_msgset_t;
+
+/* Pointer to a function responsible for freeing the memory resources
+   allocated for its argument. */
+typedef void (*mu_deallocator_t) (void *);
+  
+typedef void (*mu_onexit_t) (void*);
+typedef unsigned int mu_debug_handle_t;
+typedef unsigned int mu_debug_level_t;
+
+#define MU_FOLDER_ATTRIBUTE_DIRECTORY  0x001
+#define MU_FOLDER_ATTRIBUTE_FILE       0x002
+#define MU_FOLDER_ATTRIBUTE_LINK       0x004
+
+#define MU_FOLDER_ATTRIBUTE_ALL \
+          (MU_FOLDER_ATTRIBUTE_DIRECTORY|MU_FOLDER_ATTRIBUTE_FILE)
+
+#define mu_offsetof(s,f) ((size_t)&((s*)0)->f)
+#define MU_ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
+
+static inline char const *
+mu_prstr (char const *s)
+{
+  return s ? s : "";
+}
+  
+#define MU_DEFAULT_RECORD mu_mbox_record
+
+/* This structure used to be called mu_locus in mailutils up to
+   3.2.91-46 [release-3.2-71-g719e64a].  It is superseded by
+   structs mu_locus_point and mu_locus_range, defined in
+   <mailutils/locus.h>. 
+
+   This definition is provided for backward compatibility.  Authors are
+   urged to switch to the new API as soon as their time permits.
+
+   Please see http://mailutils.org/wiki/Source_location_API#Deprecated_interface
+   for detailed guidelines.
+*/
+struct mu_locus_DEPRECATED
+{
+  char *mu_file;
+  unsigned mu_line;
+  unsigned mu_col;
+};
+#define mu_locus mu_locus_DEPRECATED  
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+

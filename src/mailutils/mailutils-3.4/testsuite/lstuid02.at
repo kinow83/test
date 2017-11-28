@@ -1,0 +1,40 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2011-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([Assigning UIDs (with fixups)])
+
+AT_DATA([x-uid.sed],
+[/^Subject: Jabberwocky/a\
+X-UID: 2
+
+/^Subject: Simple MIME/a\
+X-UID: 1
+
+])
+
+AT_CHECK([
+sed -f x-uid.sed $abs_top_srcdir/testsuite/spool/mbox1 > mbox1
+lstuid mbox:mbox1
+],
+[0],
+[1: 2
+2: 3
+3: 4
+4: 5
+5: 6
+])
+
+AT_CLEANUP

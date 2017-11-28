@@ -1,0 +1,81 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2016-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([Transcript stream])
+AT_KEYWORDS([stream xscript])
+AT_DATA([input],[first line
+second line
+login ty coon
+login "ty" "coon"
+pass guessme
+\s
+login ty coon
+login "ty" "coon"
+pass guessme
+\p
+GNU Mailutils is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+\n
+published by the Free Software Foundation; either version 3, or (at
+your option) any later version.
+])
+
+AT_CHECK([xscript < input],
+[0],
+[0001: first line
+0002: second line
+0003: login ty coon
+0004: login "ty" "coon"
+0005: pass guessme
+// n
+0007: login ty coon
+0008: login "ty" "coon"
+0009: pass guessme
+// s
+0011: GNU Mailutils is free software; you can redistribute it and/or
+0012: modify it under the terms of the GNU General Public License as
+// p
+0014: published by the Free Software Foundation; either version 3, or (at
+0015: your option) any later version.
+],
+[C: first line
+S: 0001: first line
+C: second line
+S: 0002: second line
+C: login ty coon
+S: 0003: login ty coon
+C: login "ty" "coon"
+S: 0004: login "ty" "coon"
+C: pass guessme
+S: 0005: pass guessme
+C: \s
+S: // n
+C: login ty coon
+S: 0007: login ty "***"
+C: login "ty" "coon"
+S: 0008: login "ty" "***"
+C: PASS ***
+S: 0009: pass guessme
+C: \p
+S: (data...)
+C: (data...)
+S: // p
+C: published by the Free Software Foundation; either version 3, or (at
+S: 0014: published by the Free Software Foundation; either version 3, or (at
+C: your option) any later version.
+S: 0015: your option) any later version.
+])
+AT_CLEANUP

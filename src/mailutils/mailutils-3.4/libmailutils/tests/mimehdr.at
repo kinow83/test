@@ -1,0 +1,246 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2011-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+# Warning: This text contains 8-bit UTF-8
+
+AT_BANNER(RFC 2231 header fields)
+
+dnl ---------------------------------------------------------------------
+dnl MIMEHDR([NAME], [KW], [OPT], [INPUT], [STDOUT = `'], [STDERR = `'])
+dnl
+m4_pushdef([MIMEHDR],[
+m4_pushdef([MU_TEST_GROUP],[mimehdr])
+m4_pushdef([MU_TEST_KEYWORDS],[mimehdr rfc2231])
+m4_pushdef([MU_TEST_COMMAND],[mimehdr $3])
+MU_GENERIC_TEST([$1],[$2],[$4],[],[$5],[$6])
+m4_popdef([MU_TEST_COMMAND])
+m4_popdef([MU_TEST_KEYWORDS])
+m4_popdef([MU_TEST_GROUP])
+])
+dnl ---------------------------------------------------------------------
+
+MIMEHDR([simple],[mimehdr00 mimehdr-simple],
+[],
+[message/external-body; access-type=URL;
+    URL="ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+],
+[message/external-body
+access-type=URL
+URL=ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar
+])
+
+MIMEHDR([continuation],[mimehdr01 mimehdr-cont mimehdr-cont-00],
+[],
+[message/external-body; access-type=URL;
+         URL*0="ftp://";
+         URL*1="cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar"
+],
+[message/external-body
+access-type=URL
+URL=ftp://cs.utk.edu/pub/moore/bulk-mailer/bulk-mailer.tar
+])
+
+MIMEHDR([charset (2047)],[mimehdr02 mimehdr-charset-rfc2047 mimehdr-charset-00],
+[],
+[attachment; charset=utf-8;
+  filename==?UTF-8?B?zrHPgc+HzrXOr86/IM6zzrnOsSDPhM63zr0gzrTOv866zrnOvM6xz4POr86x==?=
+],
+[attachment
+charset=utf-8
+filename=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([charset with language (2047)],[mimehdr03 mimehdr-charset-rfc2047 mimehdr-charset-01],
+[],
+[attachment; charset=utf-8;
+  filename==?UTF-8*el?B?zrHPgc+HzrXOr86/IM6zzrnOsSDPhM63zr0gzrTOv866zrnOvM6xz4POr86x==?=
+],
+[attachment
+charset=utf-8
+filename(lang:el/UTF-8)=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([no charset (2231)],[mimehdr04 mimehdr-no-charset-rfc2231 mimehdr-nocharset-00],
+[],
+[attachment; charset=utf-8;
+  filename*=%CE%B1%CF%81%CF%87%CE%B5%CE%AF%CE%BF%20%CE%B3%CE%B9%CE%B1%20%CF%84%CE%B7%CE%BD%20%CE%B4%CE%BF%CE%BA%CE%B9%CE%BC%CE%B1%CF%83%CE%AF%CE%B1
+],
+[attachment
+charset=utf-8
+filename=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([charset (2231)],[mimehdr05 mimehdr-charset-rfc2231 mimehdr-charset-rfc2231-00 mimehdr-charset-03],
+[],
+[attachment; charset=utf-8;
+  filename*=UTF-8''%CE%B1%CF%81%CF%87%CE%B5%CE%AF%CE%BF%20%CE%B3%CE%B9%CE%B1%20%CF%84%CE%B7%CE%BD%20%CE%B4%CE%BF%CE%BA%CE%B9%CE%BC%CE%B1%CF%83%CE%AF%CE%B1
+],
+[attachment
+charset=utf-8
+filename(lang:/UTF-8)=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([charset with language (2231)],[mimehdr06 mimehdr-charset-rfc2231 mimehdr-charset-rfc2231-01 mimehdr-charset-04],
+[],
+[attachment; charset=utf-8;
+  filename*=UTF-8'el_GR'%CE%B1%CF%81%CF%87%CE%B5%CE%AF%CE%BF%20%CE%B3%CE%B9%CE%B1%20%CF%84%CE%B7%CE%BD%20%CE%B4%CE%BF%CE%BA%CE%B9%CE%BC%CE%B1%CF%83%CE%AF%CE%B1
+],
+[attachment
+charset=utf-8
+filename(lang:el_GR/UTF-8)=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([charset with language and continuation (2231)],[mimehdr07 mimehdr-charset-rfc2231 mimehdr-charset-rfc2231-02 mimehdr-charset-05],
+[],
+[attachment; charset=utf-8;
+  filename*00*=UTF-8'el_GR'%CE%B1%CF%81%CF%87%CE%B5;
+  filename*01*=%CE%AF%CE%BF%20%CE%B3%CE;
+  filename*02*=%B9%CE%B1%20%CF%84%CE%B7;
+  filename*03*=%CE%BD%20%CE%B4%CE%BF%CE;
+  filename*04*=%BA%CE%B9%CE%BC%CE%B1%CF%83%CE%AF%CE%B1
+],
+[attachment
+charset=utf-8
+filename(lang:el_GR/UTF-8)=αρχείο για την δοκιμασία
+])
+
+MIMEHDR([combined charset, lang and cset],[mimehdr08 mimehdr-comb mimehdr-charset-rfc2231],
+[],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[application/x-stuff
+title(lang:en/us-ascii)=This is even more ***fun*** isn't it!
+])
+
+MIMEHDR([format: simple],[mimehdr09],
+[-header=X-MIME-Test-Header -width=26],
+[application/x-stuff; charset=ascii; title=foobar],
+[X-MIME-Test-Header: application/x-stuff;
+ charset=ascii;
+ title=foobar
+
+])
+
+MIMEHDR([format: split],[mimehdr10],
+[-header=X-MIME-Test-Header -width=76],
+[attachment; title="unusually long filename created by gray expressly for testing purposes and not meant for any other purpose but testing the formatting of very long MIME headers"],
+[X-MIME-Test-Header: attachment;
+ title*0="unusually long filename created by gray expressly for testing pu";
+ title*1="rposes and not meant for any other purpose but testing the forma";
+ title*2="tting of very long MIME headers"
+
+])
+
+MIMEHDR([format: split 2],[mimehdr11],
+[-header=X-MIME-Test-Header -width=26],
+[attachment; title="unusually long filename created by gray expressly for testing purposes and not meant for any other purpose but testing the formatting of very long MIME headers"],
+[X-MIME-Test-Header: attachment;
+ title*0="unusually long";
+ title*1=" filename crea";
+ title*2="ted by gray ex";
+ title*3="pressly for te";
+ title*4="sting purposes";
+ title*5=" and not meant";
+ title*6=" for any other";
+ title*7=" purpose but t";
+ title*8="esting the for";
+ title*9="matting of ver";
+ title*10="y long MIME h";
+ title*11="eaders"
+
+])
+
+# This test is split into 5 subtests to make sure encoded character
+# representation is not split between subsequent numbered parameters.
+MIMEHDR([format: language info 1],[mimehdr12 mimehdr12a],
+[-header=X-MIME-Test-Header -width=27],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[X-MIME-Test-Header: application/x-stuff;
+ title*0*=en'us-ascii'This;
+ title*1*=%20is%20even%20m;
+ title*2*=ore%20***fun***;
+ title*3*=%20isn't%20it!
+
+])
+
+MIMEHDR([format: language info 2],[mimehdr12 mimehdr12b],
+[-header=X-MIME-Test-Header -width=28],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[X-MIME-Test-Header: application/x-stuff;
+ title*0*=en'us-ascii'This;
+ title*1*=%20is%20even%20mo;
+ title*2*=re%20***fun***;
+ title*3*=%20isn't%20it!
+
+])
+
+MIMEHDR([format: language info 3],[mimehdr12 mimehdr12c],
+[-header=X-MIME-Test-Header -width=29],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[X-MIME-Test-Header: application/x-stuff;
+ title*0*=en'us-ascii'This;
+ title*1*=%20is%20even%20mor;
+ title*2*=e%20***fun***%20is;
+ title*3*=n't%20it!
+
+])
+
+MIMEHDR([format: language info 4],[mimehdr12 mimehdr12d],
+[-header=X-MIME-Test-Header -width=30],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[X-MIME-Test-Header: application/x-stuff;
+ title*0*=en'us-ascii'This;
+ title*1*=%20is%20even%20more;
+ title*2*=%20***fun***%20isn';
+ title*3*=t%20it!
+
+])
+
+MIMEHDR([format: language info 5],[mimehdr12 mimehdr12e],
+[-header=X-MIME-Test-Header -width=31],
+[application/x-stuff;
+    title*0*=us-ascii'en'This%20is%20even%20more%20;
+    title*1*=%2A%2A%2Afun%2A%2A%2A%20;
+    title*2="isn't it!"
+],
+[X-MIME-Test-Header: application/x-stuff;
+ title*0*=en'us-ascii'This%20i;
+ title*1*=s%20even%20more%20**;
+ title*2*=*fun***%20isn't%20it;
+ title*3*=!
+
+])
+
+m4_popdef([MIMEHDR])

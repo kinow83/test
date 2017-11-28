@@ -1,0 +1,60 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2007-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+dnl ------------------------------------------------------------
+dnl TESTDEC2047([NAME], [KW = `'], [INPUT], [STDOUT = `'],
+dnl         [STDERR = `'], [RUN-IF-FAIL], [RUN-IF-PASS])
+dnl
+m4_pushdef([TESTDEC2047],[
+m4_pushdef([MU_TEST_GROUP],[Decode 2047])
+m4_pushdef([MU_TEST_KEYWORDS],[decode2047 decode])
+m4_pushdef([MU_TEST_COMMAND],[decode2047 -p])
+MU_GENERIC_TEST([$1],[$2],[$3],[],[$4],[$5])
+m4_popdef([MU_TEST_COMMAND])
+m4_popdef([MU_TEST_KEYWORDS])
+m4_popdef([MU_TEST_GROUP])
+])
+
+dnl ------------------------------------------------------------
+TESTDEC2047([],[decode01],
+[=?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>],
+[Keith Moore <moore@cs.utk.edu>
+])
+
+TESTDEC2047([],[decode02],
+[=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>],
+[Keld J\370rn Simonsen <keld@dkuug.dk>
+])
+
+TESTDEC2047([],[decode03],
+[=?ISO-8859-1?Q?Andr=E9?= Pirard <PIRARD@vm1.ulg.ac.be>],
+[Andr\351 Pirard <PIRARD@vm1.ulg.ac.be>
+])
+
+TESTDEC2047([],[decode04],
+[=?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?= ... =?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=],
+[If you can read this yo ... u understand the example.
+])
+
+# Malformed input string: lacks trailing =. MU 0.6.90 hanged on it.
+TESTDEC2047([malformed input],[decode05],
+[=?koi8-r?B?RndkOiDSxcfJ09TSwcPJ0SDEz83FzsE?=],
+[Fwd: \322\305\307\311\323\324\322\301\303\311\321 \304\317\315\305
+])
+
+m4_popdef([TESTDEC2047])
+
+

@@ -1,0 +1,708 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_BANNER(Format functions)
+
+dnl ------------------------------------------------------------
+dnl fmtrun([NAME], [FORMAT], [MSG], [STDOUT = `'], [STDERR = `'])
+dnl
+m4_pushdef([FMTFUNC],[
+AT_SETUP([$1])
+AT_KEYWORDS([fmtfunc format])
+AT_DATA([mh_profile],[Charset: auto
+])
+AT_DATA([input.fmt],[$2])
+AT_DATA([message],[$3])
+AT_CHECK([MH=`pwd`/mh_profile fmtcheck -form input.fmt -msgno 1 -width 80 message
+],
+[m4_if([$5],[],[0],[1])],
+[$4],[$5])
+AT_CLEANUP])
+
+FMTFUNC([msg],
+[%(msg)
+],
+[
+
+],
+[1
+])
+
+# FIXME: cur
+# FIXME: unseen
+
+FMTFUNC([size],
+[%(size)
+],
+[From: gray@example.net
+To: root@example.com
+Subject: Test
+
+test message
+],
+[72
+])
+
+FMTFUNC([num],
+[%(num 10)
+%(num)
+],
+[
+
+],
+[10
+0
+])
+
+FMTFUNC([lit],
+[%(lit string)
+%(lit)
+],
+[
+
+],
+[string
+])
+
+FMTFUNC([void],
+[%(void(num 10))
+],
+[
+
+],
+[])
+
+FMTFUNC([strlen],
+[%(lit string)=%(strlen)
+],
+[
+
+],
+[string=6
+])
+
+# FIXME: Not quite sure: perhaps it should report 80
+FMTFUNC([width],
+[%(width)
+],
+[
+
+],
+[79
+])
+
+FMTFUNC([charleft],
+[input %(charleft)
+],
+[
+
+],
+[input 73
+])
+
+# FIXME: timenow
+# FIXME: myhost
+# FIXME: myname
+# FIXME: localmbox
+
+FMTFUNC([eq],
+[%(void(num 10))%(eq 5):%(void(num 5))%(eq 5)
+],
+[
+
+],
+[0:1
+])
+
+FMTFUNC([ne],
+[%(void(num 10))%(ne 5):%(void(num 5))%(ne 5)
+],
+[
+
+],
+[1:0
+])
+
+FMTFUNC([gt],
+[%(void(num 10))%(gt 5):%(void(num 3))%(gt 5)
+],
+[
+
+],
+[1:0
+])
+
+FMTFUNC([match],
+[%(void(lit a stringent test))%(match string)
+%(void(lit one more test))%(match string)
+],
+[
+
+],
+[1
+0
+])
+
+FMTFUNC([amatch],
+[%(void(lit stringent test))%(amatch string)
+%(void(lit a stringent test))%(amatch string)
+],
+[
+
+],
+[1
+0
+])
+
+FMTFUNC([plus],
+[%(void(num 10))%(plus 15)
+],
+[
+
+],
+[25
+])
+
+FMTFUNC([minus],
+[%(void(num 10))%(minus 15)
+],
+[
+
+],
+[-5
+])
+
+FMTFUNC([divide],
+[%(void(num 10))%(divide 2)
+],
+[
+
+],
+[5
+])
+
+FMTFUNC([modulo],
+[%(void(num 10))%(modulo 2)
+%(void(num 5))%(modulo 2)
+],
+[
+
+],
+[0
+1
+])
+
+AT_SETUP([getenv])
+AT_KEYWORDS([fmtfunc format])
+AT_DATA([input.fmt],[%(getenv MH_TEST)
+])
+AT_DATA([message],[
+
+])
+AT_CHECK([MH_TEST=defined fmtcheck -form input.fmt -width 80 message
+],
+[0],
+[defined
+])
+AT_CLEANUP
+
+AT_SETUP([profile])
+AT_KEYWORDS([fmtfunc format])xo
+AT_DATA([input.fmt],[%(profile Local-Mailbox)
+%(profile undefined)
+%(profile moreproc)
+])
+AT_DATA([message],[
+
+])
+AT_DATA([mh_profile],[Local-Mailbox: foo@example.org
+moreproc: simple-more
+])
+AT_CHECK([MH=`pwd`/mh_profile  fmtcheck -form input.fmt -width 80 message
+],
+[0],
+[foo@example.org
+
+simple-more
+])
+AT_CLEANUP
+
+FMTFUNC([nonzero],
+[%(nonzero(num 10))
+%(nonzero(num))
+%(void(width))%(nonzero)
+],
+[
+
+],
+[1
+0
+1
+])
+
+FMTFUNC([zero],
+[%(zero(num 10))
+%(zero(num))
+%(void(width))%(zero)
+],
+[
+
+],
+[0
+1
+0
+])
+
+FMTFUNC([null],
+[%(lit input)%(null)
+%(lit)%(null)
+],
+[
+
+],
+[input0
+1
+])
+
+FMTFUNC([nonnull],
+[%(lit input)%(nonnull)
+%(lit)%(nonnull)
+],
+[
+
+],
+[input1
+0
+])
+
+FMTFUNC([comp],
+[%(comp{From})
+],
+[From: foo@example.com
+
+],
+[foo@example.com
+])
+
+FMTFUNC([compval],
+[%(comp{X-Level})
+],
+[From: foo@example.com
+X-Level: 8
+
+],
+[8
+])
+
+# FIXME: This relies on LC_ALL=C
+FMTFUNC([decode],
+[%(decode{Subject})
+],
+[Subject: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?= ... =?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
+
+body
+],
+[If you can read this yo ... u understand the example.
+])
+
+# FIXME: unquote
+
+FMTFUNC([trim],
+[%(void(lit trailing    ))%(strlen)
+%(trim)%(strlen)
+],
+[
+
+],
+[12
+8
+])
+
+FMTFUNC([putstr],
+[%(void(lit string))%(putstr)
+%(putstr test)
+%(putstr{from})
+%(putstr(msg))
+],
+[From: foo@example.org
+
+],
+[string
+test
+foo@example.org
+1
+])
+
+FMTFUNC([putstrf],
+[%(void(comp{Subject}))%-20(putstrf)
+],
+[From: foo@example.org
+Subject: test message
+
+body
+],
+[        test message
+])
+
+FMTFUNC([putnum],
+[%(void(num 10))%(putnum)
+%(putnum 15)
+%(putnum{X-Number})
+%(putnum(msg))
+],
+[From: foo@example.org
+X-Number: 8
+
+body
+],
+[10
+15
+8
+1
+])
+
+FMTFUNC([putnumf],
+[%(void(num 10))%03(putnumf)
+%(void(num 65535))%03(putnumf)
+],
+[
+
+],
+[010
+?35
+])
+
+# FIXME: putlit
+
+FMTFUNC([nodate],
+[%(nodate{date})
+%(nodate{from})
+],
+[From: foo@example.org
+Date: Sat, 01 Jul 2017 08:00:01 +0300
+
+body
+],
+[0
+1
+])
+
+FMTFUNC([formataddr],
+[%(formataddr{From})%(formataddr{To})%(formataddr{Reply-To})%(putstr)
+],
+[From: root@example.com
+To: gray@example.org
+Reply-To: root@example.com
+
+data
+],
+[<root@example.com>,<gray@example.org>
+])
+
+FMTFUNC([sec],
+[%(sec{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[58
+])
+
+FMTFUNC([min],
+[%(min{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[17
+])
+
+FMTFUNC([hour],
+[%(hour{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[13
+])
+
+FMTFUNC([wday],
+[%(wday{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[1
+])
+
+FMTFUNC([day],
+[%(day{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[Mon
+])
+
+FMTFUNC([weekday],
+[%(weekday{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[Monday
+])
+
+FMTFUNC([sday],
+[%(sday{Date})
+%(sday{X-Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+X-Date: 3 Jul 2017 13:17:58 +0300
+
+],
+[1
+0
+])
+
+FMTFUNC([mday],
+[%(mday{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[3
+])
+
+FMTFUNC([yday],
+[%(yday{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[183
+])
+
+FMTFUNC([mon],
+[%(mon{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[7
+])
+
+FMTFUNC([month],
+[%(month{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[Jul
+])
+
+FMTFUNC([lmonth],
+[%(lmonth{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[July
+])
+
+FMTFUNC([year],
+[%(year{Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+
+],
+[2017
+])
+
+# FIXME: zone
+
+FMTFUNC([tzone],
+[%(tzone{Date})
+%(tzone{X-Date-1})
+%(tzone{X-Date-2})
+%(tzone{X-Date-3})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+X-Date-1: Mon,  3 Jul 2017 13:17:58 -0500
+X-Date-2: Mon,  3 Jul 2017 13:17:58 +0000
+X-Date-3: Mon,  3 Jul 2017 13:17:58 0000
+
+
+],
+[+0300
+-0500
++0000
++0000
+])
+
+FMTFUNC([szone],
+[%(szone{Date})
+%(szone{X-Date})
+],
+[Date: Mon,  3 Jul 2017 13:17:58 +0300
+X-Date: Mon,  3 Jul 2017 13:17:58
+
+],
+[1
+0
+])
+
+# FIXME: date2local
+
+# FIXME: date2gmt
+
+# FIXME: dst
+# FMTFUNC([dst],
+# [%(dst{Date})
+# %(dst{X-Date})
+# ],
+# [Date: Mon,  3 Jul 2017 13:17:58 +0300
+# X-Date: Sun,  1 Jan 2017 10:11:00 +0200
+
+# ],
+# [1
+# 0
+# ])
+
+# FIXME: clock
+
+# FIXME: rclock
+
+# FIXME: tws
+
+# FIXME: pretty
+
+FMTFUNC([proper],
+[%(proper{From})
+],
+[From: Sergey <gray@gnu.org>
+
+text
+],
+[Sergey <gray@gnu.org>
+])
+
+FMTFUNC([friendly],
+[%(friendly{From})
+%(friendly{To})
+],
+[From: Sergey <gray@gnu.org>
+To: root@example.com
+
+text
+],
+[Sergey
+root@example.com
+])
+
+FMTFUNC([addr],
+[%(addr{From})
+%(addr{To})
+],
+[From: Sergey <gray@gnu.org>
+To: root@example.com
+
+text
+],
+[gray@gnu.org
+root@example.com
+])
+
+FMTFUNC([pers],
+[from=%(pers{From})
+to=%(pers{To})
+],
+[From: Sergey <gray@gnu.org>
+To: root@example.com
+
+text
+],
+[from=Sergey
+to=
+])
+
+# FIXME: note
+
+FMTFUNC([mbox],
+[%(mbox{From})
+],
+[From: Sergey <gray@gnu.org>
+
+],
+[gray
+])
+
+AT_SETUP([mymbox])
+AT_KEYWORDS([fmtfunc format])
+AT_DATA([mh_profile],[Charset: auto
+Local-Mailbox: mu@example.net
+Alternate-Mailboxes: gray, *@mailutils.*
+])
+AT_DATA([message],[From: mu@example.net
+X-From-1: gray@localhost
+X-From-2: root@mailutils.org
+X-From-3: mu@example.com
+])
+AT_DATA([input.fmt],[%(mymbox{From})
+%(mymbox{X-From-1})
+%(mymbox{X-From-2})
+%(mymbox{X-From-3})
+])
+AT_CHECK([MH=`pwd`/mh_profile fmtcheck -form input.fmt -msgno 1 -width 80 message
+],
+[0],
+[1
+1
+1
+0
+])
+AT_CLEANUP
+
+FMTFUNC([host],
+[%(host{From})
+],
+[From: Sergey <gray@gnu.org>
+
+],
+[gnu.org
+])
+
+FMTFUNC([nohost],
+[%(nohost{From})
+%(nohost{To})
+%(nohost{Sender})
+],
+[From: gray
+To: mu@example.org
+
+],
+[1
+0
+1
+])
+
+# FIXME: path
+
+# FIXME: ingrp
+
+# FIXME: gname
+
+m4_popdef([FMTFUNC])

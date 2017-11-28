@@ -1,0 +1,41 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2010-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+m4_include([testsuite.inc])
+
+AT_INIT
+
+AT_BANNER(UIDs)
+m4_include([lstuid00.at])
+m4_include([lstuid01.at])
+m4_include([lstuid02.at])
+
+AT_BANNER(mimetest)
+m4_include([mime.at])
+
+AT_BANNER(Mailbox removal)
+m4_include([mbdel.at])
+
+AT_BANNER(Folder mailbox removal)
+m4_include([fldel.at])
+
+AT_BANNER(SMTP)
+m4_include([smtp-msg.at])
+m4_include([smtp-str.at])
+
+AT_BANNER(Various)
+m4_include([ufms.at])
+m4_include([cwdrepl.at])

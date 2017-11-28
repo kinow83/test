@@ -1,0 +1,142 @@
+# Error messages for GNU Mailutils
+# Copyright (C) 2005-2007, 2010-2012, 2014-2017 Free Software
+# Foundation, Inc.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library.  If not, see <http://www.gnu.org/licenses/>. 
+
+MU_ERR_FAILURE              _("Operation failed")
+MU_ERR_CANCELED             _("Operation canceled")
+
+MU_ERR_EMPTY_VFN            _("Empty virtual function")
+
+# A counterpart of EINVAL.  Functions receiving invalid input arguments
+# return EINVAL, those receiving invalid output arguments return this
+# code:
+MU_ERR_OUT_PTR_NULL         _("Null output pointer")
+
+MU_ERR_MBX_REMOVED          _("Mailbox removed")
+
+MU_ERR_NOT_OPEN             _("Resource not open")
+MU_ERR_OPEN                 _("Resource is already open")
+
+MU_ERR_INVALID_EMAIL        _("Malformed email address")
+MU_ERR_EMPTY_ADDRESS        _("Empty address list")
+
+MU_ERR_LOCKER_NULL          _("Locker null")
+MU_ERR_LOCK_CONFLICT        _("Conflict with previous locker")
+MU_ERR_LOCK_BAD_LOCK        _("Lock file check failed")
+MU_ERR_LOCK_BAD_FILE        _("File check failed")
+MU_ERR_LOCK_NOT_HELD        _("Lock not held on file")
+MU_ERR_LOCK_EXT_FAIL        _("Failed to execute external locker")
+MU_ERR_LOCK_EXT_ERR         _("External locker failed")
+MU_ERR_LOCK_EXT_KILLED      _("External locker killed")
+
+MU_ERR_NO_SUCH_USER         _("No such user name")
+
+MU_ERR_GETHOSTBYNAME        _("DNS name resolution failed")
+MU_ERR_MAILER_BAD_FROM      _("Not a valid sender address")
+MU_ERR_MAILER_BAD_TO        _("Not a valid recipient address")
+MU_ERR_MAILER_NO_RCPT_TO    _("No recipient addresses found")
+MU_ERR_MAILER_BAD_URL       _("Malformed or unsupported mailer URL")
+MU_ERR_SMTP_RCPT_FAILED     _("SMTP RCPT command failed")
+
+MU_ERR_TCP_NO_HOST          _("Required host specification is missing")
+MU_ERR_TCP_NO_PORT          _("Invalid port or service specification")
+
+MU_ERR_BAD_2047_INPUT       _("Input string is not RFC 2047 encoded")
+MU_ERR_BAD_2047_ENCODING    _("Not a valid RFC 2047 encoding")
+
+MU_ERR_NOUSERNAME           _("User name is not supplied")
+MU_ERR_NOPASSWORD           _("User password is not supplied")
+MU_ERR_BADREPLY             _("Invalid reply from the remote host")
+
+MU_ERR_SEQ                  _("Bad command sequence")
+MU_ERR_REPLY                _("Operation rejected by remote party")
+
+MU_ERR_BAD_AUTH_SCHEME      _("Unsupported authentication scheme")
+MU_ERR_AUTH_FAILURE         _("Authentication failed")
+
+MU_ERR_PROCESS_NOEXEC       _("Cannot execute")
+MU_ERR_PROCESS_EXITED       _("Process exited with a non-zero status")
+MU_ERR_PROCESS_SIGNALED     _("Process exited on signal")
+MU_ERR_PROCESS_UNKNOWN_FAILURE _("Unknown failure while executing subprocess")
+MU_ERR_CONN_CLOSED          _("Connection closed by remote host")
+MU_ERR_PARSE                _("Parse error")
+MU_ERR_NOENT                _("Requested item not found")
+MU_ERR_EXISTS               _("Item already exists")
+MU_ERR_BUFSPACE             _("Not enough buffer space")
+
+# Database errors
+MU_ERR_SQL                  _("SQL error")
+MU_ERR_DB_ALREADY_CONNECTED _("Already connected to the database")
+MU_ERR_DB_NOT_CONNECTED     _("Not connected to the database")
+MU_ERR_RESULT_NOT_RELEASED  _("Result of the previous query is not released")
+MU_ERR_NO_QUERY             _("No query was yet executed")
+MU_ERR_BAD_COLUMN           _("Bad column address")
+MU_ERR_NO_RESULT            _("No result from the previous query available")
+MU_ERR_NO_INTERFACE         _("No such interface")
+
+MU_ERR_BADOP                _("Inappropriate operation for this mode")
+MU_ERR_BAD_FILENAME         _("Badly formed file or directory name")
+MU_ERR_READ                 _("Read error")
+
+MU_ERR_NO_TRANSPORT         _("Transport stream not set")
+MU_ERR_AUTH_NO_CRED         _("No credentials supplied")
+
+# URL-related errors
+MU_ERR_URL_MISS_PARTS       _("URL missing required parts")
+MU_ERR_URL_EXTRA_PARTS      _("URL has parts not allowed by its scheme")
+MU_ERR_URL_INVALID_PARAMETER _("Invalid parameter in URL")
+
+# This error is returned when the requested data cannot be obtained right
+# now or by the given means, or obtaining them is too costly, e.g. as
+# obtaining number of lines in a message via POP3 (which would involve
+# downloading entire message) by mu_message_quick_lines.
+MU_ERR_INFO_UNAVAILABLE	    _("Information is not yet available")
+
+# The following are mapped to the corresponding EAI_ errors
+MU_ERR_NONAME	            _("Name or service not known")
+MU_ERR_BADFLAGS	            _("Bad value for flags")
+MU_ERR_SOCKTYPE             _("Socket type not supported")
+MU_ERR_FAMILY               _("Address family not supported")
+MU_ERR_SERVICE              _("Requested service not supported")
+
+# File safety checks
+MU_ERR_PERM_OWNER_MISMATCH  _("File owner mismatch")
+MU_ERR_PERM_GROUP_WRITABLE  _("Group writable file")
+MU_ERR_PERM_WORLD_WRITABLE  _("World writable file")
+MU_ERR_PERM_GROUP_READABLE  _("Group readable file")
+MU_ERR_PERM_WORLD_READABLE  _("World readable file")
+MU_ERR_PERM_LINKED_WRDIR    _("Linked file in a writable directory")
+MU_ERR_PERM_DIR_IWGRP       _("File in group writable directory")
+MU_ERR_PERM_DIR_IWOTH       _("File in world writable directory")
+
+MU_ERR_DISABLED             _("Requested feature disabled in configuration")
+
+MU_ERR_FORMAT		    _("Error in format string")
+
+MU_ERR_REMOVE_SOURCE	    _("Failed to remove source file")
+MU_ERR_REMOVE_DEST	    _("Failed to remove destination file")
+MU_ERR_RESTORE_META         _("Failed to restore ownership or mode")
+
+# User-defined errors are meant to be returned by foreach iterator
+# callbacks when they need to break iterations.
+MU_ERR_USER0                _("User-defined error 0")
+MU_ERR_USER1                _("User-defined error 1")
+MU_ERR_USER2                _("User-defined error 2")
+MU_ERR_USER3                _("User-defined error 3")
+MU_ERR_USER4                _("User-defined error 4")
+MU_ERR_USER5                _("User-defined error 5")
+MU_ERR_USER6                _("User-defined error 6")
+MU_ERR_USER7                _("User-defined error 7")

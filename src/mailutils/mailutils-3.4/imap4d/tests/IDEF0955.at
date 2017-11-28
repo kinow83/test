@@ -1,0 +1,63 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2011-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([IDEF0955])
+
+AT_CHECK([
+test "$MU_ULONG_MAX_1" = 0 && AT_SKIP_TEST
+
+cat > input <<EOT
+1 select INBOX
+2 FETCH 1:$MU_ULONG_MAX_1 FLAGS
+3 UID FETCH 1:$MU_ULONG_MAX_1 FLAGS
+X LOGOUT
+EOT
+
+MUT_MBCOPY($abs_top_srcdir/testsuite/spool/mbox1,INBOX)
+
+IMAP4D_RUN([1 select INBOX
+2 FETCH 1:$MU_ULONG_MAX_1 FLAGS
+3 UID FETCH 1:$MU_ULONG_MAX_1 FLAGS
+X LOGOUT
+],[expand]) | remove_uidvalidity 
+],
+[0],
+[* PREAUTH IMAP4rev1 Test mode
+* 5 EXISTS
+* 5 RECENT
+* OK [[UIDNEXT 6]] Predicted next uid
+* OK [[UNSEEN 1]] first unseen message
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [[PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft)]] Permanent flags
+1 OK [[READ-WRITE]] SELECT Completed
+* 1 FETCH (FLAGS (\Recent))
+* 2 FETCH (FLAGS (\Recent))
+* 3 FETCH (FLAGS (\Recent))
+* 4 FETCH (FLAGS (\Recent))
+* 5 FETCH (FLAGS (\Recent))
+2 OK FETCH Completed
+* 1 FETCH (UID 1 FLAGS (\Recent))
+* 2 FETCH (UID 2 FLAGS (\Recent))
+* 3 FETCH (UID 3 FLAGS (\Recent))
+* 4 FETCH (UID 4 FLAGS (\Recent))
+* 5 FETCH (UID 5 FLAGS (\Recent))
+3 OK UID FETCH Completed
+* BYE Session terminating.
+X OK LOGOUT Completed
+])
+
+AT_CLEANUP
+

@@ -1,0 +1,43 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2007-2012, 2014-2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+AT_SETUP([loadable extensions: numaddr])
+AT_KEYWORDS([ext])
+
+AT_CHECK([
+MUT_PREREQ_CAPA([HAVE_LIBLTDL])
+
+AT_DATA([prog],[
+require "test-numaddr";
+
+if numaddr [[ "to", "cc" ]] :over 5
+  {
+    discard;
+  }
+])
+
+MUT_MBCOPY($abs_top_srcdir/testsuite/spool/bigto.mbox)
+
+sieve MUT_SIEVE_CMDLINE dnl
+ --clearpath --libdir-prefix="${abs_top_builddir}/examples" -f ./bigto.mbox prog
+],
+[0],
+[],
+[DISCARD on msg uid 1: marking as deleted
+])
+
+AT_CLEANUP
+

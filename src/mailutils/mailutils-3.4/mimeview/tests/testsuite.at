@@ -1,0 +1,249 @@
+# This file is part of GNU Mailutils. -*- Autotest -*-
+# Copyright (C) 2017 Free Software Foundation, Inc.
+#
+# GNU Mailutils is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3, or (at
+# your option) any later version.
+#
+# GNU Mailutils is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU Mailutils.  If not, see <http://www.gnu.org/licenses/>.
+
+m4_include([testsuite.inc])
+
+dnl ------------------------------------------------------------
+dnl MIMEVIEW_OPTIONS  -- default options for mimeview
+m4_pushdef([MIMEVIEW_OPTIONS],[--no-site --no-user])
+
+m4_pushdef([__prepare_input],[
+m4_if([$1],[],[],[bf $1 $2
+__prepare_input(m4_shift(m4_shift(m4_shift($@))))])])
+
+m4_pushdef([prepare_input],[__prepare_input(m4_shift(m4_shift($@)))])
+
+m4_pushdef([__select_args],[dnl
+m4_if([$2],[],[$1],[dnl
+__select_args([$1 $2], m4_shift(m4_shift(m4_shift(m4_shift($@)))))])])
+
+m4_pushdef([select_args],[__select_args([],m4_shift(m4_shift($@)))])
+
+m4_pushdef([__build_expect],[dnl
+m4_if([$2],[],[$1],[__build_expect([dnl
+$1[]dnl
+$2: $4
+],m4_shift(m4_shift(m4_shift(m4_shift($@)))))])])
+
+m4_pushdef([build_expect],[__build_expect([],m4_shift(m4_shift($@)))])
+
+# MIMEIDENTIFY(NAME,TYPES,FILE,CONTENT,RES)
+m4_pushdef([MIMEIDENTIFY],[
+AT_SETUP([$1])
+AT_KEYWORDS([mimeview])
+AT_CHECK([
+AT_DATA([mime.types],[$2
+])
+prepare_input($@)
+mimeview MIMEVIEW_OPTIONS --identify -f mime.types select_args($@)
+],
+[0],
+[build_expect($@)])
+AT_CLEANUP
+])
+
+m4_pushdef([MIMETEST],[
+AT_SETUP([$1])
+AT_KEYWORDS([mimeview])
+AT_CHECK([
+AT_DATA([mime.types],[$2
+])
+mimeview MIMEVIEW_OPTIONS --debug-level=app.=trace6 -t -f mime.types
+],
+m4_shift(m4_shift($@)))
+AT_CLEANUP
+])
+
+dnl ------------------------------------------------------------
+
+AT_INIT
+AT_TESTED([mimeview])
+MUT_VERSION([mimeview])
+
+MIMEIDENTIFY([default],
+[application/octet-stream],
+[input], [], [application/octet-stream])
+
+MIMEIDENTIFY([suffixes],
+[foo/x-bar bar baz
+foo/x-qux qux quux
+],
+[a.bar], [], [foo/x-bar],
+[a.baz], [], [foo/x-bar],
+[a.quux], [], [foo/x-qux],
+[a.qx], [], [unknown])
+
+MIMEIDENTIFY([default ordering],
+[text/foo bar
+text/bar bar
+],
+[a.bar], [], [text/bar])
+
+MIMEIDENTIFY([priority],
+[text/bar bar
+text/foo bar priority(20)
+],
+[a.bar], [], [text/foo])
+
+AT_BANNER([Functions])
+
+#   match("pattern")                    Pattern match on filename
+MIMEIDENTIFY([match],
+[application/x-csource	match(*.c)
+],
+[a.c],[],[application/x-csource],
+[a.c1],[],[unknown])
+
+#   ascii(offset,length)                True if bytes are valid printable ASCII
+#                                       (CR, NL, TAB, BS, 32-126)
+MIMEIDENTIFY([ascii],
+[application/x-bar	ascii(16,6)
+],
+[one],[-seek 16 -string foobar -int 100],[application/x-bar],
+[two],[-seek 16 -string fooba -byte 129],[unknown])
+
+#   printable(offset,length)            True if bytes are printable 8-bit chars
+#                                       (CR, NL, TAB, BS, 32-126, 128-254)
+MIMEIDENTIFY([printable],
+[application/x-bar	printable(16,6)
+],
+[one],[-seek 16 -string foobar -int 100],[application/x-bar],
+[two],[-seek 16 -string fooba -byte 129],[application/x-bar],
+[three],[-seek 16 -string fooba -byte 127],[unknown])
+
+#   regex(offset,"regex")               True if bytes match regular expression
+MIMEIDENTIFY([regex],
+[application/pdf    regex(0,^[[\n\r]]*%PDF)
+],
+[one],[-byte 10 -byte 10 -byte 13 -byte 10 -string %PDF],[application/pdf],
+[two],[-byte 10 -byte 10 -byte 13 -byte 7 -string %PDF],[unknown])
+
+#   string(offset,"string")             True if bytes are identical to string
+MIMEIDENTIFY([string],
+[application/x-foo  string(5,FOO)
+],
+[one],[-seek 5 -string FOO],[application/x-foo],
+[two],[-seek 4 -string FOO],[unknown])
+
+#   istring(offset,"string")            True if bytes are identical to
+#                                       case-insensitive string
+MIMEIDENTIFY([istring],
+[application/x-foo  istring(5,FOO)
+],
+[one],[-seek 5 -string foO],[application/x-foo],
+[two],[-seek 4 -string FOO],[unknown])
+
+#   char(offset,value)                  True if byte is identical
+MIMEIDENTIFY([char],
+[application/x-foo  char(5,15)
+],
+[one],[-seek 5 -byte 15],[application/x-foo],
+[two],[-seek 5 -byte 1],[unknown])
+
+#   short(offset,value)                 True if 16-bit integer is identical
+MIMEIDENTIFY([short],
+[application/x-foo  short(5,1600)
+],
+[one],[-seek 5 -short 1600],[application/x-foo],
+[two],[-seek 5 -short 1601],[unknown])
+
+#   int(offset,value)                   True if 32-bit integer is identical
+MIMEIDENTIFY([int],
+[application/x-foo  int(5,16578)
+],
+[one],[-seek 5 -int 16578],[application/x-foo],
+[two],[-seek 5 -int 16579],[unknown])
+
+#   locale("string")                    True if current locale matches string
+# FIXME
+
+#   contains(offset,range,"string")     True if the range contains the string
+MIMEIDENTIFY([contains],
+[application/x-foo contains(10,1024,"TESTSTRING")
+],
+[one],[-seek 512 -string TESTSTRING],[application/x-foo],
+[two],[-seek 512 -string TEST],[unknown])
+
+MIMEIDENTIFY([argument strings],
+[application/x-foo string(0,"FOO")
+application/x-bar string(0,'B A R')
+application/x-baz string(0,"B A"Z<1B0103>BAZ)
+application/x-qux string(0,<1B>45" Q "<01>)
+],
+[one],[-string FOO],[application/x-foo],
+[two],[-string 'B A R'],[application/x-bar],
+[three],[-string "B AZ" -byte 0x1b -byte 0x01 -byte 0x03 -string BAZ],[application/x-baz],
+[four],[-byte 0x1b -string '45 Q ' -byte 0x01],[application/x-qux])
+
+MIMEIDENTIFY([logical or],
+[text/x-bar bar baz string(0,bar) printable(3,10)
+],
+[one.bar],[],[text/x-bar],
+[one.baz],[],[text/x-bar],
+[foo],[-string bar],[text/x-bar],
+[bar],[-seek 3 -string teststring],[text/x-bar],
+[baz],[-seek 3 -string test -byte 0 -string tring],[unknown])
+
+MIMEIDENTIFY([logical and],
+[text/x-foo bar + string(0,bar<10>) + printable(4,10)
+],
+[one.bar],[-string bar -byte 0x10 -string TESTSTRING],[text/x-foo],
+[one],[-string bar -byte 0x10 -string TESTSTRING],[unknown],
+[two.bar],[-string bar -byte 0x13 -byte 0x10 -string TEST],[unknown])
+
+MIMEIDENTIFY([grouping],
+[text/x-foo bar (string(0,bar) + printable(4,10))
+],
+[one.bar],[-string foo],[text/x-foo],
+[two.baz],[-string bar -byte 0x10 -string TESTSTRING],[text/x-foo],
+[three],[-string bar -byte 0x13 -byte 0x10 -string TESTSTRING],[unknown])
+
+MIMETEST([error recovery],
+[text/x-foo bar (string(0,bar) + printable(4,10))
+   string(10,baz)
+application/x-baz
+],
+[1],
+[],
+[mimeview: mime.types:2.1: type/subtype is missing
+mime.types:2.1: started error recovery
+mime.types:3: finished error recovery
+])
+
+MIMETEST([multiple error recovery],
+[text/x-foo bar (string(0,bar) + printable(4,10))
+   string(10,baz)
+application/x-baz	baz
+image/jpeg jpeg jpg jpe string(0,<FFD8FF>) &&\
+           (char(3,0xe0) char(3,0xe1) char(3,0xe2) char(3,0xe3)\
+            char(3,0xe4) char(3,0xe5) char(3,0xe6) char(3,0xe7)
+            char(3,0xe8) char(3,0xe9) char(3,0xea) char(3,0xeb)\
+            char(3,0xec) char(3,0xed) char(3,0xee) char(3,0xef))
+image/tiff                      tiff tif string(0,MM<002A>) string(0,II<2A00>)
+],
+[1],
+[],
+[mimeview: mime.types:2.1: type/subtype is missing
+mime.types:2.1: started error recovery
+mime.types:3: finished error recovery
+mimeview: mime.types:6.63: syntax error
+mime.types:6.63: started error recovery
+mime.types:9: finished error recovery
+])
+
+
+m4_popdef([MIMETEST])
+m4_popdef([MIMEIDENTIFY])
