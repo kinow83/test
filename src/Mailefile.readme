@@ -1,0 +1,15 @@
+
+
+[autoreconf]
+configure.ac가 갱신되면 autoheader ~ autoconf까지 명령어를 일일이 실행해야 하는데,
+autoreconf는 이 과정을 한번에 해준다.
+
+autoheader : autom4te.cache 디렉토리, config.h.in 파일 생성
+libtoolize : m4 디렉토리 생성, ltmain.sh 파일을 링크
+aclocal : aclocal.m4 파일 생성, autom4te.cache 디렉토리에도 몇개의 캐시 파일 생성
+automake --add-missing : Makefile.in 파일 생성, config.guess, config.sub, install-sh, missing, depcomp를 링크
+autoconf : configure 파일 생성
+
+[gettext]
+gettext를 사용하는 경우 추가로 더 해줘야 할 것이 있다.
+autopoint 항목을 읽어보자
