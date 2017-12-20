@@ -1,0 +1,34 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	Makefile	/^CC = gcc$/;"	m
+Node	queue.c	/^struct Node {$/;"	s	file:
+Queue	queue.c	/^struct Queue {$/;"	s	file:
+SENDER_OBJS	Makefile	/^SENDER_OBJS = sender.o queue.o$/;"	m
+_IO_ADAPTER_	io_adapter.h	2;"	d
+__SIMPLE_QUEUE__	queue.h	2;"	d
+accept_thread	sender.c	/^void* accept_thread(void *arg)$/;"	f
+csocks_mutex	sender.c	/^pthread_mutex_t csocks_mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
+csocks_queue	sender.c	/^struct Queue* csocks_queue;$/;"	v	typeref:struct:Queue
+dequeue	queue.c	/^void* dequeue(struct Queue *q)$/;"	f
+enqueue	queue.c	/^int enqueue(struct Queue *q, void *value)$/;"	f
+freeQueue	queue.c	/^void freeQueue(struct Queue *q)$/;"	f
+head	queue.c	/^	struct Node *head;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
+io_adapter	io_adapter.h	/^struct io_adapter$/;"	s
+io_adapter_ctx	io_adapter.h	/^struct io_adapter_ctx {$/;"	s
+main	sender.c	/^int main(int argc, char **argv)$/;"	f
+max_size	queue.c	/^	int max_size;$/;"	m	struct:Queue	file:
+newQueue	queue.c	/^struct Queue* newQueue(int capacity)$/;"	f
+new_io_adapter	io_adapter.h	/^	io_adapter_ctx* (*new_io_adapter)(void *ctx);$/;"	m	struct:io_adapter
+new_listen_sock	sender.c	/^int new_listen_sock(int port)$/;"	f
+next	queue.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node::Node	file:
+read	io_adapter.h	/^	int (*read)(void *ctx);$/;"	m	struct:io_adapter
+release	io_adapter.h	/^	void (*release)(void *ctx);$/;"	m	struct:io_adapter
+size	queue.c	/^	int size;$/;"	m	struct:Queue	file:
+tail	queue.c	/^	struct Node *tail;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
+value	queue.c	/^	void *value;$/;"	m	struct:Node	file:
+worker_thread	sender.c	/^void* worker_thread(void *arg)$/;"	f
+write	io_adapter.h	/^	int (*write)(void *ctx);$/;"	m	struct:io_adapter
