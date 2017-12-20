@@ -14,7 +14,7 @@
 
 
 struct io_data {
-	uint8_t finished;
+	uint8_t unused;
 	uint8_t data[1500];
 };
 
@@ -27,9 +27,20 @@ static io_index {
 	uint16_t index;
 };
 
+// http://hellmath.tistory.com/8
 const int QUEUE_MAX_SIZE = 0xFFFF;
 static struct io_data queue[QUEUE_MAX_SIZE];
 int front = 1, rear = -1;
+
+void init_queue(void)
+{
+	front = rear = 0;
+}
+
+void clear_queue(void)
+{
+	front = rear;
+}
 
 int put_queue(struct io_data *data, struct io_index *idx)
 {
