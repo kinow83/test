@@ -5,30 +5,61 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 CC	Makefile	/^CC = gcc$/;"	m
+IO_SO_FILE	io_link.c	13;"	d	file:
 Node	queue.c	/^struct Node {$/;"	s	file:
+QUEUE_MAX_SIZE	io_link.c	/^const int QUEUE_MAX_SIZE = 0xFFFF;$/;"	v
 Queue	queue.c	/^struct Queue {$/;"	s	file:
-SENDER_OBJS	Makefile	/^SENDER_OBJS = sender.o queue.o$/;"	m
-_IO_ADAPTER_	io_adapter.h	2;"	d
+SENDER_OBJS	Makefile	/^SENDER_OBJS = sender.o queue.o sock.o$/;"	m
+_IO_ADAPTER_	io_link.h	2;"	d
+_MY_SOCK_	sock.h	2;"	d
 __SIMPLE_QUEUE__	queue.h	2;"	d
 accept_thread	sender.c	/^void* accept_thread(void *arg)$/;"	f
+cio	io_link.c	/^extern io_link cio = {$/;"	v
+cio_destory	io_link.c	/^void cio_destory(io_link *ctx)$/;"	f
+cio_init	io_link.c	/^int cio_init(io_link *ctx)$/;"	f
+cio_read	io_link.c	/^int cio_read(io_link *ctx)$/;"	f
+cio_write	io_link.c	/^int cio_write(io_link *ctx)$/;"	f
+clear_queue	io_link.c	/^void clear_queue(void)$/;"	f
 csocks_mutex	sender.c	/^pthread_mutex_t csocks_mutex = PTHREAD_MUTEX_INITIALIZER;$/;"	v
 csocks_queue	sender.c	/^struct Queue* csocks_queue;$/;"	v	typeref:struct:Queue
+data	io_link.c	/^	uint8_t data[1500];$/;"	m	struct:io_data	file:
 dequeue	queue.c	/^void* dequeue(struct Queue *q)$/;"	f
+destory	io_link.h	/^	void (*destory)(io_link *);$/;"	m	struct:io_linker
 enqueue	queue.c	/^int enqueue(struct Queue *q, void *value)$/;"	f
 freeQueue	queue.c	/^void freeQueue(struct Queue *q)$/;"	f
+from	io_link.c	/^	struct sockaddr_in from;$/;"	m	struct:io_hello	typeref:struct:io_hello::sockaddr_in	file:
+front	io_link.c	/^static int front = -1;$/;"	v	file:
+get_queue	io_link.c	/^struct io_data * get_queue()$/;"	f
+get_queue_index	io_link.c	/^struct io_data * get_queue_index(uint16_t index)$/;"	f
 head	queue.c	/^	struct Node *head;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
-io_adapter	io_adapter.h	/^struct io_adapter$/;"	s
-io_adapter_ctx	io_adapter.h	/^struct io_adapter_ctx {$/;"	s
+index	io_link.c	/^	uint16_t index;$/;"	m	struct:io_hello	file:
+init	io_link.h	/^	int (*init) (io_link *);$/;"	m	struct:io_linker
+init_queue	io_link.c	/^void init_queue(void)$/;"	f
+io_data	io_link.c	/^struct io_data {$/;"	s	file:
+io_hello	io_link.c	/^struct io_hello {$/;"	s	file:
+io_link	io_link.h	/^struct io_link {$/;"	s
+io_linker	io_link.h	/^struct io_linker$/;"	s
 main	sender.c	/^int main(int argc, char **argv)$/;"	f
 max_size	queue.c	/^	int max_size;$/;"	m	struct:Queue	file:
 newQueue	queue.c	/^struct Queue* newQueue(int capacity)$/;"	f
-new_io_adapter	io_adapter.h	/^	io_adapter_ctx* (*new_io_adapter)(void *ctx);$/;"	m	struct:io_adapter
-new_listen_sock	sender.c	/^int new_listen_sock(int port)$/;"	f
 next	queue.c	/^	struct Node *next;$/;"	m	struct:Node	typeref:struct:Node::Node	file:
-read	io_adapter.h	/^	int (*read)(void *ctx);$/;"	m	struct:io_adapter
-release	io_adapter.h	/^	void (*release)(void *ctx);$/;"	m	struct:io_adapter
+put_queue	io_link.c	/^int put_queue(struct io_data *data, struct io_index *idx)$/;"	f
+queue	io_link.c	/^struct io_data *queue;$/;"	v	typeref:struct:io_data
+read	io_link.h	/^	int (*read) (io_link *);$/;"	m	struct:io_linker
+rear	io_link.c	/^static int rear  = -1;$/;"	v	file:
+shmid	io_link.c	/^static int shmid = -1;$/;"	v	file:
+sio	io_link.c	/^extern io_link sio = {$/;"	v
+sio_destory	io_link.c	/^void sio_destory(io_link *ctx)$/;"	f
+sio_init	io_link.c	/^int sio_init(io_link *ctx)$/;"	f
+sio_read	io_link.c	/^int sio_read(io_link *ctx)$/;"	f
+sio_write	io_link.c	/^int sio_write(io_link *ctx)$/;"	f
 size	queue.c	/^	int size;$/;"	m	struct:Queue	file:
+sock	io_link.h	/^	int sock;$/;"	m	struct:io_link
 tail	queue.c	/^	struct Node *tail;$/;"	m	struct:Queue	typeref:struct:Queue::Node	file:
+tcp_listen_sock	sock.c	/^int tcp_listen_sock(int port)$/;"	f
+uds_connect_sock	sock.c	/^int uds_connect_sock(const char *sofile)$/;"	f
+uds_listen_sock	sock.c	/^int uds_listen_sock(const char *sofile)$/;"	f
+unused	io_link.c	/^	uint8_t unused;$/;"	m	struct:io_data	file:
 value	queue.c	/^	void *value;$/;"	m	struct:Node	file:
 worker_thread	sender.c	/^void* worker_thread(void *arg)$/;"	f
-write	io_adapter.h	/^	int (*write)(void *ctx);$/;"	m	struct:io_adapter
+write	io_link.h	/^	int (*write)(io_link *);$/;"	m	struct:io_linker

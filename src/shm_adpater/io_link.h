@@ -8,8 +8,8 @@ struct io_link {
 struct io_linker
 {
 	int (*init) (io_link *);
-	int (*write)(io_link *);
-	int (*read) (io_link *);
+	int (*write)(io_link *, void *);
+	int (*read) (io_link *, void *);
 	void (*destory)(io_link *);
 };
 
