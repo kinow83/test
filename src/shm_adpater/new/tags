@@ -1,0 +1,118 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CC	Makefile	/^CC = gcc$/;"	m
+NUM_PBIO_NODES	sender.c	49;"	d	file:
+PBIO_DATA_SIZE	pbio_data.h	4;"	d
+RECEIVER_OBJS	Makefile	/^RECEIVER_OBJS = receiver.o queue.o sock.o io_link.o$/;"	m
+SENDER_OBJS	Makefile	/^SENDER_OBJS   = sender.o queue.o sock.o xid.o pbio_data.o$/;"	m
+_MY_SOCK_	sock.h	2;"	d
+__PBIO_DATA__	pbio_data.h	2;"	d
+__QUEUE__	queue.h	2;"	d
+__XID__	xid.h	2;"	d
+a	t.c	/^	char a;$/;"	m	struct:f1_t	file:
+a	t.c	/^	f1_t a;$/;"	m	struct:f2_t	file:
+a	t.c	/^	int a;$/;"	m	struct:foo	file:
+alloc_pbio_data_queue	pbio_data.c	/^pbio_data_t *alloc_pbio_data_queue(pbio_data_queue_t *q, uint16_t *index)$/;"	f
+b	t.c	/^		int b;$/;"	m	union:foo::__anon1	file:
+b	t.c	/^	char b;$/;"	m	struct:f2_t	file:
+b	t.c	/^	int b;$/;"	m	struct:f1_t	file:
+c	t.c	/^		char c[128];$/;"	m	union:foo::__anon1	file:
+caddr	sender.c	/^	struct sockaddr_in caddr;$/;"	m	struct:svc_sock_t	typeref:struct:svc_sock_t::sockaddr_in	file:
+csock	sender.c	/^	int csock;$/;"	m	struct:svc_sock_t	file:
+data	pbio_data.h	/^	uint8_t data[PBIO_DATA_SIZE];$/;"	m	struct:pbio_data_t
+datalen	pbio_data.h	/^	size_t datalen;$/;"	m	struct:pbio_data_t
+dequeue	queue.c	/^void* dequeue(queue_t *q)$/;"	f
+destroy_pbio_data	pbio_data.c	/^void destroy_pbio_data(pbio_data_queue_t **pq)$/;"	f
+enqueue	queue.c	/^int enqueue(queue_t *q, void *value)$/;"	f
+f1_t	t.c	/^typedef struct f1_t {$/;"	s	file:
+f1_t	t.c	/^} __attribute__((packed)) f1_t;$/;"	t	typeref:struct:f1_t	file:
+f2_t	t.c	/^typedef struct f2_t {$/;"	s	file:
+f2_t	t.c	/^} __attribute__((packed)) f2_t;$/;"	t	typeref:struct:f2_t	file:
+foo	t.c	/^struct foo {$/;"	s	file:
+free_queue	queue.c	/^void free_queue(queue_t *q)$/;"	f
+gen_xid	xid.c	/^int gen_xid(xid_t *xid, struct sockaddr_in *addr)$/;"	f
+hash	xid.c	/^	uint8_t hash[32];$/;"	m	struct:xid_t	file:
+hash	xid.h	/^	uint8_t hash[32];$/;"	m	struct:xid_t
+head	queue.c	/^	q_node_t *head;$/;"	m	struct:queue_t	file:
+index	sender.c	/^	pbio_data_index_t index;$/;"	m	struct:pbio_link_data_t	file:
+init_pbio_link_accept	sender.c	/^void init_pbio_link_accept()$/;"	f
+init_svc_accept	sender.c	/^void init_svc_accept()$/;"	f
+lsock	sender.c	/^	int lsock;$/;"	m	struct:svc_sock_t	file:
+main	pbio_data.c	/^int main()$/;"	f
+main	sender.c	/^int main(int argc, char **argv)$/;"	f
+main	t.c	/^int main()$/;"	f
+max_size	pbio_data.h	/^	uint16_t max_size;$/;"	m	struct:pbio_data_queue_t
+max_size	queue.c	/^	int max_size;$/;"	m	struct:queue_t	file:
+name	t.c	/^	const char *name;$/;"	m	struct:svc_portmap_t	file:
+new_pbio_data_queue	pbio_data.c	/^pbio_data_queue_t *new_pbio_data_queue(int shmkey, int max_size)$/;"	f
+new_queue	queue.c	/^queue_t* new_queue(int capacity)$/;"	f
+next	queue.c	/^	struct q_node_t *next;$/;"	m	struct:q_node_t	typeref:struct:q_node_t::q_node_t	file:
+num_pbio_link_listens	sender.c	/^static int num_pbio_link_listens;$/;"	v	file:
+num_svc_listens	sender.c	/^static int num_svc_listens;$/;"	v	file:
+pbio_data_queue_t	pbio_data.h	/^typedef struct pbio_data_queue_t {$/;"	s
+pbio_data_queue_t	pbio_data.h	/^} pbio_data_queue_t;$/;"	t	typeref:struct:pbio_data_queue_t
+pbio_data_queues	sender.c	/^static pbio_data_queue_t *pbio_data_queues;$/;"	v	file:
+pbio_data_t	pbio_data.h	/^typedef struct pbio_data_t {$/;"	s
+pbio_data_t	pbio_data.h	/^} pbio_data_t;$/;"	t	typeref:struct:pbio_data_t
+pbio_link_accept_thread	sender.c	/^void *pbio_link_accept_thread(void *arg)$/;"	f
+pbio_link_data_t	sender.c	/^typedef struct pbio_link_data_t {$/;"	s	file:
+pbio_link_data_t	sender.c	/^} pbio_link_data_t;$/;"	t	typeref:struct:pbio_link_data_t	file:
+pbio_link_lock	sender.c	/^static pthread_mutex_t pbio_link_lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v	file:
+pbio_link_t	sender.c	/^typedef struct pbio_link_t {$/;"	s	file:
+pbio_link_t	sender.c	/^} pbio_link_t;$/;"	t	typeref:struct:pbio_link_t	file:
+pbio_links	sender.c	/^static pbio_link_t pbio_links[NUM_PBIO_NODES];$/;"	v	file:
+pbio_sock_t	pbio_sock.c	/^typedef struct pbio_sock_t {$/;"	s	file:
+pbio_sock_t	pbio_sock.c	/^} pbio_sock_t;$/;"	t	typeref:struct:pbio_sock_t	file:
+peek_pbio_data_queue	pbio_data.c	/^pbio_data_t *peek_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)$/;"	f
+pos	pbio_data.h	/^	uint16_t pos;$/;"	m	struct:pbio_data_queue_t
+proxy_csock	sender.c	/^	int      proxy_csock;$/;"	m	struct:pbio_link_t	file:
+proxy_lsock	sender.c	/^	int      proxy_lsock;$/;"	m	struct:pbio_link_t	file:
+proxy_port	sender.c	/^	uint16_t   proxy_port;$/;"	m	struct:svc_portmap_t	file:
+proxy_port	t.c	/^	const uint16_t proxy_port;$/;"	m	struct:svc_portmap_t	file:
+proxy_uds_sofile	sender.c	/^	char     proxy_uds_sofile[128];$/;"	m	struct:pbio_link_t	file:
+proxy_uds_sofile	sender.c	/^	const char *proxy_uds_sofile;$/;"	m	struct:svc_portmap_t	file:
+put_pbio_data_queue	pbio_data.c	/^int put_pbio_data_queue(pbio_data_queue_t *q, void *data, size_t datalen, uint16_t *index)$/;"	f
+q_node_t	queue.c	/^typedef struct q_node_t {$/;"	s	file:
+q_node_t	queue.c	/^} q_node_t;$/;"	t	typeref:struct:q_node_t	file:
+queue	pbio_data.h	/^	pbio_data_t *queue;$/;"	m	struct:pbio_data_queue_t
+queue_t	queue.c	/^typedef struct queue_t {$/;"	s	file:
+queue_t	queue.c	/^} queue_t;$/;"	t	typeref:struct:queue_t	file:
+queue_t	queue.h	/^typedef struct queue_t queue_t;$/;"	t	typeref:struct:queue_t
+shmid	pbio_data.h	/^	int shmid;$/;"	m	struct:pbio_data_queue_t
+shmkey	pbio_data.h	/^	int shmkey;$/;"	m	struct:pbio_data_queue_t
+size	queue.c	/^	int size;$/;"	m	struct:queue_t	file:
+svc_accept_queue_lock	sender.c	/^static pthread_mutex_t svc_accept_queue_lock = PTHREAD_MUTEX_INITIALIZER;$/;"	v	file:
+svc_accept_queues	sender.c	/^static queue_t* svc_accept_queues;$/;"	v	file:
+svc_accept_thread	sender.c	/^void *svc_accept_thread(void *arg)$/;"	f
+svc_lport	sender.c	/^	uint16_t svc_lport;$/;"	m	struct:pbio_link_t	file:
+svc_lsock	sender.c	/^	int      svc_lsock;$/;"	m	struct:pbio_link_t	file:
+svc_name	sender.c	/^	char     svc_name[64];$/;"	m	struct:pbio_link_t	file:
+svc_name	sender.c	/^	const char   *svc_name;$/;"	m	struct:svc_portmap_t	file:
+svc_port	sender.c	/^	uint16_t   svc_port;$/;"	m	struct:svc_portmap_t	file:
+svc_port	t.c	/^	const uint16_t svc_port;$/;"	m	struct:svc_portmap_t	file:
+svc_portmap_t	sender.c	/^typedef struct svc_portmap_t {$/;"	s	file:
+svc_portmap_t	sender.c	/^} svc_portmap_t;$/;"	t	typeref:struct:svc_portmap_t	file:
+svc_portmap_t	t.c	/^typedef struct svc_portmap_t {$/;"	s	file:
+svc_portmap_t	t.c	/^} svc_portmap_t;$/;"	t	typeref:struct:svc_portmap_t	file:
+svc_portmaps	sender.c	/^static svc_portmap_t svc_portmaps[3] = {$/;"	v	file:
+svc_portmaps	t.c	/^static svc_portmap_t svc_portmaps[2] = {$/;"	v	file:
+svc_sock_t	sender.c	/^typedef struct svc_sock_t {$/;"	s	file:
+svc_sock_t	sender.c	/^} svc_sock_t;$/;"	t	typeref:struct:svc_sock_t	file:
+svc_worker_thread	sender.c	/^void *svc_worker_thread(void *arg)$/;"	f
+tail	queue.c	/^	q_node_t *tail;$/;"	m	struct:queue_t	file:
+tcp_listen_sock	sock.c	/^int tcp_listen_sock(int port)$/;"	f
+uds_connect_sock	sock.c	/^int uds_connect_sock(const char *sofile)$/;"	f
+uds_listen_sock	sock.c	/^int uds_listen_sock(const char *sofile)$/;"	f
+unused_pbio_data_queue	pbio_data.c	/^void unused_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)$/;"	f
+used	pbio_data.h	/^	uint8_t used;$/;"	m	struct:pbio_data_t
+used_pbio_data_queue	pbio_data.c	/^void used_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)$/;"	f
+value	queue.c	/^	void *value;$/;"	m	struct:q_node_t	file:
+xid	sender.c	/^	xid_t xid;$/;"	m	struct:pbio_link_data_t	file:
+xid_t	xid.c	/^typedef struct xid_t {$/;"	s	file:
+xid_t	xid.c	/^} xid_t;$/;"	t	typeref:struct:xid_t	file:
+xid_t	xid.h	/^typedef struct xid_t {$/;"	s
+xid_t	xid.h	/^} xid_t;$/;"	t	typeref:struct:xid_t

@@ -11,46 +11,59 @@
 #include <semaphore.h>
 #include <sys/types.h>
 #include <sys/shm.h> 
+#include <errno.h> 
 
 #include "queue.h"
 #include "sock.h"
 #include "io_link.h"
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
+
 #define IO_SO_FILE "/tmp/uds.sock"
 
+#define IO_DATA_SIZE 1500
 
+typedef struct iodata_t {
+	uint8_t unused;
+	uint8_t data[IO_DATA_SIZE];
+	size_t datalen;
+} iodata_t;
+
+
+/* [ queue ] ***********************************************/
 // http://hellmath.tistory.com/8
 const int QUEUE_MAX_SIZE = 0xFFFF;
-io_data *queue;
+static iodata_t *ioqueue;
 static int front = -1;
 static int rear  = -1;
 
-/* queue **********************************************************************************/
-void init_queue(void)
+static void init_queue(void)
 {
 	front = rear = 0;
 }
 
-void clear_queue(void)
+static void clear_queue(void)
 {
 	front = rear;
 }
 
-int put_queue(void *data, size_t datalen, io_index *idx)
+static int put_queue(const void *data, size_t datalen, ioindex_t *ioindex)
 {
-	io_data *iodata;
+	iodata_t *iodata;
 
 	if ((rear+1) % QUEUE_MAX_SIZE == front) {    // 큐가 꽉 찼는지 확인
 		printf ("Queue Overflow.");
 		return -1;
 	}
 	
-	idx->index = rear;
+	ioindex->index = rear;
 
-	iodata = &queue[rear];
+	iodata = &ioqueue[rear];
 
 	memcpy(iodata->data, data, datalen);
-	iodata->unused = 0;
+	iodata->unused = 1;
 	iodata->datalen = datalen;
 
 	// rear를 다음 빈공간으로 변경
@@ -58,170 +71,289 @@ int put_queue(void *data, size_t datalen, io_index *idx)
 	return 0;
 }
 
-io_data * get_queue_index(uint16_t index)
+iodata_t * get_queue(uint16_t index)
 {
 	if (index >= QUEUE_MAX_SIZE) {
 		return NULL;
 	}
-	return &queue[index];
+//	ioqueue[index].unused = 0;
+	return &ioqueue[index];
 }
 
-io_data * get_queue()
+
+#if 0
+iodata_t * pop_queue()
 {
-	io_data *iodata;
+	iodata_t *iodata;
 
 	if (front == rear) {                  // 큐가 비어 있는지 확인
 		printf ("Queue Underflow.");
 		return NULL;
 	}
 
-	iodata = &queue[front];    // front의 값을 가져옴
+	iodata = &ioqueue[front];    // front의 값을 가져옴
 	front = ++front % QUEUE_MAX_SIZE;   // front를 다음 데이터 요소로
 	return iodata;
 }
+#endif
+/* end [ queue ] ***********************************************/
 
-/* end queue **********************************************************************************/
 
 static int shmid = -1;
 #define SKEY 1234
 
-int cio_init(io_link *ctx)
+
+/* [ disposer ] ***********************************************/
+static int io_disposer_init(void *ctx);
+static int io_disposer_pop (void *ctx, uint8_t *data, size_t *datalen, ioindex_t *ioindex);
+static int io_disposer_mark(void *ctx, ioindex_t *ioindex);
+static int io_disposer_send(void *ctx, ioindex_t *ioindex);
+static int io_disposer_recv(void *ctx, ioindex_t *ioindex);
+static void io_disposer_destroy(void *ctx);
+
+static int io_disposer_init(void *_ctx)
 {
-	int c_sock;
-	c_sock = uds_connect_sock(IO_SO_FILE);
-	if (c_sock < 0) {
+	io_disposer_ctx *ctx = (io_disposer_ctx *)_ctx;
+	int sock;
+	sock = uds_connect_sock(IO_SO_FILE);
+	if (sock < 0) {
 		return -1;
 	}
-	ctx->sock = c_sock;
+	ctx->connect_sock = sock;
 
-	shmid = shmget((key_t)SKEY, sizeof(io_data)*QUEUE_MAX_SIZE, 0666|IPC_CREAT);
+	shmid = shmget((key_t)SKEY, sizeof(iodata_t)*QUEUE_MAX_SIZE, 0666|IPC_CREAT);
 	if (shmid == -1) {
-		shmid = shmget((key_t)SKEY, sizeof(io_data)*QUEUE_MAX_SIZE, 0666);
-		if (shmid == -1) goto error;
+		shmid = shmget((key_t)SKEY, sizeof(iodata_t)*QUEUE_MAX_SIZE, 0666);
+		if (shmid == -1) {
+			goto error;
+		}
 	}
 
-	queue = (io_data *)shmat(shmid, (void *)0, 0);
+	ioqueue = (iodata_t *)shmat(shmid, (void *)0, 0);
 
 	return 0;
 
 error:
-	if (c_sock != -1) close(c_sock);
+	if (sock < 0) {
+		close(sock);
+	}
+	io_disposer_destroy(ctx);
 	return -1;
 }
 
-static int cio_write_data(io_link *ctx, uint8_t *data, size_t datalen)
+static int io_disposer_pop (void *_ctx, uint8_t *data, size_t *datalen, ioindex_t *ioindex)
 {
-	return 0;
-}
-
-static int cio_read_data(io_link *ctx, uint8_t *data)
-{
-	return 0;
-}
-
-static int cio_read_index(io_link *ctx, io_index *ioindex)
-{
-	int ret = read(ctx->sock, ioindex, sizeof(*ioindex));
-	if (ret < 0) {
-		perror("cio_read_index:read");
+	iodata_t * iodata = get_queue(ioindex->index);
+	if (iodata->unused == 1) {
 		return -1;
 	}
-	else if (ret != sizeof(ioindex)) {
+	data = iodata->data;
+	*datalen = iodata->datalen;
+	return 0;
+}
+
+static int io_disposer_mark(void *_ctx, ioindex_t *ioindex)
+{
+	iodata_t * iodata = get_queue(ioindex->index);
+	if (iodata->unused == 0) {
 		return -1;
 	}
-	return 0;
-
-}
-
-static int cio_write_index(io_link *ctx, io_index *ioindex)
-{
+	iodata->unused = 0;
 	return 0;
 }
 
-static void cio_destroy(io_link *ctx)
+static int io_disposer_send(void *_ctx, ioindex_t *ioindex)
 {
-	if (shmid != -1) shmdt(queue);
-	if (ctx->sock > 0) close(ctx->sock);
+	io_disposer_ctx *ctx = (io_disposer_ctx *)_ctx;
+	int ret;
+	while (1) {
+		ret = write(ctx->connect_sock, ioindex, sizeof(*ioindex));
+		if (ret < 0) {
+			if (errno == EINTR) {
+				continue;
+			}
+			perror("disposer_send:write");
+			return -1;
+		}
+		else if (ret == 0) {
+			return -1;
+		}
+		else if (ret != sizeof(ioindex)) {
+			return -1;
+		}
+		else {
+			break;
+		}
+	}
+	return 0;
 }
 
-
-static int sio_init(io_link *ctx)
+static int io_disposer_recv(void *_ctx, ioindex_t *ioindex)
 {
-	int l_sock = -1;
-	l_sock = uds_listen_sock(IO_SO_FILE);
-	if (l_sock == -1) goto error;
-	ctx->sock = l_sock;
+	io_disposer_ctx *ctx = (io_disposer_ctx *)_ctx;
+	int ret;
+	while (1) {
+		ret = read(ctx->connect_sock, ioindex, sizeof(*ioindex));
+		if (ret < 0) {
+			if (errno == EINTR) {
+				continue;
+			}
+			perror("disposer_recv:read");
+			return -1;
+		}
+		else if (ret == 0) {
+			return -1;
+		}
+		else if (ret != sizeof(ioindex)) {
+			return -1;
+		}
+		else {
+			break;
+		}
+	}
+	return 0;
+}
 
-	shmid = shmget((key_t)SKEY, sizeof(io_data)*QUEUE_MAX_SIZE, 0666|IPC_CREAT);
+static void io_disposer_destroy(void *_ctx)
+{
+	io_disposer_ctx *ctx = (io_disposer_ctx *)_ctx;
+	if (shmid != -1) {
+		shmdt(ioqueue);
+	}
+	if (ctx->connect_sock > 0) {
+		close(ctx->connect_sock);
+	}
+}
+/* end [ disposer ] ***********************************************/
+
+
+/* [ offerer ] ***********************************************/
+static int io_offerer_init(void *ctx);
+static int io_offerer_put (void *ctx, uint8_t *data, size_t datalen, ioindex_t *ioindex);
+static int io_offerer_send(void *ctx, ioindex_t *ioindex);
+static int io_offerer_recv(void *ctx, ioindex_t *ioindex);
+static void io_offerer_destroy(void *ctx);
+
+static int io_offerer_init(void *_ctx)
+{
+	io_offerer_ctx *ctx = (io_offerer_ctx *)_ctx;
+	int sock;
+	sock = uds_listen_sock(IO_SO_FILE);
+	if (sock < 0) {
+		return -1;
+	}
+	ctx->listen_sock = sock;
+
+	shmid = shmget((key_t)SKEY, sizeof(iodata_t)*QUEUE_MAX_SIZE, 0666|IPC_CREAT);
 	if (shmid == -1) {
-		shmid = shmget((key_t)SKEY, sizeof(io_data)*QUEUE_MAX_SIZE, 0666);
-		if (shmid == -1) goto error;
+		shmid = shmget((key_t)SKEY, sizeof(iodata_t)*QUEUE_MAX_SIZE, 0666);
+		if (shmid == -1) {
+			goto error;
+		}
 	}
 
-	queue = ( io_data *)shmat(shmid, (void *)0, 0);
+	ioqueue = (iodata_t *)shmat(shmid, (void *)0, 0);
 
 	return 0;
 
 error:
-	if (l_sock != -1) close(l_sock);
+	if (sock < 0) {
+		close(sock);
+	}
+	io_offerer_destroy(ctx);
 	return -1;
 }
 
-static int sio_write_index(io_link *ctx, io_index *ioindex)
+static int io_offerer_put(void *_ctx, uint8_t *data, size_t datalen, ioindex_t *ioindex)
 {
-	int ret = write(ctx->sock, ioindex, sizeof(*ioindex));
-	if (ret <= 0) {
+	if (put_queue(data, datalen, ioindex) < 0) {
 		return -1;
 	}
 	return 0;
 }
 
-static int sio_write_data(io_link *ctx, uint8_t *data, size_t datalen)
+static int io_offerer_send(void *_ctx, ioindex_t *ioindex)
 {
-	io_index ioindex;
-
-	if (put_queue(data, datalen, &ioindex) < 0) {
-		return -1;
+	io_offerer_ctx *ctx = (io_offerer_ctx *)_ctx;
+	int ret;
+	while (1) {
+		ret = write(ctx->accept_sock, ioindex, sizeof(*ioindex));
+		if (ret < 0) {
+			if (errno == EINTR) {
+				continue;
+			}
+			perror("offerer_send:write");
+			return -1;
+		}
+		else if (ret == 0) {
+			return -1;
+		}
+		else if (ret != sizeof(ioindex)) {
+			return -1;
+		}
+		else {
+			break;
+		}
 	}
-	if (sio_write_index(ctx, &ioindex) < 0) {
-		// TODO: rollback queue data
-		return -1;
+	return 0;
+}
+
+static int io_offerer_recv(void *_ctx, ioindex_t *ioindex)
+{
+	io_offerer_ctx *ctx = (io_offerer_ctx *)_ctx;
+	int ret;
+	while (1) {
+		ret = read(ctx->accept_sock, ioindex, sizeof(*ioindex));
+		if (ret < 0) {
+			if (errno == EINTR) {
+				continue;
+			}
+			perror("offerer_recv:read");
+			return -1;
+		}
+		else if (ret == 0) {
+			return -1;
+		}
+		else if (ret != sizeof(ioindex)) {
+			return -1;
+		}
+		else {
+			break;
+		}
 	}
-
 	return 0;
 }
 
-static int sio_read_data(io_link *ctx, uint8_t *data)
+static void io_offerer_destroy(void *_ctx)
 {
-	return 0;
+	io_offerer_ctx *ctx = (io_offerer_ctx *)_ctx;
+	if (shmid != -1) {
+		shmdt(ioqueue);
+	}
+	if (ctx->accept_sock > 0) {
+		close(ctx->accept_sock);
+	}
+	if (ctx->listen_sock > 0) {
+		close(ctx->listen_sock);
+	}
 }
 
-static int sio_read_index(io_link *ctx, io_index *ioindex)
-{
-	return 0;
-}
-
-static void sio_destroy(io_link *ctx)
-{
-	if (shmid != -1) shmdt(queue);
-	if (ctx->sock > 0) close(ctx->sock);
-}
-
-
-io_linker cio_linker = {
-	.init         = cio_init,
-	.write_data   = cio_write_data,
-	.read_data    = cio_read_data,
-	.write_index  = sio_write_index,
-	.read_index   = sio_read_index,
-	.destroy      = cio_destroy,
+iolinker io_disposer = {
+	.init    = io_disposer_init,
+	.put     = NULL,
+	.pop     = io_disposer_pop,
+	.mark    = io_disposer_mark,
+	.send    = io_disposer_send,
+	.recv    = io_disposer_recv,
+	.destroy = io_disposer_destroy,
 };
 
-io_linker sio_linker = {
-	.init         = sio_init,
-	.write_data   = sio_write_data,
-	.read_data    = sio_read_data,
-	.write_index  = sio_write_index,
-	.read_index   = sio_read_index,
-	.destroy      = sio_destroy,
+iolinker io_offerer = {
+	.init    = io_offerer_init,
+	.put     = io_offerer_put,
+	.pop     = NULL,
+	.mark    = NULL,
+	.send    = io_offerer_send,
+	.recv    = io_offerer_recv,
+	.destroy = io_offerer_destroy,
 };

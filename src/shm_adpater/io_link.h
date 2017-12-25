@@ -1,34 +1,37 @@
 #ifndef _IO_ADAPTER_
 #define _IO_ADAPTER_
 
-
-typedef struct io_link {
-	int sock;
-} io_link;
-
-typedef struct io_data {
-	uint8_t unused;
-	uint8_t data[1500];
-	size_t datalen;
-} io_data;
-
-typedef struct io_index {
-	uint16_t index;
-//	struct sockaddr_in from;
+typedef struct iohello_t {
+	uint16_t port;
 	uint32_t xid;
-} __attribute__((packed)) io_index;
+} __attribute__((packed)) iohello_t;
+
+typedef struct ioindex_t {
+	uint16_t index;
+	uint32_t xid;
+} __attribute__((packed)) ioindex_t;
 
 
-typedef struct io_linker
-{
-	int (*init)        (io_link *);
-	int (*write_data)  (io_link *, uint8_t *, size_t);
-	int (*read_data  ) (io_link *, uint8_t *);
-	int (*write_index) (io_link *, io_index *);
-	int (*read_index)  (io_link *, io_index *);
-	void (*destroy)    (io_link *);
-} io_linker;
+/* [ offerer ] ****************************************************/
+typedef struct io_offerer_ctx {
+	int listen_sock;
+	int accept_sock;
+} io_offerer_ctx;
 
+/* [ disposer ] ****************************************************/
+typedef struct io_disposer_ctx {
+	int connect_sock;
+} io_disposer_ctx;
 
+typedef struct iolinker {
+	int (*init) (void *);
+	int (*put)  (void *, uint8_t *, size_t,   ioindex_t *);
+	int (*pop)  (void *, uint8_t *, size_t *, ioindex_t *);
+	int (*mark) (void *, ioindex_t *);
+	int (*hello)(void *, 
+	int (*send) (void *, ioindex_t *);
+	int (*recv) (void *, ioindex_t *);
+	void (*destroy) (void *);
+} iolinker;
 
 #endif
