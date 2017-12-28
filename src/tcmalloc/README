@@ -1,0 +1,71 @@
+apt-get install libtcmalloc-minimal4
+apt-get install libtcmalloc-minimal4-dbg
+
+ln -s /usr/lib/libtcmalloc_minimal.so.4 /usr/lib/libtcmalloc_minimal.so
+
+gcc test.c -o test_tc -ltcmalloc_minimal
+
+
+멀티스레드에서 30% 성능향상이 있다는데.. 난 왜??? 안되징??
+
+kaka tcmalloc # time ./test_std 10000000
+
+real	0m32.687s
+user	1m33.284s
+sys	0m1.892s
+kaka tcmalloc # time ./test_tc 10000000
+
+real	0m30.723s
+user	1m25.868s
+sys	0m1.656s
+kaka tcmalloc # time ./test_std 10000000
+
+real	0m33.318s
+user	1m32.972s
+sys	0m1.900s
+kaka tcmalloc # time ./test_tc 10000000
+
+real	0m31.145s
+user	1m26.096s
+sys	0m1.368s
+kaka tcmalloc # time ./test_std 10000000
+
+real	0m35.243s
+user	1m32.820s
+sys	0m1.936s
+kaka tcmalloc # time ./test_tc 10000000
+
+real	0m30.558s
+user	1m25.732s
+sys	0m1.884s
+kaka tcmalloc # time ./test_std 20000000
+
+real	1m6.690s
+user	3m7.952s
+sys	0m3.704s
+kaka tcmalloc # time ./test_tc 20000000
+
+real	1m1.689s
+user	2m52.968s
+sys	0m3.624s
+kaka tcmalloc # time ./test_std 20000000
+
+real	0m54.790s
+user	3m15.504s
+sys	0m6.636s
+kaka tcmalloc # time ./test_tc 20000000
+
+real	0m48.630s
+user	2m50.976s
+sys	0m6.484s
+kaka tcmalloc # time ./test_std 20000000
+
+real	0m52.814s
+user	3m6.372s
+sys	0m5.932s
+kaka tcmalloc # time ./test_tc 20000000
+
+real	0m48.923s
+user	2m53.768s
+sys	0m5.516s
+
