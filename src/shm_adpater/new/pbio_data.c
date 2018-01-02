@@ -12,13 +12,28 @@
 #include <sys/types.h>
 #include <sys/shm.h> 
 #include <errno.h> 
+#include <assert.h> 
 
+#include "dprintf.h"
 #include "pbio_data.h"
 
-pbio_data_queue_t *new_pbio_data_queue(int shmkey, uint16_t max_size)
+static void debug_pnindex(pbio_data_queue_t *q)
+{
+	pbio_index_t *pbindex, *p;
+	int n = 0;
+	cds_list_for_each_entry_safe(pbindex, p, &q->unused_head, node) {
+		DPRINTF("unused: %d, index: %d\n", n++, pbindex->index);
+	}
+	cds_list_for_each_entry_safe(pbindex, p, &q->used_head, node) {
+		DPRINTF("used: %d,  index: %d\n", n++, pbindex->index);
+	}
+}
+
+pbio_data_queue_t *new_pbio_data_queue(int shmkey, uint16_t max_size, int is_allocator)
 {
 	pbio_data_queue_t *q = NULL;
-	int shmid;
+	pbio_index_t *pbindex;
+	int shmid, i;
 
 	q = calloc(1, sizeof(*q));
 
@@ -32,8 +47,25 @@ pbio_data_queue_t *new_pbio_data_queue(int shmkey, uint16_t max_size)
 	q->shmid = shmid;
 	q->shmkey = shmkey;
 	q->max_size = max_size;
-	q->pos = -1;
 	q->queue = (pbio_data_t *)shmat(shmid, (void *)0, 0);
+	q->is_allocator = is_allocator;
+#ifdef PBIO_DEBUG
+	q->num_unused = 0;
+	q->num_used = 0;
+#endif
+	CDS_INIT_LIST_HEAD(&q->unused_head);
+	CDS_INIT_LIST_HEAD(&q->used_head);
+
+	if (q->is_allocator) {
+		for (i=0; i<max_size; i++) {
+			pbindex = malloc(sizeof(*pbindex));
+			pbindex->index = i;
+			pbindex->timestamp = 0;
+			cds_list_add_tail(&pbindex->node, &q->unused_head);
+		}
+//		debug_pnindex(q);
+	}
+
 	return q;
 error:
 	if (shmid != -1) {
@@ -46,95 +78,108 @@ error:
 void destroy_pbio_data(pbio_data_queue_t **pq)
 {
 	pbio_data_queue_t *q = *pq;
+	struct cds_list_head *pos, *p;
+
+	// remove shared memory
 	shmctl(q->shmid, IPC_RMID, 0);
+
+	if (q->is_allocator) {
+		// remove index list
+		cds_list_for_each_safe(pos, p, &q->unused_head) {
+			cds_list_del(pos);
+			free(cds_list_entry(pos, pbio_index_t, node));
+		}
+		cds_list_for_each_safe(pos, p, &q->used_head) {
+			cds_list_del(pos);
+			free(cds_list_entry(pos, pbio_index_t, node));
+		}
+	}
 	free(q);
 	*pq = NULL;
 }
 
-pbio_data_t *alloc_pbio_data_queue(pbio_data_queue_t *q, uint16_t *index)
+size_t gc_unused_pbio_data_queue(pbio_data_queue_t *q, time_t timeout)
 {
-	uint16_t i;
-	uint16_t next;
-
-	if (q->pos+1 >= q->max_size) {
-		next = 0;
-		goto search;
+#if 0
+	if (q->is_allocator == 0) {
+		assert(q->is_allocator == 0);
 	}
-	if (q->queue[q->pos+1].used == 1) {
-		next = q->pos+2;
-		goto search;
+#endif
+	if (cds_list_empty(&q->used_head)) {
+		return 0;
 	}
-	next = q->pos+1;
-	goto done;
-search:
-	for (i=next; i<q->max_size; i++) {
-		if (q->queue[next].used == 0) {
-			next = i;
-			goto done;
+#ifdef PBIO_DEBUG
+	DPRINTF("[before] unused: %d, used: %d\n", q->num_unused, q->num_used);
+#endif
+	pbio_index_t *pbindex, *p;
+	cds_list_for_each_entry_safe(pbindex, p, &q->used_head, node) {
+		if (pbindex->timestamp > timeout) {
+			pbindex->timestamp = 0;
+			cds_list_move(&pbindex->node, &q->unused_head);
+#ifdef PBIO_DEBUG
+			q->num_unused++;
+			q->num_used--;
+#endif
 		}
 	}
-	return NULL;
-done:
-	*index = q->pos = next;
-	return &q->queue[q->pos];
+#ifdef PBIO_DEBUG
+	DPRINTF("[after ] unused: %d, used: %d\n", q->num_unused, q->num_used);
+#endif
 }
 
-int put_pbio_data_queue(pbio_data_queue_t *q, void *data, size_t datalen, uint16_t *index)
+pbio_data_t *alloc_pbio_data_queue(pbio_data_queue_t *q, uint16_t *index)
 {
-	pbio_data_t *pdata;
-	int i;
-	int next;
+#if 0
+	if (q->is_allocator == 0) {
+		assert(q->is_allocator == 0);
+	}
+#endif
+	pbio_index_t *pbindex;
 
-	if (q->pos+1 >= q->max_size) {
-		next = 0;
-		goto search;
+	if (cds_list_empty(&q->unused_head)) {
+		return NULL;
 	}
-	if (q->queue[q->pos+1].used == 1) {
-		next = q->pos+2;
-		goto search;
+	pbindex = cds_list_first_entry(&q->unused_head, pbio_index_t, node);
+	pbindex->timestamp = time(NULL);
+	cds_list_move(&pbindex->node, &q->used_head);
+	*index = pbindex->index;
+#ifdef PBIO_DEBUG
+	q->num_unused--;
+	q->num_used++;
+#endif
+	DPRINTF("allocated [%d]\n", *index);
+
+//	debug_pnindex(q);
+	return &q->queue[pbindex->index];
+}
+
+void dealloc_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)
+{
+#if 0
+	if (q->is_allocator == 0) {
+		assert(q->is_allocator == 0);
 	}
-	next = q->pos+1;
-	goto done;
-search:
-	for (i=next; i<q->max_size; i++) {
-		if (q->queue[next].used == 0) {
-			next = i;
-			goto done;
+#endif
+	pbio_index_t *pbindex, *p;
+	cds_list_for_each_entry_safe(pbindex, p, &q->used_head, node) {
+		if (pbindex->index == index) {
+			pbindex->timestamp = 0;
+			cds_list_move(&pbindex->node, &q->unused_head);
+#ifdef PBIO_DEBUG
+			q->num_unused++;
+			q->num_used--;
+#endif
+			DPRINTF("deallocated [%d]\n", index);
+			break;
 		}
 	}
-	return -1;
-done:
-	pdata = &q->queue[next];
-	memcpy(pdata->data, data, datalen);
-	pdata->used = 0;
-	pdata->datalen = datalen;
-	*index = q->pos = next;
-	return 0;
 }
 
 pbio_data_t *peek_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)
 {
-	if (index >= q->max_size) {
-		return NULL;
-	}
 	return &q->queue[index];
 }
 
-void used_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)
-{
-	if (index >= q->max_size) {
-		return;
-	}
-	q->queue[index].used = 1;
-}
-
-void unused_pbio_data_queue(pbio_data_queue_t *q, uint16_t index)
-{
-	if (index >= q->max_size) {
-		return;
-	}
-	q->queue[index].used = 0;
-}
 /* end [ queue ] ***********************************************/
 
 
@@ -153,7 +198,7 @@ int main()
 
 
 	d = peek_pbio_data_queue(q, &index);
-	printf("%s (%d, %ld)\n", d->data, d->used, d->datalen);
+	DPRINTF("%s (%d, %ld)\n", d->data, d->used, d->datalen);
 
 	destroy_pbio_data(&q);
 }

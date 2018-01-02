@@ -9,6 +9,8 @@
 #include <pthread.h>
 #include <errno.h>
 #include <sys/epoll.h>
+
+#include "dprintf.h"
 #include "queue.h"
 #include "sock.h"
 #include "pbio_data.h"
@@ -25,35 +27,47 @@ typedef struct pbio_link_data_t {
 /* [] ************************/
 static pbio_data_queue_t *pbio_data_queues;
 
+
 int main(int argc, char **argv)
 {
-	int ssock;
+	int http_sock;
 	int i, nbytes;
 	pbio_link_data_t pbio_link_data;
 
-	pbio_data_queues = new_pbio_data_queue(1234, 10);
+	pbio_data_queues = new_pbio_data_queue(1234, 10, 0);
 
 retry:
 	while (1) {
-		ssock = uds_connect_sock(HTTP_UDS_SOFILE);
-		if (ssock <= 0) {
+		http_sock = uds_connect_sock(HTTP_UDS_SOFILE);
+		if (http_sock <= 0) {
 			usleep(100);
 			continue;
 		}
 		break;
 	}
 
+	DPRINTF("connect to pbio\n");
+
 	while (1) {
-		nbytes = read(ssock, &pbio_link_data, sizeof(pbio_link_data));
+		nbytes = read(http_sock, &pbio_link_data, sizeof(pbio_link_data));
 		if (nbytes <= 0) {
 			if (errno == EINTR) continue;
-			close(ssock);
+			close(http_sock);
 			goto retry;
 		}
-		printf("wakeup: xid:%u, index:%d\n", pbio_link_data.xid.hash, pbio_link_data.index);
+		DPRINTF("wakeup: xid:%u, index:%d\n", pbio_link_data.xid.hash, pbio_link_data.index);
+
+rewrite:
+		nbytes = write(http_sock, &pbio_link_data, sizeof(pbio_link_data));
+		if (nbytes <= 0) {
+			if (errno == EINTR) goto rewrite;
+			close(http_sock);
+			goto retry;
+		}
+		DPRINTF("finish index:%d\n", pbio_link_data.index);
 	}
 
 done:
-
+	close(http_sock);
 	return 0;
 }
