@@ -1,0 +1,7 @@
+http://batsu05.egloos.com/v/839472
+
+
+
+python setup.py install
+python test.py
+apt-get install python-dev
