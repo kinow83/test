@@ -22,6 +22,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 #include <openssl/rsa.h>
 #include <openssl/crypto.h>
@@ -44,6 +45,13 @@
 #define CHECK_ERR(e,s) {if (unlikely(e!=1)) {perror(s); abort();}}
 #define CHECK_SSL(e) {if (unlikely(e!=1)) {ERR_print_errors_fp(stderr); abort();}}
 
+void set_nonblock(int fd)
+{
+	int flags = fcntl(fd, F_GETFL, 0);
+	if (flags == -1) return;
+	flags |= O_NONBLOCK;
+	fcntl(fd, F_SETFL, flags);
+}
 
 static int my_verify_cert(X509_STORE_CTX* ctx, void *arg)
 {
@@ -106,6 +114,7 @@ int main(int argc, char **argv)
 		OpenSSL_add_all_digests();
 
 		method = SSLv23_server_method();
+//		method = TLSv1_1_server_method();
 		ctx = SSL_CTX_new(method);
 		CHECK_NULL(ctx);
 	}
@@ -134,7 +143,7 @@ int main(int argc, char **argv)
 		DEBUG(SSL_CTX_check_private_key ---- OK);
 	}
 	// verify callback
-	{
+	if (0) {
 
 		int verify_mode  = 0;
 #ifdef REQUIRE_CLIENT_CERT
@@ -186,7 +195,7 @@ lrwxrwxrwx 1 root root   10  6월  7 21:14 9307c19f.0 -> client.crt
 
 		memset(&saddr, 0, sizeof(saddr));
 		saddr.sin_family = AF_INET;
-		saddr.sin_port = htons(443);
+		saddr.sin_port = htons(8443);
 		saddr.sin_addr.s_addr = INADDR_ANY;
 
 		setsockopt(ssock, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
@@ -215,16 +224,33 @@ lrwxrwxrwx 1 root root   10  6월  7 21:14 9307c19f.0 -> client.crt
 	// TCP connection is ready. Do server side SSL
 	{
 		// get SSL session from SSL Context
+		SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET);
 		ssl = SSL_new(ctx);
 		CHECK_NULL(ssl);
 
+		set_nonblock(csock);
+
 		SSL_set_fd(ssl, csock);
 
+
 		// wait for connect SSL client
+#if 0
+		printf("... accept - start \n");
 		err = SSL_accept(ssl);
+		printf("... accept - end \n");
+#else
+//		SSL_set_read_ahead(ssl, 1);
+		SSL_set_accept_state(ssl);
+	//	if (!SSL_is_init_finished(ssl)) 
+		{
+			printf("!!!!!!!!!!!!!!!!!!!!!1\n");
+			err = SSL_do_handshake(ssl);
+		}
+		sleep(5);
+#endif
 		CHECK_NULL(ssl);
 	}
-
+#if 0
 	DEBUG(SSL connection using: %s, SSL_get_cipher(ssl));
 
 	client_cert = SSL_get_peer_certificate(ssl);
@@ -248,22 +274,33 @@ lrwxrwxrwx 1 root root   10  6월  7 21:14 9307c19f.0 -> client.crt
 	} else {
 		DEBUG(client does not have certification);
 	}
-
+#endif
 	DEBUG(==============================================);
 	{
-		char buf[1024];
+		char buf[10240];
+		printf("SSL_read....\n");
+	retry:
 		err = SSL_read(ssl, buf, sizeof(buf)-1);
-		if (err <= 0) {
+		if (err < 0) {
+			if (errno == EAGAIN) {
+				usleep(10);
+				goto retry; 
+			}
+		}
+		else if (err == 0) {
 			CHECK_SSL(err);
 		}
 		buf[err] = 0;
 		DEBUG(Get %d chars: %s, err, buf);
+		printf(">>>>>>>>>>>>>>>>>>>>>>>> err=%d\n", err);
 
+		/*
 		const char *repsmsg = "hello I'm Kang";
 		err = SSL_write(ssl, repsmsg, strlen(repsmsg));
 		if (err <= 0) {
 			CHECK_SSL(err);
 		}
+		*/
 	}
 
 	close(csock);

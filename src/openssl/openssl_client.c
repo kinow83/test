@@ -395,7 +395,8 @@ int main(int argc, char **argv)
 	}
 
 	DEBUG(===============================================);
-	if (0) {
+	int loop = 3;
+	while (loop-- > 0) {
 		char buf[1024];
 		const char *msg = "I'm client hello~ server";
 		err = SSL_write(ssl, msg, strlen(msg));
@@ -403,13 +404,16 @@ int main(int argc, char **argv)
 			CHECK_SSL(err);
 		}
 
+		/*
 		err = SSL_read(ssl, buf, sizeof(buf)-1);
 		if (err <= 0) {
 			CHECK_SSL(err);
 		}
 		buf[err] = 0;
 		DEBUG(Get %d chars: %s, err, buf);
+		*/
 
+		sleep (1);
 		// close SSL connection
 	}
 	SSL_shutdown(ssl);
