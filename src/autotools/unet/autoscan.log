@@ -1,0 +1,15 @@
+autoscan: warning: missing AC_PROG_CXX wanted by: 
+	ltmain.sh:2198
+	ltmain.sh:2657
+	ltmain.sh:2660
+	ltmain.sh:2665
+	ltmain.sh:2665
+	ltmain.sh:2675
+	ltmain.sh:2679
+	ltmain.sh:2682
+	ltmain.sh:2682
+	ltmain.sh:3759
+	ltmain.sh:8641
+	ltmain.sh:8653
+	ltmain.sh:8655
+	ltmain.sh:8893

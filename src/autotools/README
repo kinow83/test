@@ -1,0 +1,30 @@
+https://wiki.kldp.org/wiki.php/DocbookSgml/Autotools-KLDP
+
+configure.ac : autoconf, automake 의 입력값
+ - autoconf 는 이를 받아서 configure 파일을 만든다.
+ - automake 는 이를 makefile.am 과 함께 받아 makefile.in 을 만든다. 
+
+  AC_CANONICAL_SYSTEM : 현재 시스템에 대한 정보를 가져온다.
+  AC_PROG_CC : cc 가 사용가능한지를 check
+  AC_CHECK_HEADERS : 지정하는 header file 들이 시스템에 있는지 검사한다. HAVE_NAME_H 를 만들어준다.
+  AC_TYPE_ : 지정한 type definition 을 확인한다.
+  AC_SUBST : configure.ac 에서 사용한 변수들이 configure 시 *.in 파일에 지정한 변수를 찾아 유효값을 넣어준다.
+  AC_CONFIG_FILES : 생성될 파일들을 지정한다. 흔히 Makefile.
+
+
+  아래 순서로 진행된다.
+  aclocal : configure.ac --> aclocal.m4
+  autoheader : configure.ac + aclocal.m4 --> config.h.in
+  autoconf : configure.ac + aclocal.m4 --> configure
+  automake : configure.ac + aclocal.m4 + Makefile.am --> Makefile.in
+  configure : Makefile.in --> Makefile
+
+
+  aclocal
+  autoheader
+  autoconf
+  automake --add-missing -copy
+  ./configure
+  make
+  make check
+  make install
