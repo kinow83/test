@@ -1,0 +1,88 @@
+
+mm.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <copy>:
+
+__fortify_function void *
+__NTH (memcpy (void *__restrict __dest, const void *__restrict __src,
+	       size_t __len))
+{
+  return __builtin___memcpy_chk (__dest, __src, __len, __bos0 (__dest));
+   0:	e9 00 00 00 00       	jmpq   5 <copy+0x5>
+   5:	90                   	nop
+   6:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+   d:	00 00 00 
+
+0000000000000010 <func>:
+
+void func(int n)
+{
+	char inner[50];
+
+	copy(CTX[n].data, inner, 50);
+  10:	48 63 ff             	movslq %edi,%rdi
+{
+	memcpy(from, to, len);
+}
+
+void func(int n)
+{
+  13:	48 83 ec 48          	sub    $0x48,%rsp
+	char inner[50];
+
+	copy(CTX[n].data, inner, 50);
+  17:	48 69 ff e8 05 00 00 	imul   $0x5e8,%rdi,%rdi
+{
+	memcpy(from, to, len);
+}
+
+void func(int n)
+{
+  1e:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  25:	00 00 
+  27:	48 89 44 24 38       	mov    %rax,0x38(%rsp)
+  2c:	31 c0                	xor    %eax,%eax
+  2e:	48 8b 04 24          	mov    (%rsp),%rax
+	char inner[50];
+
+	copy(CTX[n].data, inner, 50);
+
+	CTX[n].used = 7;
+  32:	c7 87 00 00 00 00 07 	movl   $0x7,0x0(%rdi)
+  39:	00 00 00 
+  3c:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  43:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  48:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  4f:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  54:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  5b:	48 8b 44 24 18       	mov    0x18(%rsp),%rax
+  60:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  67:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
+  6c:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  73:	48 8b 44 24 28       	mov    0x28(%rsp),%rax
+  78:	48 89 87 00 00 00 00 	mov    %rax,0x0(%rdi)
+  7f:	0f b7 44 24 30       	movzwl 0x30(%rsp),%eax
+  84:	66 89 87 00 00 00 00 	mov    %ax,0x0(%rdi)
+}
+  8b:	48 8b 44 24 38       	mov    0x38(%rsp),%rax
+  90:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+  97:	00 00 
+  99:	75 05                	jne    a0 <func+0x90>
+  9b:	48 83 c4 48          	add    $0x48,%rsp
+  9f:	c3                   	retq   
+  a0:	e8 00 00 00 00       	callq  a5 <func+0x95>
+  a5:	90                   	nop
+  a6:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+  ad:	00 00 00 
+
+00000000000000b0 <func2>:
+
+int func2(int c)
+{
+	return c + 10 / 2 +30;
+  b0:	8d 47 23             	lea    0x23(%rdi),%eax
+}
+  b3:	c3                   	retq   

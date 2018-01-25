@@ -1,0 +1,86 @@
+
+mm.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <copy>:
+#include "mm.h"
+
+struct ctx CTX[10000];
+
+void copy(void *from , void *to, size_t len)
+{
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 20          	sub    $0x20,%rsp
+   8:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+   c:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+  10:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
+	memcpy(from, to, len);
+  14:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+  18:	48 8b 4d f0          	mov    -0x10(%rbp),%rcx
+  1c:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  20:	48 89 ce             	mov    %rcx,%rsi
+  23:	48 89 c7             	mov    %rax,%rdi
+  26:	e8 00 00 00 00       	callq  2b <copy+0x2b>
+}
+  2b:	90                   	nop
+  2c:	c9                   	leaveq 
+  2d:	c3                   	retq   
+
+000000000000002e <func>:
+
+void func(int n)
+{
+  2e:	55                   	push   %rbp
+  2f:	48 89 e5             	mov    %rsp,%rbp
+  32:	48 83 ec 50          	sub    $0x50,%rsp
+  36:	89 7d bc             	mov    %edi,-0x44(%rbp)
+  39:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  40:	00 00 
+  42:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  46:	31 c0                	xor    %eax,%eax
+	char inner[50];
+
+	copy(CTX[n].data, inner, 50);
+  48:	8b 45 bc             	mov    -0x44(%rbp),%eax
+  4b:	48 98                	cltq   
+  4d:	48 69 c0 e8 05 00 00 	imul   $0x5e8,%rax,%rax
+  54:	48 05 00 00 00 00    	add    $0x0,%rax
+  5a:	48 8d 48 04          	lea    0x4(%rax),%rcx
+  5e:	48 8d 45 c0          	lea    -0x40(%rbp),%rax
+  62:	ba 32 00 00 00       	mov    $0x32,%edx
+  67:	48 89 c6             	mov    %rax,%rsi
+  6a:	48 89 cf             	mov    %rcx,%rdi
+  6d:	e8 00 00 00 00       	callq  72 <func+0x44>
+
+	CTX[n].used = 7;
+  72:	8b 45 bc             	mov    -0x44(%rbp),%eax
+  75:	48 98                	cltq   
+  77:	48 69 c0 e8 05 00 00 	imul   $0x5e8,%rax,%rax
+  7e:	48 05 00 00 00 00    	add    $0x0,%rax
+  84:	c7 00 07 00 00 00    	movl   $0x7,(%rax)
+}
+  8a:	90                   	nop
+  8b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  8f:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+  96:	00 00 
+  98:	74 05                	je     9f <func+0x71>
+  9a:	e8 00 00 00 00       	callq  9f <func+0x71>
+  9f:	c9                   	leaveq 
+  a0:	c3                   	retq   
+
+00000000000000a1 <func2>:
+
+int func2(int c)
+{
+  a1:	55                   	push   %rbp
+  a2:	48 89 e5             	mov    %rsp,%rbp
+  a5:	89 7d fc             	mov    %edi,-0x4(%rbp)
+	return c + 10 / 2 +30;
+  a8:	8b 45 fc             	mov    -0x4(%rbp),%eax
+  ab:	83 c0 23             	add    $0x23,%eax
+}
+  ae:	5d                   	pop    %rbp
+  af:	c3                   	retq   
