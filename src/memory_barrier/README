@@ -1,2 +1,87 @@
 
 //	__asm__ __volatile__ ("nop" ::: "memory");
+
+REP (Repeat String)
+ECX 레지스터를 카운터로 사용해서 문자열 관련 명령을 ECX>0인 동안 반복한다.
+한번 진행될 때마다 ECX 레지스터값이 -1 된다.
+ex. REP MOVS destination, source
+
+출처: http://p3ace.tistory.com/40 [:: 피스하모니 P3ace...]
+
+
+
+
+
+0xffffffffa019dbf0 <dsa_slim_input>:    push   %rbp
+0xffffffffa019dbf1 <dsa_slim_input+1>:  mov    %rsp,%rbp ----> 스택 프레임 생성.
+0xffffffffa019dbf4 <dsa_slim_input+4>:  push   %r15 ----> rbx, rbp, rdi, rsi, r12-r15 are nonvolatile.
+0xffffffffa019dbf6 <dsa_slim_input+6>:  push   %r14 ----> r14는 레지스터. r14 레지스터에 저장된 값을 스택에 저장함.
+0xffffffffa019dbf8 <dsa_slim_input+8>:  push   %r13
+0xffffffffa019dbfa <dsa_slim_input+10>: push   %r12
+0xffffffffa019dbfc <dsa_slim_input+12>: push   %rbx
+0xffffffffa019dbfd <dsa_slim_input+13>: sub    $0x58,%rsp ----> 0x58은 10진수 88. 88바이트를 메모리에 할당함.
+0xffffffffa019dc01 <dsa_slim_input+17>: callq  0xffffffff8100ad40 <mcount>  ----> retq (리턴을 의미함)
+0xffffffffa019dc06 <dsa_slim_input+22>: mov    %rsi,-0x48(%rbp) ----> rsi 레지스터에 저장된 값을 'rbp 레지스터 주소 - 72바이트(0x48)' 가 가리키는 주소에 저장함. rsi(복사할 데이터의 source(출발지 주소))와 rdi(데이터 복사의 destination(도착지 주소))는 한 쌍으로 주로 쓰임.
+0xffffffffa019dc0a <dsa_slim_input+26>: mov    0xa8(%rsi),%rax ----> rsi 레지스터에 저장된 주소에서 168바이트(0xa8) 만큼 떨어진 곳의 값을 rax 레지스터에 저장함.
+0xffffffffa019dc11 <dsa_slim_input+33>: mov    %rdi,%r12  ----> rdi 레지스터에 저장된 값을 r12 레지스터에 옮김.
+0xffffffffa019dc14 <dsa_slim_input+36>: mov    0x8(%rax),%r13d ----> r13d는 r13 레지스터의 하위 32비트를 의미함.
+0xffffffffa019dc18 <dsa_slim_input+40>: mov    0x4(%rax),%ebx
+0xffffffffa019dc1b <dsa_slim_input+43>: bswap  %r13d ----> bswap은 바이트 순서를 변경함 (리틀 엔디안 -> 빅 엔디안. and vice versa)
+0xffffffffa019dc1e <dsa_slim_input+46>: bswap  %ebx
+0xffffffffa019dc20 <dsa_slim_input+48>: testb  $0x2,0xd(%rax) ----> testb 명령어는 비트 연산 and를 수행한다.
++ 0xffffffffa019dc24 <dsa_slim_input+52>: je     0xffffffffa019dc60 ----> and 연산을 수행(testb  $0x2,0xd(%rax))한 결과가 true이면 0xffffffffa019dc60 주소로 점프함.
+(아래에 빨강색으로 표시한 부분은 해석할 필요 없음.)
+- 0xffffffffa019dc26 <dsa_slim_input+54>: movzbl 0x54(%rdi),%eax
+- 0xffffffffa019dc2a <dsa_slim_input+58>: test   $0x1,%al
+- 0xffffffffa019dc2c <dsa_slim_input+60>: jne    0xffffffffa019e170
+- 0xffffffffa019dc32 <dsa_slim_input+66>: add    $0x1,%ebx
+- 0xffffffffa019dc35 <dsa_slim_input+69>: or     $0x1,%eax
+- 0xffffffffa019dc38 <dsa_slim_input+72>: mov    %ebx,(%rdi)
+- 0xffffffffa019dc3a <dsa_slim_input+74>: mov    %ebx,0x4(%rdi)
+- 0xffffffffa019dc3d <dsa_slim_input+77>: mov    %al,0x54(%rdi)
+- 0xffffffffa019dc40 <dsa_slim_input+80>: movl   $0x0,-0x4c(%rbp)
+- 0xffffffffa019dc47 <dsa_slim_input+87>: mov    -0x4c(%rbp),%eax
+- 0xffffffffa019dc4a <dsa_slim_input+90>: add    $0x58,%rsp
+- 0xffffffffa019dc4e <dsa_slim_input+94>: pop    %rbx
+- 0xffffffffa019dc4f <dsa_slim_input+95>: pop    %r12
+- 0xffffffffa019dc51 <dsa_slim_input+97>: pop    %r13
+- 0xffffffffa019dc53 <dsa_slim_input+99>: pop    %r14
+- 0xffffffffa019dc55 <dsa_slim_input+101>:        pop    %r15
+- 0xffffffffa019dc57 <dsa_slim_input+103>:        leaveq 
+- 0xffffffffa019dc58 <dsa_slim_input+104>:        retq   
+- 0xffffffffa019dc59 <dsa_slim_input+105>:        nopl   0x0(%rax)
++ 0xffffffffa019dc60 <dsa_slim_input+112>:        mov    -0x48(%rbp),%rax ----> 여기로 점프함.
+0xffffffffa019dc64 <dsa_slim_input+116>:        mov    %r13d,%r11d
+0xffffffffa019dc67 <dsa_slim_input+119>:        mov    %ebx,%r10d
++ 0xffffffffa019dc6a <dsa_slim_input+122>:        sub    0x8(%rdi),%r11d ----> 문제 발생!!!!!! (unable to handle kernel NULL pointer dereference at 0000000000000008)
+(아래에 빨강색으로 표시한 부분은 해석할 필요 없음.)
+- 0xffffffffa019dc6e <dsa_slim_input+126>:        sub    (%rdi),%r10d
+- 0xffffffffa019dc71 <dsa_slim_input+129>:        cmpl   $0x2,0x5ee68(%rip)        # 0xffffffffa01fcae0
+- 0xffffffffa019dc78 <dsa_slim_input+136>:        mov    0xa4(%rax),%r14d
+- 0xffffffffa019dc7f <dsa_slim_input+143>:        mov    0x58(%rdi),%rax
+- 0xffffffffa019dc83 <dsa_slim_input+147>:        mov    0xc30(%rax),%r15
+- 0xffffffffa019dc8a <dsa_slim_input+154>:        jg     0xffffffffa019e180
+- 0xffffffffa019dc90 <dsa_slim_input+160>:        cmpq   $0x0,0x8(%r15)
+- 0xffffffffa019dc95 <dsa_slim_input+165>:        je     0xffffffffa019dd1f
+- 0xffffffffa019dc9b <dsa_slim_input+171>:        mov    0x10(%r15),%rdx
+- 0xffffffffa019dc9f <dsa_slim_input+175>:        movzwl 0xda(%rdx),%eax
+- 0xffffffffa019dca6 <dsa_slim_input+182>:        mov    %rax,%rcx
+- 0xffffffffa019dca9 <dsa_slim_input+185>:        add    $0x1,%eax
+- 0xffffffffa019dcac <dsa_slim_input+188>:        and    $0x1f,%ecx
+- 0xffffffffa019dcaf <dsa_slim_input+191>:        mov    %ax,0xda(%rdx)
+- 0xffffffffa019dcb6 <dsa_slim_input+198>:        mov    %rcx,%rax
+- 0xffffffffa019dcb9 <dsa_slim_input+201>:        shl    $0x5,%rax
+- 0xffffffffa019dcbd <dsa_slim_input+205>:        lea    0x4d0(%rdx,%rax,1),%rsi
+- 0xffffffffa019dcc5 <dsa_slim_input+213>:        mov    0x10(%r15),%rax
+- 0xffffffffa019dcc9 <dsa_slim_input+217>:        movzwl 0xd8(%rax),%eax
+- 0xffffffffa019dcd0 <dsa_slim_input+224>:        mov    %ebx,0x10(%rsi)
+- 0xffffffffa019dcd3 <dsa_slim_input+227>:        shl    $0x14,%eax
+- 0xffffffffa019dcd6 <dsa_slim_input+230>:        or     $0x10003,%eax
+- 0xffffffffa019dcdb <dsa_slim_input+235>:        mov    %eax,0xc(%rsi)
+- 0xffffffffa019dcde <dsa_slim_input+238>:        mov    %rcx,%rax
+- 0xffffffffa019dce1 <dsa_slim_input+241>:        add    $0x27,%rcx
+- 0xffffffffa019dce5 <dsa_slim_input+245>:        shl    $0x5,%rax
+- 0xffffffffa019dce9 <dsa_slim_input+249>:        shl    $0x5,%rcx
+
+
+
