@@ -2,13 +2,10 @@
 #include "libwips.h"
 #include "libcommon.h"
 
-
-int main(int argc, char **argv) {
-
-	printf("this is wips\n");
-
-	hello_wips();
-
+void hello_wips() 
+{
 	common_init();
-
+	printf("hello wips\n");
 }
+
+

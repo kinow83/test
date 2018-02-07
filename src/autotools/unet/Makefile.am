@@ -1,2 +1,2 @@
 #SUBDIRS = wips aus kernel
-SUBDIRS = @DIRS@
+SUBDIRS = @DIRS@ common

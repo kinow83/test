@@ -393,7 +393,7 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 "
 
 # Files that config.status was made for.
-config_files=" Makefile linux/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
+config_files=" Makefile common/Makefile linux/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
 config_headers=" config.h"
 config_commands=" depfiles libtool"
 
@@ -750,6 +750,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
     "linux/Makefile") CONFIG_FILES="$CONFIG_FILES linux/Makefile" ;;
     "linux/aus/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/Makefile" ;;
     "linux/aus/common/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/common/Makefile" ;;
@@ -831,6 +832,8 @@ S["am__EXEEXT_FALSE"]=""
 S["am__EXEEXT_TRUE"]="#"
 S["LTLIBOBJS"]=""
 S["LIBOBJS"]=""
+S["LIBWIPS_DIR"]="$(top_srcdir)/linux/wips/libs"
+S["COMMON_DIR"]="$(top_srcdir)/common"
 S["DIRS"]="linux"
 S["target_os"]="linux-gnu"
 S["target_vendor"]="pc"

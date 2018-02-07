@@ -214,6 +214,7 @@ AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
+COMMON_DIR = @COMMON_DIR@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -240,6 +241,7 @@ LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
+LIBWIPS_DIR = @LIBWIPS_DIR@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
@@ -326,7 +328,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
 #SUBDIRS = wips aus kernel
-SUBDIRS = @DIRS@
+SUBDIRS = @DIRS@ common
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

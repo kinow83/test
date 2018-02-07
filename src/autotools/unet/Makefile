@@ -214,6 +214,7 @@ AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
+COMMON_DIR = $(top_srcdir)/common
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -240,6 +241,7 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIBWIPS_DIR = $(top_srcdir)/linux/wips/libs
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
@@ -326,7 +328,7 @@ top_builddir = .
 top_srcdir = .
 
 #SUBDIRS = wips aus kernel
-SUBDIRS = linux
+SUBDIRS = linux common
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

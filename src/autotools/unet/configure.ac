@@ -30,6 +30,14 @@ case "$target" in
 		;;
 esac
 
+dnl --------------------------
+COMMON_DIR='$(top_srcdir)'/common
+LIBWIPS_DIR='$(top_srcdir)'/linux/wips/libs
+AC_SUBST(COMMON_DIR)
+AC_SUBST(LIBWIPS_DIR)
+dnl --------------------------
+
+
 # Checks for libraries.
 
 # Checks for header files.
@@ -40,6 +48,7 @@ esac
 AC_FUNC_MALLOC
 
 AC_CONFIG_FILES([Makefile
+				 common/Makefile
                  linux/Makefile
                  linux/aus/Makefile
                  linux/aus/common/Makefile

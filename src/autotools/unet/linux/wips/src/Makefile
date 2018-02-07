@@ -109,9 +109,9 @@ AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-am_wips_OBJECTS = wips.$(OBJEXT)
+am_wips_OBJECTS = wips-wips.$(OBJEXT)
 wips_OBJECTS = $(am_wips_OBJECTS)
-wips_LDADD = $(LDADD)
+wips_DEPENDENCIES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -185,6 +185,7 @@ AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
+COMMON_DIR = $(top_srcdir)/common
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -211,6 +212,7 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIBWIPS_DIR = $(top_srcdir)/linux/wips/libs
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
@@ -297,6 +299,8 @@ top_builddir = ../../..
 top_srcdir = ../../..
 wips_SOURCES = wips.c
 ha_SOURCES = ha.c
+wips_CPPFLAGS = -I$(top_srcdir)/common -I$(top_srcdir)/linux/wips/libs
+wips_LDADD = -lcommon -L$(top_srcdir)/common -lwips -L$(top_srcdir)/linux/wips/libs
 all: all-am
 
 .SUFFIXES:
@@ -395,7 +399,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/ha.Po
-include ./$(DEPDIR)/wips.Po
+include ./$(DEPDIR)/wips-wips.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -417,6 +421,20 @@ include ./$(DEPDIR)/wips.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LTCOMPILE) -c -o $@ $<
+
+wips-wips.o: wips.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(wips_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT wips-wips.o -MD -MP -MF $(DEPDIR)/wips-wips.Tpo -c -o wips-wips.o `test -f 'wips.c' || echo '$(srcdir)/'`wips.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/wips-wips.Tpo $(DEPDIR)/wips-wips.Po
+#	$(AM_V_CC)source='wips.c' object='wips-wips.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(wips_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o wips-wips.o `test -f 'wips.c' || echo '$(srcdir)/'`wips.c
+
+wips-wips.obj: wips.c
+	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(wips_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT wips-wips.obj -MD -MP -MF $(DEPDIR)/wips-wips.Tpo -c -o wips-wips.obj `if test -f 'wips.c'; then $(CYGPATH_W) 'wips.c'; else $(CYGPATH_W) '$(srcdir)/wips.c'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/wips-wips.Tpo $(DEPDIR)/wips-wips.Po
+#	$(AM_V_CC)source='wips.c' object='wips-wips.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(wips_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o wips-wips.obj `if test -f 'wips.c'; then $(CYGPATH_W) 'wips.c'; else $(CYGPATH_W) '$(srcdir)/wips.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
