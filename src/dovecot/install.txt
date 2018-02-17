@@ -1,0 +1,9 @@
+
+Q> imap 인증시 a login "kaka@kinow.com" qwe123
+   인경우 도메인 뒤에 붙어서 오는 경우 인증이 안될경우....
+
+# Username formatting before it's looked up from databases. You can use
+# the standard variables here, eg. %Lu would lowercase the username, %n would
+# drop away the domain if it was given, or "%n-AT-%d" would change the '@' into
+# "-AT-". This translation is done after auth_username_translation changes.
+auth_username_format = %n
