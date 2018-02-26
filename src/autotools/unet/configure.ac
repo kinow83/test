@@ -31,8 +31,8 @@ case "$target" in
 esac
 
 dnl --------------------------
-COMMON_DIR='$(top_srcdir)'/common
-LIBWIPS_DIR='$(top_srcdir)'/linux/wips/libs
+COMMON_DIR='$(top_srcdir)/common'
+LIBWIPS_DIR='$(top_srcdir)/linux/wips/libs'
 AC_SUBST(COMMON_DIR)
 AC_SUBST(LIBWIPS_DIR)
 dnl --------------------------
@@ -50,6 +50,7 @@ AC_FUNC_MALLOC
 AC_CONFIG_FILES([Makefile
 				 common/Makefile
                  linux/Makefile
+                 linux/lib/Makefile
                  linux/aus/Makefile
                  linux/aus/common/Makefile
                  linux/aus/libs/Makefile

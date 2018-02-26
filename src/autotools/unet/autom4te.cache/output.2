@@ -629,6 +629,21 @@ LIB@&t@OBJS
 EGREP
 GREP
 CPP
+LIBWIPS_DIR
+COMMON_DIR
+DIRS
+target_os
+target_vendor
+target_cpu
+target
+host_os
+host_vendor
+host_cpu
+host
+build_os
+build_vendor
+build_cpu
+build
 RANLIB
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
@@ -1341,6 +1356,11 @@ Program names:
   --program-prefix=PREFIX            prepend PREFIX to installed program names
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 _ACEOF
 fi
 
@@ -3786,6 +3806,140 @@ else
   RANLIB="$ac_cv_prog_RANLIB"
 fi
 
+AC_PROG_LIBTOOL
+
+# target, ...
+# Make sure we can run config.sub.
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+$as_echo_n "checking build system type... " >&6; }
+if ${ac_cv_build+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+test "x$ac_build_alias" = x &&
+  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+$as_echo "$ac_cv_build" >&6; }
+case $ac_cv_build in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+esac
+build=$ac_cv_build
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_build
+shift
+build_cpu=$1
+build_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+build_os=$*
+IFS=$ac_save_IFS
+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+$as_echo_n "checking host system type... " >&6; }
+if ${ac_cv_host+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+$as_echo "$ac_cv_host" >&6; }
+case $ac_cv_host in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+esac
+host=$ac_cv_host
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_host
+shift
+host_cpu=$1
+host_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+host_os=$*
+IFS=$ac_save_IFS
+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking target system type" >&5
+$as_echo_n "checking target system type... " >&6; }
+if ${ac_cv_target+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test "x$target_alias" = x; then
+  ac_cv_target=$ac_cv_host
+else
+  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
+    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $target_alias failed" "$LINENO" 5
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_target" >&5
+$as_echo "$ac_cv_target" >&6; }
+case $ac_cv_target in
+*-*-*) ;;
+*) as_fn_error $? "invalid value of canonical target" "$LINENO" 5;;
+esac
+target=$ac_cv_target
+ac_save_IFS=$IFS; IFS='-'
+set x $ac_cv_target
+shift
+target_cpu=$1
+target_vendor=$2
+shift; shift
+# Remember, the first character of IFS is used to create $*,
+# except with old shells:
+target_os=$*
+IFS=$ac_save_IFS
+case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
+
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+test -n "$target_alias" &&
+  test "$program_prefix$program_suffix$program_transform_name" = \
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-
+
+case "$target" in
+#	x86_64-pc-linux-gnu
+	x86_64-*-linux*)
+		DIRS="linux";
+		
+		;;
+	*solaris*)
+		DIRS="solaris";
+		
+		;;
+	*)
+		echo $target
+		;;
+esac
+
+COMMON_DIR='$(top_srcdir)'/common
+LIBWIPS_DIR='$(top_srcdir)'/linux/wips/libs
+
+
+
 
 # Checks for libraries.
 
@@ -4260,7 +4414,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile aus/Makefile aus/common/Makefile aus/libs/Makefile aus/src/Makefile kernel/Makefile wips/Makefile wips/bin/Makefile wips/etc/Makefile wips/libs/Makefile wips/script/Makefile wips/src/Makefile"
+ac_config_files="$ac_config_files Makefile common/Makefile linux/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4990,17 +5144,19 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "aus/Makefile") CONFIG_FILES="$CONFIG_FILES aus/Makefile" ;;
-    "aus/common/Makefile") CONFIG_FILES="$CONFIG_FILES aus/common/Makefile" ;;
-    "aus/libs/Makefile") CONFIG_FILES="$CONFIG_FILES aus/libs/Makefile" ;;
-    "aus/src/Makefile") CONFIG_FILES="$CONFIG_FILES aus/src/Makefile" ;;
-    "kernel/Makefile") CONFIG_FILES="$CONFIG_FILES kernel/Makefile" ;;
-    "wips/Makefile") CONFIG_FILES="$CONFIG_FILES wips/Makefile" ;;
-    "wips/bin/Makefile") CONFIG_FILES="$CONFIG_FILES wips/bin/Makefile" ;;
-    "wips/etc/Makefile") CONFIG_FILES="$CONFIG_FILES wips/etc/Makefile" ;;
-    "wips/libs/Makefile") CONFIG_FILES="$CONFIG_FILES wips/libs/Makefile" ;;
-    "wips/script/Makefile") CONFIG_FILES="$CONFIG_FILES wips/script/Makefile" ;;
-    "wips/src/Makefile") CONFIG_FILES="$CONFIG_FILES wips/src/Makefile" ;;
+    "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
+    "linux/Makefile") CONFIG_FILES="$CONFIG_FILES linux/Makefile" ;;
+    "linux/aus/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/Makefile" ;;
+    "linux/aus/common/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/common/Makefile" ;;
+    "linux/aus/libs/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/libs/Makefile" ;;
+    "linux/aus/src/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/src/Makefile" ;;
+    "linux/kernel/Makefile") CONFIG_FILES="$CONFIG_FILES linux/kernel/Makefile" ;;
+    "linux/wips/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/Makefile" ;;
+    "linux/wips/bin/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/bin/Makefile" ;;
+    "linux/wips/etc/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/etc/Makefile" ;;
+    "linux/wips/libs/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/libs/Makefile" ;;
+    "linux/wips/script/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/script/Makefile" ;;
+    "linux/wips/src/Makefile") CONFIG_FILES="$CONFIG_FILES linux/wips/src/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

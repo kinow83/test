@@ -328,7 +328,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
 #SUBDIRS = wips aus kernel
-SUBDIRS = @DIRS@ common
+SUBDIRS = common @DIRS@
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

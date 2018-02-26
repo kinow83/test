@@ -12114,8 +12114,8 @@ case "$target" in
 		;;
 esac
 
-COMMON_DIR='$(top_srcdir)'/common
-LIBWIPS_DIR='$(top_srcdir)'/linux/wips/libs
+COMMON_DIR='$(top_srcdir)/common'
+LIBWIPS_DIR='$(top_srcdir)/linux/wips/libs'
 
 
 
@@ -12195,7 +12195,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile common/Makefile linux/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
+ac_config_files="$ac_config_files Makefile common/Makefile linux/Makefile linux/lib/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -13211,6 +13211,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
     "linux/Makefile") CONFIG_FILES="$CONFIG_FILES linux/Makefile" ;;
+    "linux/lib/Makefile") CONFIG_FILES="$CONFIG_FILES linux/lib/Makefile" ;;
     "linux/aus/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/Makefile" ;;
     "linux/aus/common/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/common/Makefile" ;;
     "linux/aus/libs/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/libs/Makefile" ;;

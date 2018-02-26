@@ -1,1 +1,1 @@
-SUBDIRS = common libs src
+#SUBDIRS = common libs src

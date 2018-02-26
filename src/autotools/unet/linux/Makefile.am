@@ -1,1 +1,2 @@
-SUBDIRS = wips aus kernel
+SUBDIRS = lib wips kernel
+#SUBDIRS += aus

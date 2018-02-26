@@ -135,6 +135,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libwips_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(libwips_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -323,6 +326,8 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libwips.la
 libwips_la_SOURCES = libwips.c
 libwips_la_CPPFLAGS = -I@COMMON_DIR@
+#libwips_la_LIBADD = @COMMON_DIR@/libcommon.la ../../lib/liblog.la
+libwips_la_LDFLAGS = -L$(top_srcdir)/linux/lib/.libs -llog
 all: all-am
 
 .SUFFIXES:
@@ -393,7 +398,7 @@ clean-libLTLIBRARIES:
 	}
 
 libwips.la: $(libwips_la_OBJECTS) $(libwips_la_DEPENDENCIES) $(EXTRA_libwips_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libwips_la_OBJECTS) $(libwips_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(libwips_la_LINK) -rpath $(libdir) $(libwips_la_OBJECTS) $(libwips_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

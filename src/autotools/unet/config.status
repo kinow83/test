@@ -393,7 +393,7 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 "
 
 # Files that config.status was made for.
-config_files=" Makefile common/Makefile linux/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
+config_files=" Makefile common/Makefile linux/Makefile linux/lib/Makefile linux/aus/Makefile linux/aus/common/Makefile linux/aus/libs/Makefile linux/aus/src/Makefile linux/kernel/Makefile linux/wips/Makefile linux/wips/bin/Makefile linux/wips/etc/Makefile linux/wips/libs/Makefile linux/wips/script/Makefile linux/wips/src/Makefile"
 config_headers=" config.h"
 config_commands=" depfiles libtool"
 
@@ -437,7 +437,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/root/git/test/src/autotools/unet'
+ac_pwd='/home/kinow/git/test/src/autotools/unet'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
@@ -679,7 +679,7 @@ finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
 finish_eval=''
 hardcode_into_libs='yes'
 sys_lib_search_path_spec='/usr/lib/gcc/x86_64-linux-gnu/5 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib '
-configure_time_dlsearch_path='/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/lib/i386-linux-gnu/mesa /usr/local/lib /usr/lib/vmware-tools/lib32/libvmGuestLib.so /usr/lib/vmware-tools/lib64/libvmGuestLib.so /usr/lib/vmware-tools/lib32/libvmGuestLibJava.so /usr/lib/vmware-tools/lib64/libvmGuestLibJava.so /usr/lib/vmware-tools/lib32/libDeployPkg.so /usr/lib/vmware-tools/lib64/libDeployPkg.so /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/x86_64-linux-gnu/mesa '
+configure_time_dlsearch_path='/lib /usr/lib /usr/lib/x86_64-linux-gnu/libfakeroot /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/mesa-egl /usr/lib/x86_64-linux-gnu/mesa '
 configure_time_lt_sys_library_path=''
 hardcode_action='immediate'
 enable_dlopen='unknown'
@@ -752,6 +752,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
     "linux/Makefile") CONFIG_FILES="$CONFIG_FILES linux/Makefile" ;;
+    "linux/lib/Makefile") CONFIG_FILES="$CONFIG_FILES linux/lib/Makefile" ;;
     "linux/aus/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/Makefile" ;;
     "linux/aus/common/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/common/Makefile" ;;
     "linux/aus/libs/Makefile") CONFIG_FILES="$CONFIG_FILES linux/aus/libs/Makefile" ;;
@@ -901,12 +902,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /root/git/test/src/autotools/unet/install-sh"
-S["MAKEINFO"]="${SHELL} /root/git/test/src/autotools/unet/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /root/git/test/src/autotools/unet/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /root/git/test/src/autotools/unet/missing automake-1.15"
-S["AUTOCONF"]="${SHELL} /root/git/test/src/autotools/unet/missing autoconf"
-S["ACLOCAL"]="${SHELL} /root/git/test/src/autotools/unet/missing aclocal-1.15"
+S["install_sh"]="${SHELL} /home/kinow/git/test/src/autotools/unet/install-sh"
+S["MAKEINFO"]="${SHELL} /home/kinow/git/test/src/autotools/unet/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/kinow/git/test/src/autotools/unet/missing automake-1.15"
+S["AUTOCONF"]="${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/kinow/git/test/src/autotools/unet/missing aclocal-1.15"
 S["VERSION"]="VERSION"
 S["PACKAGE"]="full-package-name"
 S["CYGPATH_W"]="echo"

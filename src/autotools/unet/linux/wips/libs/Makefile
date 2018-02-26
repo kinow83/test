@@ -135,6 +135,9 @@ AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libwips_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(libwips_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -197,13 +200,13 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /root/git/test/src/autotools/unet/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /root/git/test/src/autotools/unet/missing autoconf
-AUTOHEADER = ${SHELL} /root/git/test/src/autotools/unet/missing autoheader
-AUTOMAKE = ${SHELL} /root/git/test/src/autotools/unet/missing automake-1.15
+AUTOCONF = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoconf
+AUTOHEADER = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoheader
+AUTOMAKE = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing automake-1.15
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -240,7 +243,7 @@ LIPO =
 LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
-MAKEINFO = ${SHELL} /root/git/test/src/autotools/unet/missing makeinfo
+MAKEINFO = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -263,10 +266,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 VERSION = VERSION
-abs_builddir = /root/git/test/src/autotools/unet/linux/wips/libs
-abs_srcdir = /root/git/test/src/autotools/unet/linux/wips/libs
-abs_top_builddir = /root/git/test/src/autotools/unet
-abs_top_srcdir = /root/git/test/src/autotools/unet
+abs_builddir = /home/kinow/git/test/src/autotools/unet/linux/wips/libs
+abs_srcdir = /home/kinow/git/test/src/autotools/unet/linux/wips/libs
+abs_top_builddir = /home/kinow/git/test/src/autotools/unet
+abs_top_srcdir = /home/kinow/git/test/src/autotools/unet
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -295,7 +298,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /root/git/test/src/autotools/unet/install-sh
+install_sh = ${SHELL} /home/kinow/git/test/src/autotools/unet/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -323,6 +326,8 @@ top_srcdir = ../../..
 lib_LTLIBRARIES = libwips.la
 libwips_la_SOURCES = libwips.c
 libwips_la_CPPFLAGS = -I$(top_srcdir)/common
+#libwips_la_LIBADD = $(top_srcdir)/common/libcommon.la ../../lib/liblog.la
+libwips_la_LDFLAGS = -L$(top_srcdir)/linux/lib/.libs -llog
 all: all-am
 
 .SUFFIXES:
@@ -393,7 +398,7 @@ clean-libLTLIBRARIES:
 	}
 
 libwips.la: $(libwips_la_OBJECTS) $(libwips_la_DEPENDENCIES) $(EXTRA_libwips_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libwips_la_OBJECTS) $(libwips_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(libwips_la_LINK) -rpath $(libdir) $(libwips_la_OBJECTS) $(libwips_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

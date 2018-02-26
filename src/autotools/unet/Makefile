@@ -203,13 +203,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /root/git/test/src/autotools/unet/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /root/git/test/src/autotools/unet/missing autoconf
-AUTOHEADER = ${SHELL} /root/git/test/src/autotools/unet/missing autoheader
-AUTOMAKE = ${SHELL} /root/git/test/src/autotools/unet/missing automake-1.15
+AUTOCONF = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoconf
+AUTOHEADER = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing autoheader
+AUTOMAKE = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing automake-1.15
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -246,7 +246,7 @@ LIPO =
 LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
-MAKEINFO = ${SHELL} /root/git/test/src/autotools/unet/missing makeinfo
+MAKEINFO = ${SHELL} /home/kinow/git/test/src/autotools/unet/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 NM = /usr/bin/nm -B
@@ -269,10 +269,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = strip
 VERSION = VERSION
-abs_builddir = /root/git/test/src/autotools/unet
-abs_srcdir = /root/git/test/src/autotools/unet
-abs_top_builddir = /root/git/test/src/autotools/unet
-abs_top_srcdir = /root/git/test/src/autotools/unet
+abs_builddir = /home/kinow/git/test/src/autotools/unet
+abs_srcdir = /home/kinow/git/test/src/autotools/unet
+abs_top_builddir = /home/kinow/git/test/src/autotools/unet
+abs_top_srcdir = /home/kinow/git/test/src/autotools/unet
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -301,7 +301,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /root/git/test/src/autotools/unet/install-sh
+install_sh = ${SHELL} /home/kinow/git/test/src/autotools/unet/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -328,7 +328,7 @@ top_builddir = .
 top_srcdir = .
 
 #SUBDIRS = wips aus kernel
-SUBDIRS = linux common
+SUBDIRS = common linux
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

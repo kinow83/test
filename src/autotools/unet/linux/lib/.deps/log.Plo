@@ -1,6 +1,5 @@
-libwips_la-libwips.lo: libwips.c /usr/include/stdc-predef.h \
- /usr/include/stdio.h /usr/include/features.h \
- /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+log.lo: log.c /usr/include/stdc-predef.h /usr/include/stdio.h \
+ /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
@@ -12,8 +11,7 @@ libwips_la-libwips.lo: libwips.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/stdio2.h libwips.h \
- ../../../common/libcommon.h ../../lib/log.h
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h log.h
 
 /usr/include/stdc-predef.h:
 
@@ -51,8 +49,4 @@ libwips_la-libwips.lo: libwips.c /usr/include/stdc-predef.h \
 
 /usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
-libwips.h:
-
-../../../common/libcommon.h:
-
-../../lib/log.h:
+log.h:
