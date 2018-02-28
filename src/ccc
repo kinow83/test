@@ -1,0 +1,164 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <assert.h>
+
+
+#ifndef ATOMIC_DEC
+	#define ATOMIC_DEC(x) (x)--
+#endif
+
+#ifndef ATOMIC_INC
+	#define ATOMIC_INC(x) (x)++
+#endif
+
+struct _CLOADER_;
+
+typedef struct _CLOADER_OPS_ {
+	void* (*load)(struct _CLOADER_ *, void *);
+	void (*release)(struct _CLOADER_ *, void *);
+} cloader_ops;
+
+typedef struct _CLOADER_ {
+	cloader_ops ops;
+	void *prf_1;
+	void *prf_2;
+	void *cur_prf;
+	int is_reload;
+	int ref_count;
+} cloader;
+
+
+
+int init_cloader(cloader *c, cloader_ops *ops)
+{
+	memset(c, 0, sizeof(*c));
+	c->ops.load = ops->load;
+	c->ops.release = ops->release;
+
+//	assert((c->ops.load != NULL));
+	return 0;
+}
+
+
+int load_cloader(cloader *c, void *arg)
+{
+//	assert(c->ops.load != NULL);
+
+	c->prf_1 = c->ops.load(c, arg);
+	c->prf_2 = NULL;
+	c->cur_prf = c->prf_1;
+	c->is_reload = 0;
+	c->ref_count = 0;
+
+	return 0;
+}
+
+int reload_cloader(cloader *c, void *arg)
+{
+	void *next_prf = NULL;
+
+	if (c->is_reload == 1) {
+		return 0;
+	}
+
+	c->is_reload = 1;
+	while (1) {
+		if (c->ref_count == 0) {
+			break;
+		} else {
+			usleep(500);
+		}
+	}
+
+	if (c->cur_prf == c->prf_1) {
+		next_prf = c->prf_2;
+	} else {
+		next_prf = c->prf_1;
+	}
+
+	if (next_prf) {
+		if (c->ops.release) {
+			c->ops.release(c, arg);
+		}
+	}
+
+//	assert(c->ops.load != NULL);
+	next_prf = c->ops.load(c, arg);
+
+	c->cur_prf = next_prf;
+	if (c->cur_prf == c->prf_1) {
+		printf("current profile is 1\n");
+	} else {
+		printf("current profile is 2\n");
+	}
+
+	c->is_reload = 0;
+
+	return 0;
+}
+
+void get_current_cloader(cloader *c, void **pprf)
+{
+	ATOMIC_INC(c->ref_count);
+	if (c->is_reload == 1) {
+		ATOMIC_DEC(c->ref_count);
+		while (1) {
+			if (c->is_reload == 0) {
+				ATOMIC_INC(c->ref_count);
+				break;
+			} else {
+				usleep(100);
+			}
+		}
+	}
+
+	*pprf = c->cur_prf;
+	ATOMIC_DEC(c->ref_count);
+}
+
+
+
+
+typedef struct _TEST_CONFIG_ {
+	int num;
+} test_config;
+
+static void* test_load(cloader *c, void *arg)
+{
+	static int call = 0;
+	test_config *t = malloc(sizeof(test_config));
+	call += 10;
+	t->num = call;
+	return t;
+}
+
+static void test_release(cloader *c, void *arg)
+{
+	return;
+}
+
+
+int main()
+{
+	cloader_ops p;
+	cloader c;
+	test_config *t;
+
+	p.load = test_load;
+	p.release = NULL;
+	init_cloader(&c, &p);
+
+	load_cloader(&c, NULL);
+
+	get_current_cloader(&c, (void **)&t);
+	printf("1. %d\n" ,t->num);
+
+	reload_cloader(&c, NULL);
+
+	get_current_cloader(&c, (void **)&t);
+	printf("2. %d\n" ,t->num);
+
+}
