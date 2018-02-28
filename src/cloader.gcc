@@ -1,0 +1,2 @@
+gcc cloader.c -o cloader -lpthread -g
+valgrind --tool=memcheck --leak-check=yes --show-reachable=yes ./cloader
