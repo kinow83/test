@@ -72,10 +72,10 @@ int main(int argc, char **argv)
 	for (i=0; i<N; i++) {
 		pthread_create(&tid[i], NULL, handler, NULL);
 	}
-	echo(terminate, terminatelen);
 
 	for (i=0; i<N; i++) {
 		pthread_join(tid[i], NULL);
 	}
+	echo(terminate, terminatelen);
 	return 0;
 }
