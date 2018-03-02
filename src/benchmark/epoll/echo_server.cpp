@@ -16,6 +16,8 @@
 
 static int listener;
 static int epfd;
+const char *terminate = "close";
+size_t      terminatelen = 5;
 
 static void die(const char* msg)
 {
@@ -106,6 +108,7 @@ int main()
                     epoll_ctl(epfd, EPOLL_CTL_DEL, client, &ev);
                     close(client);
                 } else {
+					if (memcmp(terminate, terminatelen);
                     write(client, buffer, n);
                 }
             }
