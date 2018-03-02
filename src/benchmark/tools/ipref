@@ -1,0 +1,12 @@
+sudo apt-get install iperf
+
+kinow@kinow ~/git/test/src $ iperf -s
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+
+[  4] local 127.0.0.1 port 5001 connected with 127.0.0.1 port 53672
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0- 9.9 sec   311 Bytes   251 bits/sec
+

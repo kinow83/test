@@ -1,0 +1,44 @@
+sudo apt-get install smartmontools
+
+
+sudo smartctl -a /dev/sdb
+
+=== START OF INFORMATION SECTION ===
+Model Family:     Seagate Barracuda 7200.14 (AF)
+Device Model:     ST1000DM003-1CH162
+Serial Number:    Z1D4W687
+LU WWN Device Id: 5 000c50 063ba4460
+Firmware Version: CC47
+User Capacity:    1,000,204,886,016 bytes [1.00 TB]
+Sector Sizes:     512 bytes logical, 4096 bytes physical
+Rotation Rate:    7200 rpm
+Form Factor:      3.5 inches
+Device is:        In smartctl database [for details use: -P show]
+ATA Version is:   ACS-2, ACS-3 T13/2161-D revision 3b
+SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+Local Time is:    Fri Mar  2 09:09:41 2018 KST
+SMART support is: Available - device has SMART capability.
+SMART support is: Enabled
+
+
+
+sudo smartctl -a /dev/sda
+smartctl 6.5 2016-01-24 r4214 [x86_64-linux-4.10.0-38-generic] (local build)
+	Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
+
+	=== START OF INFORMATION SECTION ===
+	Model Family:     Samsung based SSDs
+	Device Model:     Samsung SSD 840 EVO 250GB
+	Serial Number:    S1DCNEAD701118R
+	LU WWN Device Id: 5 002538 85000caab
+	Firmware Version: EXT0AB0Q
+	User Capacity:    250,059,350,016 bytes [250 GB]
+	Sector Size:      512 bytes logical/physical
+	Rotation Rate:    Solid State Device
+	Device is:        In smartctl database [for details use: -P show]
+	ATA Version is:   ACS-2, ATA8-ACS T13/1699-D revision 4c
+	SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)
+	Local Time is:    Fri Mar  2 09:10:39 2018 KST
+	SMART support is: Available - device has SMART capability.
+	SMART support is: Enabled
+

@@ -33,6 +33,7 @@ static void setnonblocking(int sock)
 
 static int setup_socket()
 {
+	int opt = 1;
     int sock;
     struct sockaddr_in sin;
 
@@ -45,6 +46,8 @@ static int setup_socket()
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = htonl(INADDR_ANY);
     sin.sin_port = htons(SERVER_PORT);
+
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
     if (bind(sock, (struct sockaddr *) &sin, sizeof sin) < 0) {
         close(sock);
@@ -96,7 +99,7 @@ int main()
                 ev.events = EPOLLIN | EPOLLET;
                 ev.data.fd = client;
                 epoll_ctl(epfd, EPOLL_CTL_ADD, client, &ev);
-				printf("accept #%d\n", client);
+//				printf("accept #%d\n", client);
             } else {
                 int client = events[i].data.fd;
                 int n = read(client, buffer, sizeof buffer);
@@ -108,7 +111,9 @@ int main()
                     epoll_ctl(epfd, EPOLL_CTL_DEL, client, &ev);
                     close(client);
                 } else {
-					if (memcmp(terminate, terminatelen);
+					if (memcmp(terminate, buffer, terminatelen) == 0) {
+						exit(0);
+					}
                     write(client, buffer, n);
                 }
             }
