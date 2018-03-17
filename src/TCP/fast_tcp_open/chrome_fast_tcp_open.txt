@@ -1,0 +1,3 @@
+chrome://flags
+
+TCP Fast open : Enabled
