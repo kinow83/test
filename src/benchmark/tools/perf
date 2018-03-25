@@ -3,3 +3,11 @@ perf
 sudo apt install linux-tools-common
 
 
+sudo perf record ./echo_server
+
+sudo perf stat ./echo_server
+sudo perf stat cache-misses ./echo_server
+sudo perf stat -e cache-misses ./echo_server
+sudo perf stat --help
+sudo perf stat list
+

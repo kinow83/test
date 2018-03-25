@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/socket.h>
@@ -10,7 +10,7 @@
 #include <sys/epoll.h>
 #include <netinet/in.h>
 
-#define SERVER_PORT 10008
+#define SERVER_PORT 10007
 #define MAX_EVENTS 10
 #define BACKLOG 10
 
@@ -63,14 +63,16 @@ static int setup_socket()
     return sock;
 }
 
-static int tp = 0;
-int main()
+int main(int argc, char **argv)
 {
+	int timeout = atoi(argv[1]);
     struct epoll_event ev;
     struct epoll_event events[MAX_EVENTS];
     char buffer[1024];
-	int timeout = -1;
 
+	if (timeout == 0) {
+		timeout = -1;
+	}
 	stop = 0;
 
     if ((epfd = epoll_create(MAX_EVENTS)) < 0) {
@@ -91,51 +93,43 @@ int main()
         int i;
         int nfd = epoll_wait(epfd, events, MAX_EVENTS, timeout);
 
-        for (i=0; i<nfd; i++) {
-//			if (events[i].events & EPOLLIN) 
-			{
-				if (events[i].data.fd == listener) {
-					struct sockaddr_in client_addr;
-					socklen_t client_addr_len = sizeof client_addr;
+        for (i = 0; i < nfd; i++) {
+            if (events[i].data.fd == listener) {
+                struct sockaddr_in client_addr;
+                socklen_t client_addr_len = sizeof client_addr;
 
-					int client = accept(listener, (struct sockaddr *) &client_addr, &client_addr_len);
-					if (client < 0) {
-						perror("accept");
-						continue;
-					}
+                int client = accept(listener, (struct sockaddr *) &client_addr, &client_addr_len);
+                if (client < 0) {
+                    perror("accept");
+                    continue;
+                }
 
-//					setnonblocking(client);
-					memset(&ev, 0, sizeof ev);
-					ev.events = EPOLLIN; // | EPOLLERR;
-					ev.data.fd = client;
-					epoll_ctl(epfd, EPOLL_CTL_ADD, client, &ev);
-					tp++;
-				} else {
-					int client = events[i].data.fd;
-					int n = read(client, buffer, sizeof buffer);
-					if (n < 0) {
-						printf("errno=%d\n", errno);
-						perror("read");
-						epoll_ctl(epfd, EPOLL_CTL_DEL, client, NULL);
-						close(client);
-					} else if (n == 0) {
-						epoll_ctl(epfd, EPOLL_CTL_DEL, client, NULL);
-						close(client);
-					} else {
-						if (memcmp(terminate, buffer, terminatelen) == 0) {
-							write(client, buffer, n);
-							epoll_ctl(epfd, EPOLL_CTL_DEL, client, NULL);
-							close(client);
-							stop = 1;
-							break;
-						}
-						write(client, buffer, n);
+                setnonblocking(client);
+				memset(&ev, 0, sizeof ev);
+                ev.events = EPOLLIN | EPOLLET;
+                ev.data.fd = client;
+                epoll_ctl(epfd, EPOLL_CTL_ADD, client, &ev);
+//				printf("accept #%d\n", client);
+            } else {
+                int client = events[i].data.fd;
+                int n = read(client, buffer, sizeof buffer);
+                if (n < 0) {
+                    perror("read");
+                    epoll_ctl(epfd, EPOLL_CTL_DEL, client, &ev);
+                    close(client);
+                } else if (n == 0) {
+                    epoll_ctl(epfd, EPOLL_CTL_DEL, client, &ev);
+                    close(client);
+                } else {
+					if (memcmp(terminate, buffer, terminatelen) == 0) {
+						stop = 1;
+						break;
 					}
-				}
-			}
+                    write(client, buffer, n);
+                }
+            }
         }
     }
 	close(listener);
-	printf("tp=%d\n", tp);
     return 0;
 }
