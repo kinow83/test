@@ -59,34 +59,35 @@ void* table_get(table_t* table, char* key)
 
 int main(int argc, char* argv[])
 {
-	unsigned i = 0;
-	void* d = NULL;
 	size_t num = 0;
-	struct word *w = NULL, *c;
-	char *f;
+	struct word *w = NULL;
+	struct word *c = NULL;
+	struct word *f = NULL;
+	clock_t start;
 
 	num = load_word(argc, argv, 20, 20, &w);
+	num = load_word(argc, argv, 20, 20, &f);
 	printf("num = %ld\n", num);
 
 	table_t* table = table_create(num);
-	i = 0;
+
+	printf("gnu hsearch\n");
+	start = clock();
 	for (c=w; c; c=c->next) {
 		table_add(table, c->text, c->text);
 	}
-	printf("completed add\n");
+	printf("gnu hsearch insert: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
 
 
-	clock_t start = clock();
-	i = 0;
-	for (c=w; c; c=c->next) {
-		f = table_get(table, c->text);
-		if (f == NULL) {
-			printf("nn\n"); exit(1);
-		}
+	start = clock();
+	for (c=f; c; c=c->next) {
+		assert(table_get(table, c->text) != NULL);
 	}
-	printf("%0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+	printf("gnu hsearch: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
 
 	table_destroy(table);
+
+	printf("\n");
 
 	return 0;
 }

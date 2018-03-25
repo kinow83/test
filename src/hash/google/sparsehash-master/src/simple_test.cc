@@ -46,6 +46,8 @@
 
 #include "sampling.h"
 
+using std::string;
+
 
 #define CHECK_IFF(cond, when) do {                                      \
   if (when) {                                                           \
@@ -74,31 +76,84 @@ int main(int argc, char** argv) {
   // Run with an argument to get verbose output
   const bool verbose = argc > 1;
   size_t i, num = 0;
-  struct word *w = NULL, *c;
-  char *f;
+  struct word *w = NULL;
+  struct word *c = NULL;
+  struct word *f = NULL;
   clock_t start;
-  google::sparse_hash_set<char*> sset;
-  google::sparse_hash_map<char*, char*> smap;
-  google::dense_hash_set<char*> dset;
-  google::dense_hash_map<char*, char*> dmap;
+  string s;
+  google::sparse_hash_set<string> sset;
+  google::dense_hash_set <string> dset;
+  google::sparse_hash_map<string, string> smap;
+  google::dense_hash_map <string, string> dmap;
 
   num = load_word(argc, argv, 20, 20, &w);
+  num = load_word(argc, argv, 20, 20, &f);
   printf("num = %ld\n", num);
 
-  for (c=w; c; c=c->next) {
-	  smap[c->text] = c->text;
-  }
-  printf("completed add\n");
+  // SET
+  {
+	  printf("google sset\n");
+	  start = clock();
+	  for (c=w; c; c=c->next) {
+		  sset.insert(string(c->text));
+	  }
+	  printf("insert complete: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
 
-  start = clock();
-  i = 0;
-  for (c=w; c; c=c->next) {
-	  f = smap[c->text];
-//	  printf("%s = %s\n", c->text, f);
-	  assert( f != NULL );
-  }
-  printf("smap: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+	  start = clock();
+	  i = 0;
+	  for (c=f; c; c=c->next) {
+		  assert (sset.find(string(c->text)) != sset.end());
+	  }
+	  printf("sset: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
 
+  } printf("\n"); {
+	  // MAP
+	  printf("google smap\n");
+	  start = clock();
+	  for (c=w; c; c=c->next) {
+		  smap[string(c->text)] = string(c->text);
+	  }
+	  printf("insert complete: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+
+	  start = clock();
+	  i = 0;
+	  for (c=f; c; c=c->next) {
+		s = string(c->text);
+		  assert (smap[s] == s);
+	  }
+	  printf("smap: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+  } printf("\n"); {
+	  printf("google dset\n");
+	  start = clock();
+	  for (c=w; c; c=c->next) {
+		  dset.insert(string(c->text));
+	  }
+	  printf("insert complete: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+
+	  start = clock();
+	  i = 0;
+	  for (c=f; c; c=c->next) {
+		  assert (dset.find(string(c->text)) != dset.end());
+	  }
+	  printf("dset: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+
+  } printf("\n"); {
+	  // MAP
+	  printf("google dmap\n");
+	  start = clock();
+	  for (c=w; c; c=c->next) {
+		  dmap[string(c->text)] = string(c->text);
+	  }
+	  printf("insert complete: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+
+	  start = clock();
+	  i = 0;
+	  for (c=f; c; c=c->next) {
+		s = string(c->text);
+		  assert (dmap[s] == s);
+	  }
+	  printf("dmap: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+  }
 
 
 #if 0
