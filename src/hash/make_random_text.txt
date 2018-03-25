@@ -1,0 +1,5 @@
+
+base64 random text
+
+base64 /dev/urandom | head -c 3242880 > 5K.txt
+
