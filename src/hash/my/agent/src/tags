@@ -1,0 +1,96 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BASE_create	obj.c	/^int BASE_create$/;"	f
+BASE_init	obj.c	/^void BASE_init$/;"	f
+BUFSIZE	system.c	16;"	d	file:
+CPU_CMD	system.c	20;"	d	file:
+DISK_CMD	system.c	18;"	d	file:
+HASH_KEY	table.c	14;"	d	file:
+HOST	agent.c	20;"	d	file:
+IPToTable	table.c	/^int IPToTable$/;"	f
+IP_create	table.c	/^IP * IP_create$/;"	f
+IP_delete	table.c	/^void IP_delete$/;"	f
+IP_init	table.c	/^void IP_init$/;"	f
+IP_insert	table.c	/^int IP_insert$/;"	f
+IP_serach	table.c	/^u_long IP_serach$/;"	f
+KEYToTable	table.c	/^int KEYToTable$/;"	f
+KEY_init	table.c	/^void KEY_init$/;"	f
+KEY_insert	table.c	/^int KEY_insert$/;"	f
+KEY_serach	table.c	/^u_long KEY_serach$/;"	f
+LOCALHOST	agent.c	19;"	d	file:
+MEM_CMD	system.c	19;"	d	file:
+OBJ_create	obj.c	/^int OBJ_create$/;"	f
+OBJ_group_init	obj.c	/^void OBJ_group_init(void)$/;"	f
+OBJ_init	obj.c	/^void OBJ_init$/;"	f
+OBJ_insert	obj.c	/^int OBJ_insert$/;"	f
+URLToTable	table.c	/^int URLToTable$/;"	f
+URL_delete	table.c	/^void URL_delete$/;"	f
+URL_hash	table.c	/^u_long URL_hash$/;"	f
+URL_init	table.c	/^void URL_init$/;"	f
+URL_insert	table.c	/^int URL_insert$/;"	f
+URL_serach	table.c	/^u_long URL_serach$/;"	f
+USER	agent.c	21;"	d	file:
+_strnstr	table.c	/^char * _strnstr(char *big, char *little, int len)$/;"	f
+alive_func	agent.c	/^void *alive_func(char *host, char *user, char *password)$/;"	f
+bistree_destroy	bist.c	/^void bistree_destroy(BisTree *tree) {$/;"	f
+bistree_destroy	bistree.c	/^void bistree_destroy(BisTree *tree) {$/;"	f
+bistree_init	bist.c	/^void bistree_init(BisTree *tree, int (*compare)(const void *key1, const void$/;"	f
+bistree_init	bistree.c	/^void bistree_init(BisTree *tree, int (*compare)(const void *key1, const void$/;"	f
+bistree_insert	bist.c	/^int bistree_insert(BisTree *tree, const void *data) {$/;"	f
+bistree_insert	bistree.c	/^int bistree_insert(BisTree *tree, const void *data) {$/;"	f
+bistree_lookup	bist.c	/^int bistree_lookup(BisTree *tree, void **data) {$/;"	f
+bistree_lookup	bistree.c	/^int bistree_lookup(BisTree *tree, void **data) {$/;"	f
+bistree_remove	bist.c	/^int bistree_remove(BisTree *tree, const void *data) {$/;"	f
+bistree_remove	bistree.c	/^int bistree_remove(BisTree *tree, const void *data) {$/;"	f
+bitree_destroy	bitree.c	/^void bitree_destroy(BiTree *tree) {$/;"	f
+bitree_init	bitree.c	/^void bitree_init(BiTree *tree, void (*destroy)(void *data)) {$/;"	f
+bitree_ins_left	bitree.c	/^int bitree_ins_left(BiTree *tree, BiTreeNode *node, const void *data) {$/;"	f
+bitree_ins_right	bitree.c	/^int bitree_ins_right(BiTree *tree, BiTreeNode *node, const void *data) {$/;"	f
+bitree_merge	bitree.c	/^int bitree_merge(BiTree *merge, BiTree *left, BiTree *right, const void$/;"	f
+bitree_rem_left	bitree.c	/^void bitree_rem_left(BiTree *tree, BiTreeNode *node) {$/;"	f
+bitree_rem_right	bitree.c	/^void bitree_rem_right(BiTree *tree, BiTreeNode *node) {$/;"	f
+buf	system.c	/^char buf[BUFSIZE];$/;"	v
+compare_str	obj.c	/^int compare_str$/;"	f
+create_new_file	agent.c	/^void create_new_file()$/;"	f
+destroy_left	bist.c	/^static void destroy_left(BisTree *tree, BiTreeNode *node) {$/;"	f	file:
+destroy_left	bistree.c	/^static void destroy_left(BisTree *tree, BiTreeNode *node) {$/;"	f	file:
+destroy_right	bist.c	/^static void destroy_right(BisTree *tree, BiTreeNode *node) {$/;"	f	file:
+destroy_right	bistree.c	/^static void destroy_right(BisTree *tree, BiTreeNode *node) {$/;"	f	file:
+freed	system.c	/^char freed[12];	\/\/ 잔여 메모리 크기$/;"	v
+freem	system.c	/^unsigned long freem; 	\/\/ 잔여 메모리 크기$/;"	v
+garbage	system.c	/^char garbage[48];$/;"	v
+get_cpu	system.c	/^void get_cpu(int interval){$/;"	f
+get_disk	system.c	/^void get_disk(){$/;"	f
+get_mem	system.c	/^void get_mem(){$/;"	f
+hide	bist.c	/^static int hide(BisTree *tree, BiTreeNode *node, const void *data) {$/;"	f	file:
+hide	bistree.c	/^static int hide(BisTree *tree, BiTreeNode *node, const void *data) {$/;"	f	file:
+insert	bist.c	/^static int insert(BisTree *tree, BiTreeNode **node, const void *data, int$/;"	f	file:
+insert	bistree.c	/^static int insert(BisTree *tree, BiTreeNode **node, const void *data, int$/;"	f	file:
+keyword	system.c	22;"	d	file:
+keyword1	system.c	23;"	d	file:
+keyword2	system.c	24;"	d	file:
+live_log_thread_func	agent.c	/^void *live_log_thread_func( void *sock )$/;"	f
+log_thread_func	agent.c	/^void *log_thread_func( void *data )$/;"	f
+lookup	bist.c	/^static int lookup(BisTree *tree, BiTreeNode *node, void **data) {$/;"	f	file:
+lookup	bistree.c	/^static int lookup(BisTree *tree, BiTreeNode *node, void **data) {$/;"	f	file:
+main	agent.c	/^int main(int argc, char **argv){$/;"	f
+n_id	system.c	/^double n_total, n_id;$/;"	v
+n_total	system.c	/^double n_total, n_id;$/;"	v
+p_id	system.c	/^double p_total, p_id;$/;"	v
+p_total	system.c	/^double p_total, p_id;$/;"	v
+pcap_thread_func	agent.c	/^void *pcap_thread_func( void *data )$/;"	f
+rotate_left	bist.c	/^static void rotate_left(BiTreeNode **node) {$/;"	f	file:
+rotate_left	bistree.c	/^static void rotate_left(BiTreeNode **node) {$/;"	f	file:
+rotate_right	bist.c	/^static void rotate_right(BiTreeNode **node) {$/;"	f	file:
+rotate_right	bistree.c	/^static void rotate_right(BiTreeNode **node) {$/;"	f	file:
+sort_func	agent.c	/^void sort_func()$/;"	f
+system_moniter	system.c	/^void system_moniter(int interval){$/;"	f
+timer_thread_func	agent.c	/^void *timer_thread_func( void *data )$/;"	f
+tok	system.c	/^char tok[5][12];$/;"	v
+tok	system.c	/^char tok[8][12];$/;"	v
+tot	system.c	/^unsigned long tot; 		\/\/ 전체 메모리 크기$/;"	v
+total	system.c	/^char total[12]; \/\/ 전체 메모리 크기$/;"	v
