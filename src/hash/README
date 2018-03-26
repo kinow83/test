@@ -2,3 +2,57 @@
 base64 random text
 
 base64 /dev/urandom | head -c 3242880 > 5K.txt
+
+=================================================
+
+num = 1940547
+gnu hsearch
+gnu hsearch insert: 0.62001
+gnu hsearch: 0.69566
+
+num = 1940547
+unorderd_map in libstdc++
+unordered insert: 3.39624
+unordered find: 0.74252
+
+num = 1940547
+shash
+shash insert: 5.18292
+shash find: 5.20946
+
+num = 1940547
+google sset
+insert complete: 8.72002
+sset: 1.03696
+
+google smap
+insert complete: 17.88240
+smap: 1.09667
+
+=================================================
+
+num = 1940547
+gnu hsearch
+gnu hsearch insert: 0.61830
+gnu hsearch: 0.69411
+
+num = 1940547
+unorderd_map in libstdc++
+unordered insert: 3.41539
+unordered find: 0.74894
+
+num = 1940547
+shash
+shash insert: 5.24204
+shash find: 5.18983
+
+num = 1940547
+google sset
+insert complete: 8.67642
+sset: 1.02583
+
+google smap
+insert complete: 18.08491
+smap: 1.14132
+
+
