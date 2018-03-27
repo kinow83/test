@@ -19,6 +19,16 @@
 	#define atomic_dec(x) _uatomic_dec(&(x))
 #endif
 
+#define cloader_busy_wait() \
+	do { \
+		usleep(1); \
+	} while (0)
+
+#define cloader_not_busy_wait() \
+	do { \
+		usleep(100); \
+	} while (0)
+
 struct cloader_t;
 
 typedef struct cloader_ops_t {
@@ -26,113 +36,172 @@ typedef struct cloader_ops_t {
 	void (*release)(void *);
 } cloader_ops_t;
 
+typedef struct cloader_cfg_t {
+	void *data;
+} cloader_cfg_t;
+
 typedef struct cloader_t {
-	cloader_ops_t ops;
-	void *prf_1;
-	void *prf_2;
-	void *prf_c;
-	int reload;
-	int ref_count;
+	uint8_t is_load_called; // load function is called only once.
+	cloader_ops_t ops;  // cloader operations
+	cloader_cfg_t cfg1; // config #1
+	cloader_cfg_t cfg2; // config #2
+	cloader_cfg_t *cur; // current config
+	int reload;         // now reloading ?
+	uint32_t ref_count; // referece count of config data
+	pthread_t reloader_tid; // pthread id of the first called reload. Not support reload multi-thread.
 } cloader_t;
 
 
-int init_cloader(cloader_t *c, cloader_ops_t *ops)
+int cloader_init(cloader_t *c, cloader_ops_t *ops)
 {
+	if (ops->load == NULL) {
+		return -1;
+	}
+
 	memset(c, 0, sizeof(*c));
 	c->ops.load = ops->load;
 	c->ops.release = ops->release;
 
-	assert((c->ops.load != NULL));
 	return 0;
 }
 
-void release_cloader(cloader_t *c)
+void cloader_release(cloader_t *c)
 {
 	if (c->ops.release) {
-		if (c->prf_1) {
-			c->ops.release(c->prf_1);
+		if (c->cfg1.data) {
+			c->ops.release(c->cfg1.data);
 		}
-		if (c->prf_2) {
-			c->ops.release(c->prf_2);
+		if (c->cfg2.data) {
+			c->ops.release(c->cfg2.data);
 		}
 	}
+	c->is_load_called = 0;
+	c->reloader_tid = 0;
 }
 
-int load_cloader(cloader_t *c, void *arg)
+int cloader_load(cloader_t *c, void *arg)
 {
-	assert(c->ops.load != NULL);
+	if (c->is_load_called) {
+		return -1;
+	}
 
-	c->prf_1 = c->ops.load(c, arg);
-	c->prf_2 = NULL;
-	c->prf_c = c->prf_1;
+	c->cfg1.data = c->ops.load(c, arg);
+	c->cfg2.data = NULL;
+	c->cur = &c->cfg1;
 	c->reload = 0;
 	c->ref_count = 0;
+	c->is_load_called = 1;
 
 	return 0;
 }
 
-int reload_cloader(cloader_t *c, void *arg)
+static inline void pending_empty_ref_count(cloader_t *c)
 {
-	void *next_prf = NULL;
-
-	if (c->reload == 1) {
-		return 0;
-	}
-
-	c->reload = 1;
-	while (1) {
+	do {
 		if (c->ref_count == 0) {
 			break;
 		} else {
-			usleep(500);
+			cloader_not_busy_wait();
 		}
-	}
+	} while (1);
+}
 
-	if (c->prf_c == c->prf_1) {
-		next_prf = c->prf_2;
+static inline void pending_reload_completed(cloader_t *c)
+{
+	do {
+		if (c->reload == 0) {
+			break;
+		} else {
+			cloader_not_busy_wait();
+		}
+	} while (1);
+}
+
+static inline cloader_cfg_t *next_cloader_cfg(cloader_t *c)
+{
+	return (c->cur == &c->cfg1) ? &c->cfg2 : &c->cfg1;
+}
+
+int cloader_reload(cloader_t *c, void *arg)
+{
+	cloader_cfg_t *next = NULL;
+
+	if (c->reloader_tid == 0) {
+		c->reloader_tid = pthread_self();
 	} else {
-		next_prf = c->prf_1;
+		assert(c->reloader_tid == pthread_self());
 	}
 
-	if (next_prf) {
+	next = next_cloader_cfg(c);
+
+	assert(next != NULL);
+
+	if (next->data) {
 		if (c->ops.release) {
-			c->ops.release(next_prf);
+			c->ops.release(next->data);
 		}
 	}
 
-	assert(c->ops.load != NULL);
-	next_prf = c->ops.load(c, arg);
+	// config data loading time too long.
+	// so here config data is loaded.
+	next->data = c->ops.load(c, arg);
+	printf("internal loading completed.\n");
 
-	c->prf_c = next_prf;
-	if (c->prf_c == c->prf_1) {
-		printf("current profile is 1\n");
-	} else {
-		printf("current profile is 2\n");
+
+	c->reload = 1;
+	{
+		pending_empty_ref_count(c);
+
+		// change current config
+		c->cur = next;
+
+		if (c->cur == &c->cfg1) {
+			printf("reload OK! current is #1\n");
+		} else 
+		if (c->cur == &c->cfg2){
+			printf("reload OK! current is #2\n");
+		} else {
+			assert("reload OK! current ????");
+		}
 	}
-
 	c->reload = 0;
 
 	return 0;
 }
 
-void get_current_cloader(cloader_t *c, void **pprf)
+void cloader_ref_up(cloader_t *c, void **data)
 {
-	atomic_inc(c->ref_count);
-	if (c->reload == 1) {
-		atomic_dec(c->ref_count);
-		while (1) {
-			if (c->reload == 0) {
-				atomic_inc(c->ref_count);
-				break;
-			} else {
-				usleep(100);
-			}
-		}
-	}
+	// wait for complete reload
+	pending_reload_completed(c);
 
-	*pprf = c->prf_c;
+	atomic_inc(c->ref_count);
+
+	*data = c->cur->data;
+}
+
+void cloader_ref_down(cloader_t *c)
+{
 	atomic_dec(c->ref_count);
 }
+
+void cloader_trace(cloader_t *c)
+{
+	if (c->cur == &c->cfg1) {
+		printf("trace: current is #1, ref_count:%u, reload:%d", c->ref_count, c->reload);
+	} else 
+	if (c->cur == &c->cfg2){
+		printf("trace: current is #2, ref_count:%u, reload:%d", c->ref_count, c->reload);
+	} else {
+		assert("trace: current ????");
+	}
+}
+
+
+
+
+
+
+
 
 
 
@@ -151,16 +220,25 @@ typedef struct as_prf_list {
 	struct as_prf_list *next;
 } _PACKED_ as_prf_list;
 
-static void as_print(as_prf_list *list)
+static void as_release(void *prf)
 {
-	int n = 1;
-	as_prf_list *cur;
-	as_prf_entry *entry;
-
-	for (cur = list; cur; cur = cur->next) {
-		entry = cur->entry;
-		printf("[#%03d] %s:%d:%d:%d\n", n++, entry->rbl_addr, entry->rbl_use, entry->rbl_direct, entry->rbl_action);
+	struct as_prf_list *cur;
+	struct as_prf_list *tmp;
+	struct as_prf_list *head;
+		
+	head = (struct as_prf_list*)prf;
+	if (!head) {
+		return;
 	}
+	for (cur = head; cur; ) {
+		tmp = cur->next;
+		if (cur->entry) {
+			free(cur->entry);
+		}
+		free(cur);
+		cur = tmp;
+	}
+	return;
 }
 
 static void* as_load(cloader_t *c, void *arg)
@@ -190,92 +268,88 @@ static void* as_load(cloader_t *c, void *arg)
 			head = cur;
 		}
 	}
+
+	if (c->is_load_called == 1) {
+		usleep(1000);
+		printf("!!! reload complete !!!\n");
+	}
 	return head;
 }
 
-static void as_release(void *prf)
+static void as_print(as_prf_list *list)
 {
-	struct as_prf_list *cur;
-	struct as_prf_list *tmp;
-	struct as_prf_list *head;
-		
-	head = (struct as_prf_list*)prf;
-	if (!head) {
-		return;
+	int n = 1;
+	as_prf_list *cur;
+	as_prf_entry *entry;
+
+	for (cur = list; cur; cur = cur->next) {
+		entry = cur->entry;
+		entry->rbl_use += n;
+//		printf("[#%03d] %s:%d:%d:%d\n", n++, entry->rbl_addr, entry->rbl_use, entry->rbl_direct, entry->rbl_action);
 	}
-	for (cur = head; cur; ) {
-		printf("1111111111\n");
-		tmp = cur->next;
-		if (cur->entry) {
-			free(cur->entry);
-		}
-		free(cur);
-		cur = tmp;
-	}
-	return;
 }
 
-int main()
+static uint32_t called_reader = 1;
+void* reader_thread_func(void *arg)
 {
-	cloader_ops_t ops;
-	cloader_t loader;
+	cloader_t *c = (cloader_t*)arg;
 	as_prf_list *apl;
+	while (1) {
+		cloader_ref_up(c, (void **)&apl);
+		{
+			as_print(apl);
 
-	ops.load    = as_load;
-	ops.release = as_release;
-
-	init_cloader(&loader, &ops);
-	printf("done init_cloader\n");
-
-	load_cloader(&loader, NULL);
-	printf("done load_cloader\n");
-	get_current_cloader(&loader,(void**)&apl);
-	as_print(apl);
-
-	release_cloader(&loader);
+			atomic_inc(called_reader);
+			if (called_reader % 5000000 == 0) {
+				printf("called_reader = %u\n", called_reader);
+				cloader_trace(c);
+			}
+		}
+		cloader_ref_down(c);
+	}
+	return NULL;
 }
 
-
-#if 0
-cloader_ops_t p;
-cloader_t c;
-
-void* handler(void *arg)
+void* reloader_thread_func(void *arg)
 {
-	int i;
-	test_config *t;
-
-	for (i=0; i<10000000; i++) {
-		get_current_cloader(&c, (void **)&t);
-		printf("1. %d\n" ,t->num);
-
-		reload_cloader(&c, NULL);
-
-		get_current_cloader(&c, (void **)&t);
-		printf("2. %d\n" ,t->num);
+	cloader_t *c = (cloader_t*)arg;
+	while (1) {
+		cloader_reload(c, NULL);
 	}
-
 	return NULL;
 }
 
 int main()
 {
+#define READER_CNT	1
+#define LOADER_CNT	1
+
+	cloader_ops_t ops;
+	cloader_t loader;
+	as_prf_list *apl;
 	int i;
-	int N = 16;
-	pthread_t tid[N];
-	p.load = test_load;
-	p.release = NULL;
-	init_cloader(&c, &p);
+	pthread_t reader_tid[READER_CNT];
+	pthread_t loader_tid[LOADER_CNT];
 
-	load_cloader(&c, NULL);
+	ops.load    = as_load;
+	ops.release = as_release;
 
-	for (i=0; i<N; i++) {
-		pthread_create(&tid[i], NULL, handler, NULL);
+	cloader_init(&loader, &ops);
+	cloader_load(&loader, NULL);
+
+	for (i=0; i<READER_CNT; i++) {
+		pthread_create(&reader_tid[i], NULL, reader_thread_func, &loader);
 	}
-	for (i=0; i<N; i++) {
-		pthread_join(tid[i], NULL);
+	for (i=0; i<LOADER_CNT; i++) {
+		pthread_create(&loader_tid[i], NULL, reloader_thread_func, &loader);
 	}
-	return 0;
+
+	for (i=0; i<READER_CNT; i++) {
+		pthread_join(reader_tid[i], NULL);
+	}
+	for (i=0; i<LOADER_CNT; i++) {
+		pthread_join(loader_tid[i], NULL);
+	}
+	cloader_release(&loader);
 }
-#endif
 
