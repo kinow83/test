@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	pcre_extra *pcre_extra;
 	char *buf = malloc(SIZE_20MB+1);
 	int sub_vec[30];
-	
+	const char *match_str;
 
 	buf[SIZE_20MB] = 0;
 
@@ -48,6 +48,16 @@ int main(int argc, char **argv)
 		}
 	} else {
 		printf("match: %d\n", ret);
+		if (ret == 0) {
+			printf("But too many substrings were found to fit in subStrVec!\n");
+			ret = 30 / 3;
+		}
+
+		for (int i=0; i<ret; i++) {
+			pcre_get_substring(buf, sub_vec, ret, i, &match_str);
+			printf("match(%2d/%2d: (%2d,%2d): '%s'\n", i, ret-1, sub_vec[i*2], sub_vec[i*2+1], match_str);
+		}
+		pcre_free_substring(match_str);
 	}
 
 
