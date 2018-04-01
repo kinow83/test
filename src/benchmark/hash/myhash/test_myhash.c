@@ -80,6 +80,7 @@ int main(int argc, char** argv)
 	printf("shash find: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
 
 
+	printf("\n");
 	//hash_table_free(h);
 }
 

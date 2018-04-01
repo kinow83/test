@@ -1,8 +1,8 @@
 
-all: hsearch
+all: test_hsearch
 
-hsearch: hsearch.c
-	gcc hsearch.c -o hsearch -I.. ../libsample.a
+test_hsearch: test_hsearch.c
+	gcc test_hsearch.c -o test_hsearch -I.. ../libsample.a
 
 clean:
-	rm -fr hsearch
+	rm -fr test_hsearch
