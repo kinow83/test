@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	int cnt = 0;
 	start = clock();
 	for (c=f; c; c=c->next) {
-		s = string(c->text);
+		s = mymap[string(c->text)];
 		assert (s.empty() != true);
 	}
 	printf("unordered find: %0.5f\n", (float)(clock() - start) / CLOCKS_PER_SEC);
