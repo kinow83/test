@@ -1,0 +1,115 @@
+ifconfig vmnet8 mtu 100
+
+=======================================================================================================================
+1 authenticate PLAIN
++ 
+AGtpbm93AGtpbm93MDQyMQ==
+
+1 select inbox
+a check
+2 select inbox
+3 id
+a check
+4 id
+a check
+5 select inbox
+5 select inbox
+5 select inbox
+6 fetch 1 (body.peek[])
+a check
+7 id
+
+=======================================================================================================================
+
+1 select inbox
+a check
+2 select inbo* OK [CLOSED] Previous mailbox closed.
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 6 EXISTS
+* 0 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1520426958] UIDs valid
+* OK [UIDNEXT 35] Predicted next UID
+* OK [HIGHESTMODSEQ 37] Highest
+1 OK [READ-WRITE] Select completed (0.000 + 0.000 secs).
+a OK Check completed.
+x
+3 id
+a check
+4 id
+a check
+5 select inbo* OK [CLOSED] Previous mailbox closed.
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 6 EXISTS
+* 0 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1520426958] UIDs valid
+* OK [UIDNEXT 35] Predicted next UID
+* OK [HIGHESTMODSEQ 37] Highest
+2 OK [READ-WRITE] Select completed (0.001 + 0.000 secs).
+* ID ("name" "Dovecot")
+3 OK ID completed (0.000 + 0.000 secs).
+* ID ("name" "Dovecot")
+4 OK ID completed (0.000 + 0.000 secs).
+a OK Check completed.
+a OK Check completed.
+x
+5 select inbox
+5 select inbox
+6 fetch 1 (body.peek[])
+a check
+7 id* OK [CLOSED] Previous mailbox closed.
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 6 EXISTS
+* 0 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1520426958] UIDs valid
+* OK [UIDNEXT 35] Predicted next UID
+* OK [HIGHESTMODSEQ 37] Highest
+5 OK [READ-WRITE] Select completed (0.001 + 0.000 secs).
+* OK [CLOSED] Previous mailbox closed.
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 6 EXISTS
+* 0 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1520426958] UIDs valid
+* OK [UIDNEXT 35] Predicted next UID
+* OK [HIGHESTMODSEQ 37] Highest
+5 OK [READ-WRITE] Select completed (0.000 + 0.000 secs).
+* OK [CLOSED] Previous mailbox closed.
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 6 EXISTS
+* 0 RECENT
+* OK [UNSEEN 1] First unseen.
+* OK [UIDVALIDITY 1520426958] UIDs valid
+* OK [UIDNEXT 35] Predicted next UID
+* OK [HIGHESTMODSEQ 37] Highest
+5 OK [READ-WRITE] Select completed (0.000 + 0.000 secs).
+* 1 FETCH (BODY[] {512}
+Return-Path: <kaka@kinow.com>
+Received: from kinow.com (kinow.com [192.168.0.4])
+	by kinow.com (8.15.2/8.15.2/Debian-3) with ESMTP id w27CoIj3009740
+	for <kinow@kinow.com>; Wed, 7 Mar 2018 21:50:19 +0900
+Message-ID: <1520427018.8554.2.camel@kinow.com>
+Subject: 11
+From: kaka <kaka@kinow.com>
+Reply-To: kaka@kinow.com
+To: kinow@kinow.com
+Date: Wed, 07 Mar 2018 21:50:18 +0900
+Content-Type: text/plain
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+222
+)
+
+* ID ("name" "Dovecot")
+7 OK ID completed (0.000 + 0.000 secs).
+6 OK Fetch completed (0.001 + 0.674 secs).
+a OK Check completed.
