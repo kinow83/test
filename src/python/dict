@@ -1,0 +1,76 @@
+
+import sys
+import json
+import ast
+
+def get_dict(datasource, path, delim='.'):
+    toks = path.split(delim)
+
+    if len(toks) == 0:
+        return datasource.get(path)
+
+    for tok in toks:
+        data = datasource.get(tok)
+        if data is None:
+            return None;
+        datasource = data
+    return datasource
+
+
+def set_dict(datasorce, key, val, delim='.'):
+    toks = key.split(delim)
+    tokslen = len(toks)
+
+    if tokslen == 0:
+        datasorce[key] = val
+        return datasorce
+
+    for i, tok in enumerate(toks):
+        data = datasorce.get(tok)
+        if i == tokslen-1:
+            datasorce[tok] = val
+            return datasorce
+        if data is None:
+            datasorce[tok] = {}
+        datasorce = datasorce[tok]
+
+def foo(datastore):
+    v = json.loads(datastore.replace("'","\""))
+    k = "top.header.id"
+    r = get_dict(v, k)
+    print(k, r)
+    k = "top.header.name"
+    r = get_dict(v, k)
+    print(k, r)
+    k = "top.body.use"
+    r = get_dict(v, k)
+    print(k, r)
+    k = "top.body.name"
+    r = get_dict(v, k)
+    print(k, r)
+    k = "top_body_name"
+    r = get_dict(v, k, '_')
+    print(k, r)
+    k = "kaka"
+    r = get_dict(v, k)
+    print(k, r)
+
+    p = {}
+    set_dict(p, "korea.suwon.id", 10)
+    set_dict(p, "korea.suwon.name", 'kaka')
+    set_dict(p, "korea.seoul.gangnam.subway", 10)
+    set_dict(p, "korea.seoul.dobong.subway", 20)
+    set_dict(p, "korean", 100)
+    print(json.dumps(p))
+
+if __name__ == "__main__":
+	foo("{'top':{"
+        "   'header':{"
+        "       'id':1, 'use':0"
+        "   },"
+        "   'body':{"
+        "       'id':2, 'use':1, 'name':'kinow'"
+        "   },"
+        "   'kaka':1000"
+        "},"
+        "'kaka':200}")
