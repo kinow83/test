@@ -1,0 +1,39 @@
+{
+  "smtp":{
+    "except":{
+      "value":{
+        "id": "1",
+        "name": "except-1-name",
+        "desc": "except-1-desc"
+      }
+    },
+    "block_mail":{
+      "use":1,
+      "direct": 1,
+      "action": 3,
+      "value": {
+        "id": "3",
+        "name": "block_mail-3-name",
+        "desc": "block_mail-3-desc"
+      }
+    },
+    "ban_word":{
+      "use":1,
+      "direct": 2,
+      "action": 3,
+      "value": {
+        "id": "5",
+        "name": "ban_word-5-name",
+        "desc": "ban_word-5-desc"
+      }
+    },
+    "relay":{
+      "use":1,
+      "direct": 2,
+      "action": 3,
+      "value": {
+        "id": "None"
+      }
+    }
+  }
+}
