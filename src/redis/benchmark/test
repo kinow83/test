@@ -1,0 +1,92 @@
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 100000
+[sudo] password for kinow: 
+proxy_thread 2/100000 ->tx: 100000
+proxy_thread 3/100000 ->tx: 100000
+proxy_thread 1/100000 ->tx: 100000
+proxy_thread 0/100000 ->tx: 100000
+-->[proxy_thread 3/100000]: 8.438655
+-->[proxy_thread 0/100000]: 8.481974
+-->[proxy_thread 1/100000]: 8.498073
+-->[proxy_thread 2/100000]: 8.501130
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 200000
+proxy_thread 0/200000 ->tx: 200000
+proxy_thread 2/200000 ->tx: 200000
+proxy_thread 3/200000 ->tx: 200000
+proxy_thread 1/200000 ->tx: 200000
+-->[proxy_thread 2/200000]: 17.328530
+-->[proxy_thread 0/200000]: 17.333881
+-->[proxy_thread 3/200000]: 17.361439
+-->[proxy_thread 1/200000]: 17.365730
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 300000
+proxy_thread 2/300000 ->tx: 300000
+proxy_thread 3/300000 ->tx: 300000
+proxy_thread 1/300000 ->tx: 300000
+proxy_thread 0/300000 ->tx: 300000
+-->[proxy_thread 1/300000]: 26.083666
+-->[proxy_thread 0/300000]: 26.175449
+-->[proxy_thread 2/300000]: 26.254041
+-->[proxy_thread 3/300000]: 26.342783
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 400000
+proxy_thread 1/400000 ->tx: 400000
+proxy_thread 2/400000 ->tx: 400000
+proxy_thread 3/400000 ->tx: 400000
+proxy_thread 0/400000 ->tx: 400000
+-->[proxy_thread 3/400000]: 34.557085
+-->[proxy_thread 0/400000]: 34.676297
+-->[proxy_thread 2/400000]: 34.737718
+-->[proxy_thread 1/400000]: 34.750971
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 500000
+proxy_thread 2/500000 ->tx: 500000
+proxy_thread 0/500000 ->tx: 500000
+proxy_thread 1/500000 ->tx: 500000
+proxy_thread 3/500000 ->tx: 500000
+-->[proxy_thread 2/500000]: 42.969637
+-->[proxy_thread 1/500000]: 43.029483
+-->[proxy_thread 0/500000]: 43.047298
+-->[proxy_thread 3/500000]: 43.107960
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 600000
+proxy_thread 3/600000 ->tx: 600000
+proxy_thread 1/600000 ->tx: 600000
+proxy_thread 0/600000 ->tx: 600000
+proxy_thread 2/600000 ->tx: 600000
+-->[proxy_thread 1/600000]: 51.930185
+-->[proxy_thread 3/600000]: 52.005740
+-->[proxy_thread 2/600000]: 52.026995
+-->[proxy_thread 0/600000]: 52.076752
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 700000
+proxy_thread 0/700000 ->tx: 700000
+proxy_thread 2/700000 ->tx: 700000
+proxy_thread 1/700000 ->tx: 700000
+proxy_thread 3/700000 ->tx: 700000
+-->[proxy_thread 2/700000]: 61.229938
+-->[proxy_thread 1/700000]: 61.264020
+-->[proxy_thread 0/700000]: 61.346096
+-->[proxy_thread 3/700000]: 61.374677
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 800000
+proxy_thread 3/800000 ->tx: 800000
+proxy_thread 2/800000 ->tx: 800000
+proxy_thread 1/800000 ->tx: 800000
+proxy_thread 0/800000 ->tx: 800000
+-->[proxy_thread 3/800000]: 69.548194
+-->[proxy_thread 0/800000]: 69.548640
+-->[proxy_thread 2/800000]: 70.027548
+-->[proxy_thread 1/800000]: 70.107093
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 900000
+proxy_thread 1/900000 ->tx: 900000
+proxy_thread 0/900000 ->tx: 900000
+proxy_thread 3/900000 ->tx: 900000
+proxy_thread 2/900000 ->tx: 900000
+-->[proxy_thread 2/900000]: 79.557987
+-->[proxy_thread 1/900000]: 79.580760
+-->[proxy_thread 0/900000]: 79.868729
+-->[proxy_thread 3/900000]: 79.994525
+kinow@kinow ~/git/test/src/redis/benchmark $ sudo ./proxy 1000000
+proxy_thread 1/1000000 ->tx: 1000000
+proxy_thread 3/1000000 ->tx: 1000000
+proxy_thread 0/1000000 ->tx: 1000000
+proxy_thread 2/1000000 ->tx: 1000000
+-->[proxy_thread 2/1000000]: 86.742643
+-->[proxy_thread 3/1000000]: 86.892681
+-->[proxy_thread 1/1000000]: 87.004772
+-->[proxy_thread 0/1000000]: 87.180371
+
