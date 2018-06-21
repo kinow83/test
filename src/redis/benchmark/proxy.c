@@ -54,16 +54,23 @@ void *push_worker(void *arg)
         exit(1);
     }
 
-	printf("push %s\n", peer_qname);
-
 	init_bm_timediff(&config->td);
+
 	while (1) {
 		ctx.data[0] = (int)tot_tx;
 		reply = redisCommand(c, "LPUSH %s %b", peer_qname, &ctx, ctxsize);
 		if (reply) {
+			if (reply->type == REDIS_REPLY_ERROR) { 
+				printf("reply error - %s\n", reply->str);
+				freeReplyObject(reply);
+				break;
+			}
 			freeReplyObject(reply);
 			tot_tx++;
+		} else if (reply == NULL) {
+			printf("reply null\n");
 		}
+
 		if (tot_tx == config->count) {
 			break;
 		}
@@ -99,21 +106,25 @@ void *pop_worker(void *arg)
         exit(1);
     }
 
-	printf("pop %s\n", my_qname);
-
 	while (1) {
 		reply = redisCommand(c, "BRPOP %s 0", my_qname);
 		if (reply) {
-			tot_rx++;
 			if (reply->type == REDIS_REPLY_ARRAY && reply->elements == 2) {
+				tot_rx++;
 				tot_data_len += reply->element[1]->len;
+			} else if (reply->type == REDIS_REPLY_ERROR) {
+				printf("reply error - %s\n", reply->str);
+			} else {
+				printf("reply error\n");
 			}
 			ctx = (bmctx_t *)reply->element[1]->str;
-			//printf("%d\n", ctx->data[0]);
-			if (tot_rx == config->count) {
-				break;
-			}
 			freeReplyObject(reply);
+		} else {
+			printf("reply null\n");
+		}
+
+		if (tot_rx == config->count) {
+			break;
 		}
 	}
 	check_bm_timediff(tname, &config->td, 1);

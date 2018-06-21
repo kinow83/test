@@ -51,25 +51,34 @@ void *worker(void *arg)
         exit(1);
     }
 
-//	printf("pop %s\n", my_qname);
-//	printf("push %s\n", peer_qname);
-
 	while (1) {
 		reply1 = redisCommand(c, "BRPOP %s 0", my_qname);
 		if (reply1) {
 			tot_rx++;
 			if (reply1->type == REDIS_REPLY_ARRAY && reply1->elements == 2) {
 				tot_data_len += reply1->element[1]->len;
-
 				ctx = (bmctx_t*)reply1->element[1]->str;
+
 				reply2 = redisCommand(c, "LPUSH %s %b", peer_qname, ctx, ctxsize);
 				if (reply2) {
-					//printf("push %s %lu\n", peer_qname, tot_tx);
+					if (reply2->type == REDIS_REPLY_ERROR) {
+						printf("reply2 error - %s\n", reply2->str);
+						freeReplyObject(reply2);
+						break;
+					}
 					tot_tx++;
 					freeReplyObject(reply2);
+				} else {
+					printf("reply2 null\n");
 				}
+			} else if (reply1->type == REDIS_REPLY_ERROR) {
+				printf("reply1 error - %s\n", reply1->str);
+			} else {
+				printf("reply1 error\n");
 			}
 			freeReplyObject(reply1);
+		} else {
+			printf("reply1 null\n");
 		}
 	}
     redisFree(c);
