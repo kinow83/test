@@ -1,0 +1,9 @@
+alloc 
+    entry = &entries[entry_indexes[meta->alloc_idx]];
+    entry_indexes[meta->alloc_idx] = -1;
+    meta->alloc_idx = next_alloc_idx;
+
+
+free
+    entry_indexes[meta->free_idx] = entry->info.id;
+    meta->free_idx = next_idx(meta->free_idx, meta->num_entry);
