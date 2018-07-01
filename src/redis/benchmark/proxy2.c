@@ -11,6 +11,8 @@ __thread uint64_t tot_data_len = 0;
 __thread uint64_t tot_rx = 0;
 __thread uint64_t tot_tx = 0;
 
+struct bm_timediff td;
+uint64_t mask;
 
 static int core_num()
 {
@@ -54,6 +56,14 @@ void *push_worker(void *arg)
         exit(1);
     }
 
+	while (1) {
+		mask &= (1 << config->id);
+		if (mask == 0) {
+			break;
+		}
+		usleep(1);
+	}
+	init_bm_timediff(&td);
 	init_bm_timediff(&config->td);
 
 	while (1) {
@@ -161,5 +171,7 @@ int main(int argc, char** argv)
 		pthread_join(push_tid[i], NULL);
 		pthread_join(pop_tid[i], NULL);
 	}
+
+	check_bm_timediff("last", &td, 1);
 }
 
