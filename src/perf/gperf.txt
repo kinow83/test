@@ -1,0 +1,18 @@
+
+sudo apt-get install libtcmalloc-minimal4
+
+yum install gperftools
+cd /usr/lib64
+[root@test lib64]# ls -al libtc*
+
+
+
+gcc ..... -ltcmalloc
+
+
+[root@fc ~]# gcc re.c -o reeeeeeeee -ltcmalloc -g
+[root@fc ~]# HEAPPROFILE=meme ./reeeeeeeee
+HEAPCHECK=normal ???
+[root@fc ~]# pprof --text --lines  ./reeeeeeeee meme.0001.heap
+
+
