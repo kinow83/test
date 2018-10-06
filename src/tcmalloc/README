@@ -1,3 +1,11 @@
+tcmalloc
+gprof
+gcov
+
+==================================================================================
+==================================================================================
+==================================================================================
+
 apt-get install libtcmalloc-minimal4
 apt-get install libtcmalloc-minimal4-dbg
 
@@ -13,59 +21,113 @@ kaka tcmalloc # time ./test_std 10000000
 real	0m32.687s
 user	1m33.284s
 sys	0m1.892s
-kaka tcmalloc # time ./test_tc 10000000
 
-real	0m30.723s
-user	1m25.868s
-sys	0m1.656s
-kaka tcmalloc # time ./test_std 10000000
 
-real	0m33.318s
-user	1m32.972s
-sys	0m1.900s
-kaka tcmalloc # time ./test_tc 10000000
+==================================================================================
+==================================================================================
+==================================================================================
 
-real	0m31.145s
-user	1m26.096s
-sys	0m1.368s
-kaka tcmalloc # time ./test_std 10000000
+gprof : 리눅스 프로파일링
+gcc -o test test.c -pg (-pg)
+]# ./test
+--> gmon.out 파일 생성
+gprof ./test gmon.out
 
-real	0m35.243s
-user	1m32.820s
-sys	0m1.936s
-kaka tcmalloc # time ./test_tc 10000000
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Flat profile:
 
-real	0m30.558s
-user	1m25.732s
-sys	0m1.884s
-kaka tcmalloc # time ./test_std 20000000
+Each sample counts as 0.01 seconds.
+ no time accumulated
 
-real	1m6.690s
-user	3m7.952s
-sys	0m3.704s
-kaka tcmalloc # time ./test_tc 20000000
+  %   cumulative   self              self     total
+ time   seconds   seconds    calls  Ts/call  Ts/call  name
+  0.00      0.00     0.00       20     0.00     0.00  replacement_free
+  0.00      0.00     0.00        1     0.00     0.00  start_counting_bytes
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+1. % time : 전체 프로그램에서 해당 함수가 차지하는 수행시간의 비율
+2. cumulative seconds : 해당 함수의 수행시간과 리스트의 위쪽에 있는 함수들의 수행시간의 합
+3. self seconds : 해당 함수의 수행시간. 이 수행시간을 기준으로 프로파일링 결과가 정렬됨
+4. calls : 함수가 호출된 횟수. 함수가 호출되지 않았으면 공백
+5. self ms/call : 해당 함수가 한 번 호출될 때 해당 함수에서만 소모되는 평균 수행시간(ms 단위)
+6. total ms/call : 해당 함수가 한 번 호출되어서 함수의 모든 동작을 수행하는데 소모되는 평균 수행시간(ms 단위)
+7. name : 함수의 이름. 결과를 출력할 때 두 번째 우선순위를 가지는 정렬기준
 
-real	1m1.689s
-user	2m52.968s
-sys	0m3.624s
-kaka tcmalloc # time ./test_std 20000000
+                     Call graph (explanation follows)
 
-real	0m54.790s
-user	3m15.504s
-sys	0m6.636s
-kaka tcmalloc # time ./test_tc 20000000
 
-real	0m48.630s
-user	2m50.976s
-sys	0m6.484s
-kaka tcmalloc # time ./test_std 20000000
+granularity: each sample hit covers 2 byte(s) no time propagated
 
-real	0m52.814s
-user	3m6.372s
-sys	0m5.932s
-kaka tcmalloc # time ./test_tc 20000000
+index % time    self  children    called     name
+                0.00    0.00      20/20          main [9]
+[1]      0.0    0.00    0.00      20         replacement_free [1]
+-----------------------------------------------
+                0.00    0.00       1/1           main [9]
+[2]      0.0    0.00    0.00       1         start_counting_bytes [2]
+-----------------------------------------------
 
-real	0m48.923s
-user	2m53.768s
-sys	0m5.516s
+8. index : Call grapth 표의 각 항목들에 부여된 숫자. 
+9. % time : 현재 항목의 함수와 거기서 불리는 모든 함수들의 총 수행시간의 합
+10. self : 현재 항목의 함수가 소모한 총 시간
+11. children : 현재 항목의 함수가 호출한 함수들의 실행시간의 합
+12. called : 함수가 호출된 횟수. 재귀적 호출로 함수가 실행되는 횟수는 제외
+13. name : 함수의 이름. index가 함수 이름 뒤에 붙어 있음.
+
+
+==================================================================================
+==================================================================================
+==================================================================================
+
+gcov : 프로그램에 대한 코드 커버리지 (전체 코드 중 얼마나 실행이 되었는지) 테스트 수행할 수 있는 도구
+gcc -fprofile-arcs -ftest-coverage test -o test.c
+gcov -b test.c
+cat test.c.gcov
+
+        -:    0:Source:dns.c
+        -:    0:Graph:dns.gcno
+        -:    0:Data:dns.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <event2/dns.h>
+        -:    2:#include <event2/util.h>
+        -:    3:#include <event2/event.h>
+        -:    4:
+        -:    5:#include <sys/socket.h>
+        -:    6:
+        -:    7:#include <stdio.h>
+        -:    8:#include <stdlib.h>
+        -:    9:#include <string.h>
+        -:   10:#include <assert.h>
+        -:   11:struct event_base *base = NULL;
+        -:   12:
+        -:   13:struct user_data {
+        -:   14:    char *name; /* the name we're resolving */
+        -:   15:    int idx; /* its position on the command line */
+        -:   16:};
+        -:   17:
+        -:   18:
+        -:   19:
+        -:   20:static size_t total_allocated = 0;
+        -:   21:static size_t total_cnt = 0;
+        -:   22:static size_t max_cnt = 100;
+        -:   23:
+function replacement_malloc called 440 returned 100% blocks executed 80%
+      440:   24:static void *replacement_malloc(size_t sz) {
+      440:   25:        printf("new alloc    : %ld\n", total_cnt);
+call    0 returned 100%
+      440:   26:        if (max_cnt < total_cnt) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   27:                return NULL;
+        -:   28:        }
+      440:   29:        total_cnt++;
+      440:   30:        return malloc(sz);
+        -:   31:}
+function replacement_realloc called 20 returned 100% blocks executed 80%
+       20:   32:static void *replacement_realloc(void *ptr, size_t sz) {
+       20:   33:        printf("realloc      : %ld\n", total_cnt);
+call    0 returned 100%
+       20:   34:        if (max_cnt < total_cnt) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+
 
