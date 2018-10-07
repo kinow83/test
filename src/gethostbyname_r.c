@@ -1,3 +1,11 @@
+
+/*
+##########################################################################################
+[root@fc ~]# time RES_OPTIONS="debug timeout:1 attempts:1" ./getbyname google.com
+##########################################################################################
+*/
+
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
