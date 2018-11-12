@@ -10,9 +10,9 @@ typedef struct appsec_feature_t {
 
 static appsec_feature_t appsec_features[] =
 {
-    {"htp",  {"1", "2", "3"}},
-    {"smtp", {"a", "b"}},
-    {"pop3", {"_1", "_2", "_3", "_4", "_5", "_6"}},
+    {"bbbb",  {"1", "2", "3"}},
+    {"aaaa", {"a", "b"}},
+    {"cccc", {"_1", "_2", "_3", "_4", "_5", "_6"}},
     {NULL,   {NULL,}},
 };
 
