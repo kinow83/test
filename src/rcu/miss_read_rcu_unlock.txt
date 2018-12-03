@@ -1,0 +1,6 @@
+  1 #1  0x00007f19c69a3780 in futex (val3=0, uaddr2=0x0, timeout=0x0, val=-1, op=0, uaddr=0x7f19c6ba8288 <rcu_gp_memb+8>) at ../include/urcu/futex.h:65
+  2 #2  futex_async (timeout=0x0, uaddr2=0x0, val3=0, val=-1, op=0, uaddr=0x7f19c6ba8288 <rcu_gp_memb+8>) at ../include/urcu/futex.h:97
+  3 #3  wait_gp () at urcu.c:256
+  4 #4  wait_for_readers (input_readers=input_readers@entry=0x7f19c46f1c40, cur_snap_readers=cur_snap_readers@entry=0x0,
+  5             qsreaders=qsreaders@entry=0x7f19c46f1c50) at urcu.c:339
+  6 #5  0x00007f19c69a3ba2 in synchronize_rcu_memb () at urcu.c:480
