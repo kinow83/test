@@ -1,0 +1,17 @@
+echo 1 > /proc/sys/net/ipv4/tcp_syn_retries 
+
+
+
+[root@fc ~]# tcpdump -i ens37 -nn port 80 and host 192.168.0.6
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on ens37, link-type EN10MB (Ethernet), capture size 262144 bytes
+00:56:37.550832 IP 192.168.0.7.60346 > 192.168.0.6.80: Flags [S], seq 2361138519, win 29200, options [mss 1460,sackOK,TS val 2447278618 ecr 0,nop,wscale 7], length 0
+00:56:38.580247 IP 192.168.0.7.60346 > 192.168.0.6.80: Flags [S], seq 2361138519, win 29200, options [mss 1460,sackOK,TS val 2447279647 ecr 0,nop,wscale 7], length 0
+
+[root@fc ~]# time telnet 192.168.0.6 80
+Trying 192.168.0.6...
+telnet: connect to address 192.168.0.6: Connection timed out
+
+real	0m3.084s
+user	0m0.001s
+sys	0m0.006s
