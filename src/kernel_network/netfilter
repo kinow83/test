@@ -1,0 +1,8 @@
+Netfilter 프로젝트
+1. xtables2 : 넷링크 기반 인터페이스를 커널 넷필터 서브시스템과 통신하는 데 사용
+http://xtables.de
+
+2. nftables : iptables를 대체할 후보로 여겨지는 새로운 패킷 필터링 엔진
+nftables 솔루션은 가상머신 사용과 iptables객체(iptables, ip6tables, arptables, ebtables)대신 하나의 통합된 구현을 기반
+http://netfilter.org/projects/nftables
+http://lwn.net/Articles/324989 Nftables:새로운 패킷 필터링 엔진
