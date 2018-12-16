@@ -1,0 +1,41 @@
+kinow@kinow:~/src/libpcap-1.9.0$ ifconfig 
+enp3s0f1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 54:ab:3a:96:f7:b6  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 2573  bytes 229211 (229.2 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2573  bytes 229211 (229.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlp2s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.6  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::dfaf:5cea:4ea:7ed7  prefixlen 64  scopeid 0x20<link>
+        ether 68:14:01:4a:88:29  txqueuelen 1000  (Ethernet)
+        RX packets 317668  bytes 437201194 (437.2 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 77219  bytes 9322749 (9.3 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+kinow@kinow:~/src/libpcap-1.9.0$ cat /sys/class/net/wlp2s0/device/irq 
+132
+
+kinow@kinow:~/src/libpcap-1.9.0$ cat /proc/interrupts |grep 132
+ 132:          0          0        291     110358  IR-PCI-MSI 1048576-edge      ath10k_pci
+
+kinow@kinow:~/src/libpcap-1.9.0$ cat /proc/irq/132/smp_affinity
+8
+CPU 코어를 나타내는 16 진수 비트 마스크입니다.
+smp_affinity의 기본값인 f는 IRQ가 시스템에 있는 모든 CPU에서 서비스할 수 있다는 것을 의미합니다. 
+이 값을 1로 설정하면 CPU 0 만이 이 인터럽트를 서비스할 수 있다는 것을 의미합니다:
+
+https://access.redhat.com/documentation/ko-kr/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-cpu-irq
+
