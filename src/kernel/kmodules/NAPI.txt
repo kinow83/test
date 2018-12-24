@@ -1,0 +1,39 @@
+
+[/dev/core.c - softirq]
+subsys_initcall() - ?????????????
+
+open_softirq(NET_TX_SOFTIRQ, net_tx_action);
+open_softirq(NET_RX_SOFTIRQ, net_rx_action);
+
+net_rx_action
+    - napi_struct n->poll()
+
+
+[NAPI - struct]
+struct napi_struct {
+    /* The poll_list must only be managed by the entity which
+     * changes the state of the NAPI_STATE_SCHED bit.  This means
+     * whoever atomically sets that bit can add this napi_struct
+     * to the per-CPU poll_list, and whoever clears that bit
+     * can remove from the list right before clearing the bit.
+     */
+    struct list_head    poll_list;
+
+    unsigned long       state;
+    int         weight;
+    unsigned int        gro_count;
+    int         (*poll)(struct napi_struct *, int);
+#ifdef CONFIG_NETPOLL
+    int         poll_owner;
+#endif
+    struct net_device   *dev;
+    struct sk_buff      *gro_list;
+    struct sk_buff      *skb;
+    struct hrtimer      timer;
+    struct list_head    dev_list;
+    struct hlist_node   napi_hash_node;
+    unsigned int        napi_id;
+};
+
+[XXX driver]
+netif_napi_add(adapter->netdev, &q_vector->napi, igb_poll, 64);

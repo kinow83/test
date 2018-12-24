@@ -1,0 +1,35 @@
+https://kldp.org/node/112272
+
+인터럽트 처리를 위한 3가지 방법
+
+인터럽트란 HW적으로 CPU에 interrupt를 만들어 무엇인가 처리해야 할일을 처리하게끔(?) 만드는 역할을 합니다. 
+키보드를 누를때도 인터럽트가 발생하고, USB에 장치를 연결해도, 
+심지어 time tick을 처리하기 위해서도 1초에 300번정도(커널설정에 따라 변경 가능(i.e. 1000) HW interrupt가 발생합니다. 
+HW적으로 인터럽트핀(pin)이 CPU를 깨워서 인터럽트가 걸리면 맨 앞 핸들러로 뛰어서 어떤인터럽트가 걸렸는지 확인하는 루틴이 실행됩니다. 
+이 루틴안에서 어떤 인터럽트인지 확인하고 다음처리를 담당하게 되죠. 
+그러나 주위해야하는점은 어떤 HW 인터럽트가 먼저 걸렸을때엔 다른 HW 인터럽트가 걸리지 않게 됩니다(인터럽트 pin을 SW적으로 내리기 전까진). 
+즉,응답성을 위해선 인터럽트 핸들러에선 정말 간단하게 어떤 인터럽트인지만 확인하고, 
+바로 인터럽트를 해제하지 않으면 그사이엔 어떠한 HW 인터럽트가 발생되지 않아 시스템의 응답성이 떨어지게 되겠죠.. 
+바로 HW인터럽트를 받아서 인터럽트핀을 해제하고 약간 지연되게 처리하는 방법이 위의 3가지라고 보시면 됩니다.
+
+[softirq]
+32가지 미리 정의된 인터럽트들을 정의하고, 인터럽트 핸들러가 종료되서 인터럽트 가능한 상태로 바뀌면 바로 softirq가 실행된다. 
+가장 높은 우선순위를 가지고 있으며, 고정된 인터럽트들을 처리하기 위해서 사용합니다. 현재 커널은 32가지중 6가지만 사용합니다. 종류는 
+HI_SOFTIRQ(높은 우선순위), 
+TIMER_SOFTIRQ(타이머), 
+NET_TX_SOFTIRQ(네트워크 패킷송신), 
+NET_RX_SOFTIRQ(네트워크 패킷수신), 
+SCSI_SOFTIRQ(SCSI), 
+TASKLET_SOFTIRQ(태스크릿들)이고, HI_SOFTIRQ가 우선순위가 가장높게 처리됩니다.
+
+[tasklet]
+동적으로 할당된 softirq라고 생각하면 됩니다. 위 softirq의 SCSI_SOFTIRQ가 처리되고나서 TASKLET_SOFTIRQ가 처리되는데 
+이때엔 동적으로 할당을 받아서 처리하고 싶은 handler를 등록하고 처리하게 됩니다.
+
+[work queue] - 좀더 헤비한 일을 처리하기 위해, kernel thread를 work queue로 구현 많이 함. top 실행 시 kthreadd, ksoftirq(softirq를 스케줄링하는 kernel thread, events, kblockd, khubd(USB device 관리하는 허브 thread), kseriod, kswapd, kpsmoused, udevd, reiserfs
+softirq나 tasklet들이 실행중에는 SW인터럽트중이라, HW 인터럽트는 가능하지만, 여전히 SW적으로 우선적으로 처리되는것들입니다. 
+즉 softirq중에는 user process들이나, context switch등은 처리되지 않고 있겠죠. 
+모든 SW irq를 softirq로만 처리한다면 user process나 context switch등은 처리안되어 유저입장에선 상당히 반응성이 안좋은 커널이라 생각할수 있습니다. 
+그래서 context switch등과 동일한 level에서 스케쥴링되는 work queue를 두어 SW interrupt들이지만 상당히 시간을 요하거나 
+계산해야될게 많은 작업들 혹은 휴면이 필요한 I/O작업이 필요한 일들은 context switch될때 같이 되게 만들어 주어 커널 응답성을 좋게 해줄수 있습니다.
+
