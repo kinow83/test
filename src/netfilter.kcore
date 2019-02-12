@@ -1,0 +1,1821 @@
+watch -n 1 "dmesg -T|grep LO |tail -n 20"
+[root@centos mods]# dmesg
+[ 8444.826732] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.826808] swapper/0
+[ 8444.826816] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.826822] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.826826] Call Trace:
+[ 8444.826832]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.826846]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.826855]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.826862]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.826869]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.826878]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8444.826884]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.826891]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.826897]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8444.826933]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8444.826943]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8444.826949]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8444.826965]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8444.826973]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8444.826981]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8444.826988]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8444.826995]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8444.827002]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8444.827009]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8444.827016]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8444.827023]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8444.827029]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8444.827035]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8444.827042]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8444.827048]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8444.827055]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8444.827063]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8444.827069]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8444.827076]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8444.827102]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8444.827118]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8444.827126]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8444.827134]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.827141]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.827148]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.827181]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.827188]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8444.827206]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8444.827210]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.827229]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.827236]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.827253]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.827260]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.827268]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.827304]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.827313]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.827329]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.827335]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.827341]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.827349]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.827357] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.827489] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.851193] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=1
+[ 8444.851507] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.851558] swapper/0
+[ 8444.851566] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.851571] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.851576] Call Trace:
+[ 8444.851582]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.851605]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.851623]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.851633]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.851640]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.851648]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8444.851655]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.851661]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.851678]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8444.851685]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8444.851692]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8444.851698]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8444.851705]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8444.851712]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8444.851730]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8444.851745]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8444.851752]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8444.851759]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8444.851765]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8444.851772]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8444.851778]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8444.851786]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8444.851794]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8444.851801]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8444.851808]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8444.851815]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8444.851840]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8444.851857]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8444.851865]  [<ffffffff9ecdab94>] ? task_cputime+0x44/0x80
+[ 8444.851873]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8444.851881]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.851888]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.851896]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.851903]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.851910]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8444.851917]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8444.851922]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.851931]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.851938]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.851946]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.851953]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.851961]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.851968]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.851975]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.851981]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.851988]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.851994]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.852001]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.852008] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.852112] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.852328] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.852364] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.855996] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.856117] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.856409] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.896187] swapper/0
+[ 8444.896213] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.896219] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.896224] Call Trace:
+[ 8444.896229]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.896243]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.896251]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.896258]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.896266]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.896273]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.896279]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.896286]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8444.896293]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8444.896300]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8444.896306]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8444.896313]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8444.896319]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8444.896328]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8444.896336]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8444.896342]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8444.896349]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.896357]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.896364]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.896370]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.896377]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8444.896384]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8444.896389]  <EOI>  [<ffffffff9f365ce0>] ? bit_wait+0x50/0x50
+[ 8444.896398]  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.896404]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.896410]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.896418]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.896425]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.896432]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.896440]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.896446]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.896452]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.896460]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.896466]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.896473]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.896481] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.015291] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.015595] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.015607] swapper/0
+[ 8445.015643] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.015657] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.015662] Call Trace:
+[ 8445.015666]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.015677]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.015698]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.015703]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.015719]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.015724]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8445.015728]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.015732]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.015737]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8445.015742]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8445.015747]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8445.015752]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8445.015756]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8445.015762]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8445.015767]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.015779]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.015784]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.015789]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.015793]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.015797]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.015802]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.015807]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.015812]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.015817]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.015822]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.015827]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.015848]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.015863]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.015876]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.015881]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.015888]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.015893]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.015898]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.015902]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.015907]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.015912]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.015914]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.015922]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.015926]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.015931]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.015936]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.015941]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.015947]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.015951]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.015955]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.015959]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.015964]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.015969]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.015974] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.016114] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.019345] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.019462] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.019710] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.020138] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.020303] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.021536] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.021941] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022320] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022338] swapper/0
+[ 8445.022343] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.022347] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.022349] Call Trace:
+[ 8445.022353]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.022364]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.022371]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.022376]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.022382]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.022387]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8445.022392]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.022396]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.022401]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8445.022407]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8445.022412]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8445.022416]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8445.022429]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8445.022434]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8445.022440]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8445.022445]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8445.022450]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8445.022455]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8445.022460]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.022466]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.022471]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.022475]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.022479]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.022484]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.022489]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.022494]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.022499]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.022504]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.022509]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.022532]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.022547]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.022560]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.022566]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.022572]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.022577]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.022582]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.022587]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.022591]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.022597]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.022600]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.022607]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.022612]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.022616]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.022622]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.022627]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.022633]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.022637]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.022642]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.022646]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.022650]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.022656]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.022661] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022749] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022909] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023696] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023804] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023908] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024033] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.024039] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024048] swapper/0
+[ 8445.024053] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.024056] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.024068] Call Trace:
+[ 8445.024072]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.024082]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.024088]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.024103]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.024109]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.024123]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8445.024129]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.024134]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.024138]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8445.024143]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8445.024148]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8445.024154]  [<ffffffff9ec97fcf>] ? print_prefix+0x6f/0xb0
+[ 8445.024159]  [<ffffffff9ec980fa>] ? msg_print_text+0xea/0x1d0
+[ 8445.024164]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8445.024169]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8445.024174]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8445.024181]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8445.024199]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8445.024216]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.024220]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8445.024225]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.024229]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.024234]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.024238]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.024243]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.024248]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.024254]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.024259]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.024264]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.024269]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.024283]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.024296]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.024307]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.024313]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.024319]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.024324]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.024329]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.024333]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.024338]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.024344]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.024346]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.024353]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.024358]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.024363]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.024368]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.024373]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.024379]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.024383]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.024387]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.024392]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.024396]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.024401]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.024406] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024471] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.254813] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255288] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.255577] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255934] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255975] swapper/0
+[ 8445.255984] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.255990] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.255995] Call Trace:
+[ 8445.256001]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.256016]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.256027]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.256035]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.256043]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.256052]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8445.256059]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.256066]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.256073]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8445.256081]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8445.256089]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8445.256098]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8445.256115]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8445.256124]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8445.256132]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8445.256141]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8445.256149]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8445.256156]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8445.256164]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.256173]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.256180]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.256189]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.256196]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.256203]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.256210]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8445.256217]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.256225]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.256235]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.256242]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.256250]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.256279]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.256298]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.256306]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.256315]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.256323]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.256331]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.256338]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.256345]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.256353]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.256358]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.256368]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.256375]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.256382]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.256390]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.256398]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.256407]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.256414]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.256420]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.256427]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.256434]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.256442]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.256450] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.256548] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.256670] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.256887] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.256992] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.257066] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257152] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.257170] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257186] swapper/0
+[ 8445.257198] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.257223] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.257229] Call Trace:
+[ 8445.257236]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.257252]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.257264]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.257274]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.257283]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.257292]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8445.257301]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.257311]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.257320]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8445.257329]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8445.257338]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8445.257350]  [<ffffffff9ec60f90>] ? native_apic_msr_write+0x30/0x40
+[ 8445.257359]  [<ffffffff9ec60ed3>] ? x2apic_send_IPI_self+0x23/0x30
+[ 8445.257368]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8445.257378]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8445.257388]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8445.257400]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8445.257420]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8445.257432]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.257443]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8445.257452]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.257461]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.257470]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.257478]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.257487]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.257496]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.257505]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.257515]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.257524]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.257535]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.257573]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.257594]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.257613]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.257623]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.257634]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.257643]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.257652]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.257661]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.257670]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.257679]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.257685]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.257700]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.257708]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.257717]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.257727]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.257736]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.257748]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.257757]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.257766]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.257774]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.257784]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.257793]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.257803] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257872] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.470970] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.511005] swapper/2
+[ 8480.511039] CPU: 2 PID: 0 Comm: swapper/2 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.511059] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.511075] Call Trace:
+[ 8480.511095]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.511140]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.511169]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.511196]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.511223]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.511250]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.511275]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.511300]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8480.511327]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8480.511355]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8480.511379]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8480.511405]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8480.511430]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8480.511459]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8480.511485]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8480.511509]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8480.511536]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.511562]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.511587]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.511612]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.511637]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8480.511665]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8480.511681]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.511761]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.511789]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.511814]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.511840]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.511899]  [<ffffffff9ec57db7>] start_secondary+0x1f7/0x270
+[ 8480.511926]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.511958] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/2,0/0, cpu=2
+[ 8480.538467] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8480.538989] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539012] swapper/0
+[ 8480.539021] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.539028] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.539034] Call Trace:
+[ 8480.539041]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.539059]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.539069]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.539079]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.539089]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.539098]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8480.539107]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.539115]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.539124]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8480.539133]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8480.539143]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8480.539151]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8480.539160]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8480.539170]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8480.539179]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8480.539197]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8480.539207]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.539216]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.539224]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.539233]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.539241]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.539251]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.539259]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.539268]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.539278]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.539287]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.539296]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.539326]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.539348]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.539380]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.539391]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.539400]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.539409]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.539418]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.539426]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.539436]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.539442]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.539454]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.539463]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.539471]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.539481]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.539490]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8480.539500]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8480.539509]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8480.539517]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8480.539525]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8480.539534]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8480.539543]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.539552] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539638] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539664] swapper/0
+[ 8480.539673] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.539680] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.539685] Call Trace:
+[ 8480.539692]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.539705]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.539714]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.539723]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.539733]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.539742]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8480.539751]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.539759]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.539768]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8480.539778]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8480.539787]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8480.539796]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8480.539810]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8480.539820]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8480.539846]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8480.539860]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8480.539872]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8480.539884]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8480.539894]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8480.539904]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.539912]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.539921]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.539929]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.539938]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.539946]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.539955]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.539963]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.539973]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.539982]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.539991]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.540015]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.540036]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.540046]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.540056]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.540065]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.540073]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.540081]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.540090]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.540099]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.540105]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.540117]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.540126]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.540134]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.540142]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.540151]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8480.540160]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8480.540168]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8480.540176]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8480.540184]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8480.540193]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8480.540202]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.540211] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.540313] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.540493] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541287] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541428] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541529] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.541593] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.541611] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541614] X
+[ 8480.541621] CPU: 0 PID: 7897 Comm: X Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.541625] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.541628] Call Trace:
+[ 8480.541632]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.541644]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.541651]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.541658]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.541665]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.541671]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8480.541677]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.541682]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.541689]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8480.541695]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8480.541702]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8480.541710]  [<ffffffff9ec97fcf>] ? print_prefix+0x6f/0xb0
+[ 8480.541716]  [<ffffffff9ec980fa>] ? msg_print_text+0xea/0x1d0
+[ 8480.541722]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8480.541728]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8480.541735]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8480.541743]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8480.541755]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8480.541764]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8480.541770]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8480.541776]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.541783]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.541789]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.541795]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.541801]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.541807]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.541813]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.541819]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.541841]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.541850]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.541857]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.541879]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.541897]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.541904]  [<ffffffff9eca125a>] ? irq_exit+0xda/0x110
+[ 8480.541911]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.541918]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.541924]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.541930]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.541936]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.541942]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.541949]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.541952]  <EOI>  [<ffffffff9ee56de3>] ? pollwake+0x73/0x90
+[ 8480.542003]  [<ffffffff9f36a0f5>] ? _raw_spin_unlock_irqrestore+0x15/0x20
+[ 8480.542010]  [<ffffffff9eccecbf>] __wake_up_sync_key+0x4f/0x60
+[ 8480.542018]  [<ffffffff9f21d43a>] sock_def_readable+0x3a/0x70
+[ 8480.542026]  [<ffffffff9f2f5f29>] unix_stream_sendmsg+0x219/0x430
+[ 8480.542033]  [<ffffffff9f21857d>] sock_aio_write+0x15d/0x180
+[ 8480.542041]  [<ffffffff9ee4067b>] do_sync_readv_writev+0x7b/0xd0
+[ 8480.542049]  [<ffffffff9ee422be>] do_readv_writev+0xce/0x260
+[ 8480.542056]  [<ffffffff9ecc5e92>] ? hrtimer_start+0x12/0x20
+[ 8480.542062]  [<ffffffff9ee424e5>] vfs_writev+0x35/0x60
+[ 8480.542068]  [<ffffffff9ee4269f>] SyS_writev+0x7f/0x110
+[ 8480.542075]  [<ffffffff9f374ddb>] system_call_fastpath+0x22/0x27
+[ 8480.542083] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.542154] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8483.119975] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8483.120013] swapper/0
+[ 8483.120022] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8483.120028] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8483.120034] Call Trace:
+[ 8483.120040]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8483.120055]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8483.120064]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8483.120072]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8483.120081]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8483.120090]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8483.120097]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8483.120104]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8483.120112]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8483.120120]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8483.120128]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8483.120136]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8483.120154]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8483.120163]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8483.120172]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8483.120179]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8483.120187]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8483.120195]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8483.120203]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8483.120212]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8483.120219]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8483.120227]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8483.120234]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8483.120241]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8483.120249]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8483.120257]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8483.120265]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8483.120274]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8483.120282]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8483.120312]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8483.120333]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8483.120342]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8483.120352]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8483.120379]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8483.120388]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8483.120395]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8483.120403]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8483.120411]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8483.120416]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8483.120427]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8483.120434]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8483.120442]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8483.120450]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8483.120458]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8483.120466]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8483.120473]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8483.120480]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8483.120487]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8483.120494]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8483.120502]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8483.120511] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8483.120640] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.160189] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=3
+[ 8485.161100] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.161152] swapper/0
+[ 8485.161170] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8485.161182] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8485.161191] Call Trace:
+[ 8485.161249]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8485.161296]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8485.161330]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8485.161350]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8485.161370]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8485.161387]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8485.161404]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8485.161420]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8485.161438]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8485.161457]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8485.161476]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8485.161493]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8485.161511]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8485.161530]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8485.161549]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8485.161584]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8485.161604]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8485.161621]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8485.161639]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8485.161655]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8485.161672]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8485.161690]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8485.161708]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8485.161728]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8485.161746]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8485.161765]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8485.161827]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8485.161880]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8485.161902]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8485.161923]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8485.161941]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8485.161959]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8485.161976]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8485.161993]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8485.162012]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8485.162021]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8485.162050]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8485.162066]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8485.162083]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8485.162102]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8485.162120]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8485.162138]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8485.162155]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8485.162172]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8485.162187]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8485.162254]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8485.162316]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8485.162345] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.162856] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=1
+[ 8485.164421] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=systemd-journal,3498/3498, cpu=0
+[ 8485.164724] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=2
+[ 8485.179274] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=ksoftirqd/0,3/3, cpu=0
+[ 8485.179830] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=1
+[ 8485.180441] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=ksoftirqd/0,3/3, cpu=0
+[ 8485.220255] firefox
+[ 8485.220270] CPU: 0 PID: 42863 Comm: firefox Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8485.220279] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8485.220286] Call Trace:
+[ 8485.220294]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8485.220320]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8485.220335]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8485.220348]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8485.220361]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8485.220374]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8485.220385]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8485.220397]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8485.220410]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8485.220424]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8485.220435]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8485.220447]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8485.220460]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8485.220474]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8485.220486]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8485.220497]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8485.220511]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8485.220523]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8485.220536]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8485.220547]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8485.220560]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8485.220573]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8485.220579]  <EOI>  [<ffffffff9edb6df5>] ? __add_to_page_cache_locked+0xf5/0x190
+[ 8485.220599]  [<ffffffff9edb6ee7>] add_to_page_cache_lru+0x37/0xb0
+[ 8485.220613]  [<ffffffff9ee85e77>] mpage_readpages+0xd7/0x170
+[ 8485.220857]  [<ffffffffc0595000>] ? __xfs_get_blocks+0x6d0/0x6d0 [xfs]
+[ 8485.221013]  [<ffffffffc0595000>] ? __xfs_get_blocks+0x6d0/0x6d0 [xfs]
+[ 8485.221026]  [<ffffffff9ee0dcf8>] ? alloc_pages_current+0x98/0x110
+[ 8485.221196]  [<ffffffffc05940d8>] xfs_vm_readpages+0x38/0x80 [xfs]
+[ 8485.221260]  [<ffffffff9edc35ef>] __do_page_cache_readahead+0x1cf/0x260
+[ 8485.221273]  [<ffffffff9edc3c51>] ra_submit+0x21/0x30
+[ 8485.221285]  [<ffffffff9edb8ba5>] filemap_fault+0x105/0x490
+[ 8485.221298]  [<ffffffff9f366e72>] ? down_read+0x12/0x40
+[ 8485.221445]  [<ffffffffc059fd0e>] __xfs_filemap_fault+0x7e/0x1d0 [xfs]
+[ 8485.221461]  [<ffffffff9ecc2dc0>] ? wake_bit_function+0x40/0x40
+[ 8485.221611]  [<ffffffffc059ff0c>] xfs_filemap_fault+0x2c/0x30 [xfs]
+[ 8485.221624]  [<ffffffff9ede41da>] __do_fault.isra.59+0x8a/0x100
+[ 8485.221639]  [<ffffffff9ede478c>] do_read_fault.isra.61+0x4c/0x1b0
+[ 8485.221651]  [<ffffffff9ede9134>] handle_pte_fault+0x2f4/0xd10
+[ 8485.221669]  [<ffffffff9edebc6d>] handle_mm_fault+0x39d/0x9b0
+[ 8485.221682]  [<ffffffff9f36f5e3>] __do_page_fault+0x203/0x500
+[ 8485.221695]  [<ffffffff9f36f915>] do_page_fault+0x35/0x90
+[ 8485.221708]  [<ffffffff9f36b758>] page_fault+0x28/0x30
+[ 8485.221725] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=firefox,42863/42863, cpu=0
+[ 8490.928095] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.929016] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.929052] swapper/0
+[ 8490.929065] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8490.929074] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8490.929082] Call Trace:
+[ 8490.929094]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8490.929117]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8490.929131]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8490.929144]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8490.929157]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8490.929169]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8490.929181]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8490.929192]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8490.929204]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8490.929217]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8490.929230]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8490.929242]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8490.929253]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8490.929267]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8490.929280]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8490.929302]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8490.929316]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8490.929329]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8490.929341]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8490.929353]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8490.929365]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8490.929377]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8490.929390]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8490.929404]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8490.929416]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8490.929429]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8490.929466]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8490.929493]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8490.929506]  [<ffffffff9ecdab94>] ? task_cputime+0x44/0x80
+[ 8490.929520]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8490.929534]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8490.929546]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8490.929559]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8490.929570]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8490.929582]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8490.929596]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8490.929604]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8490.929622]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8490.929633]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8490.929645]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8490.929658]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8490.929673]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8490.929686]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8490.929697]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8490.929708]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8490.929720]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8490.929731]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8490.929742]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8490.929752] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.929967] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.933836] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.934074] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.974014] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[root@centos mods]# ^C
+[root@centos mods]# dmesg
+[root@centos mods]# !rmmod
+rmmod mod1
+
+[root@centos mods]#
+[root@centos mods]# dems
+^C
+[root@centos mods]# dmesg
+[ 8444.826732] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.826808] swapper/0
+[ 8444.826816] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.826822] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.826826] Call Trace:
+[ 8444.826832]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.826846]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.826855]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.826862]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.826869]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.826878]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8444.826884]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.826891]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.826897]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8444.826933]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8444.826943]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8444.826949]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8444.826965]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8444.826973]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8444.826981]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8444.826988]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8444.826995]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8444.827002]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8444.827009]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8444.827016]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8444.827023]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8444.827029]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8444.827035]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8444.827042]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8444.827048]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8444.827055]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8444.827063]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8444.827069]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8444.827076]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8444.827102]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8444.827118]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8444.827126]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8444.827134]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.827141]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.827148]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.827181]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.827188]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8444.827206]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8444.827210]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.827229]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.827236]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.827253]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.827260]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.827268]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.827304]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.827313]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.827329]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.827335]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.827341]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.827349]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.827357] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.827489] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.851193] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=1
+[ 8444.851507] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.851558] swapper/0
+[ 8444.851566] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.851571] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.851576] Call Trace:
+[ 8444.851582]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.851605]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.851623]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.851633]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.851640]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.851648]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8444.851655]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.851661]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.851678]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8444.851685]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8444.851692]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8444.851698]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8444.851705]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8444.851712]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8444.851730]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8444.851745]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8444.851752]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8444.851759]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8444.851765]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8444.851772]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8444.851778]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8444.851786]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8444.851794]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8444.851801]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8444.851808]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8444.851815]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8444.851840]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8444.851857]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8444.851865]  [<ffffffff9ecdab94>] ? task_cputime+0x44/0x80
+[ 8444.851873]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8444.851881]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.851888]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.851896]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.851903]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.851910]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8444.851917]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8444.851922]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.851931]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.851938]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.851946]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.851953]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.851961]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.851968]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.851975]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.851981]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.851988]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.851994]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.852001]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.852008] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.852112] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.852328] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.852364] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.855996] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.856117] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42632/42632, cpu=0
+[ 8444.856409] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8444.896187] swapper/0
+[ 8444.896213] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8444.896219] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8444.896224] Call Trace:
+[ 8444.896229]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8444.896243]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8444.896251]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8444.896258]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8444.896266]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8444.896273]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8444.896279]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8444.896286]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8444.896293]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8444.896300]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8444.896306]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8444.896313]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8444.896319]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8444.896328]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8444.896336]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8444.896342]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8444.896349]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8444.896357]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8444.896364]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8444.896370]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8444.896377]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8444.896384]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8444.896389]  <EOI>  [<ffffffff9f365ce0>] ? bit_wait+0x50/0x50
+[ 8444.896398]  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8444.896404]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8444.896410]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8444.896418]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8444.896425]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8444.896432]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8444.896440]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8444.896446]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8444.896452]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8444.896460]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8444.896466]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8444.896473]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8444.896481] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.015291] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.015595] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.015607] swapper/0
+[ 8445.015643] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.015657] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.015662] Call Trace:
+[ 8445.015666]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.015677]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.015698]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.015703]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.015719]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.015724]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8445.015728]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.015732]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.015737]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8445.015742]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8445.015747]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8445.015752]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8445.015756]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8445.015762]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8445.015767]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.015779]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.015784]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.015789]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.015793]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.015797]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.015802]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.015807]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.015812]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.015817]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.015822]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.015827]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.015848]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.015863]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.015876]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.015881]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.015888]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.015893]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.015898]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.015902]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.015907]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.015912]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.015914]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.015922]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.015926]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.015931]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.015936]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.015941]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.015947]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.015951]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.015955]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.015959]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.015964]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.015969]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.015974] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.016114] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.019345] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.019462] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.019710] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.020138] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.020303] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.021536] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=3
+[ 8445.021941] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022320] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022338] swapper/0
+[ 8445.022343] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.022347] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.022349] Call Trace:
+[ 8445.022353]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.022364]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.022371]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.022376]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.022382]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.022387]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8445.022392]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.022396]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.022401]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8445.022407]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8445.022412]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8445.022416]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8445.022429]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8445.022434]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8445.022440]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8445.022445]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8445.022450]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8445.022455]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8445.022460]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.022466]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.022471]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.022475]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.022479]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.022484]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.022489]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.022494]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.022499]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.022504]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.022509]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.022532]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.022547]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.022560]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.022566]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.022572]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.022577]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.022582]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.022587]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.022591]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.022597]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.022600]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.022607]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.022612]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.022616]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.022622]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.022627]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.022633]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.022637]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.022642]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.022646]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.022650]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.022656]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.022661] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022749] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.022909] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023696] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023804] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.023908] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024033] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.024039] [LI] 192.168.129.1:51593 -> 192.168.129.10:33558, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024048] swapper/0
+[ 8445.024053] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.024056] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.024068] Call Trace:
+[ 8445.024072]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.024082]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.024088]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.024103]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.024109]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.024123]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8445.024129]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.024134]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.024138]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8445.024143]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8445.024148]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8445.024154]  [<ffffffff9ec97fcf>] ? print_prefix+0x6f/0xb0
+[ 8445.024159]  [<ffffffff9ec980fa>] ? msg_print_text+0xea/0x1d0
+[ 8445.024164]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8445.024169]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8445.024174]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8445.024181]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8445.024199]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8445.024216]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.024220]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8445.024225]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.024229]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.024234]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.024238]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.024243]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.024248]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.024254]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.024259]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.024264]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.024269]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.024283]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.024296]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.024307]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.024313]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.024319]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.024324]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.024329]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.024333]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.024338]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.024344]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.024346]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.024353]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.024358]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.024363]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.024368]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.024373]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.024379]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.024383]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.024387]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.024392]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.024396]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.024401]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.024406] [LO] 192.168.129.10:33558 -> 192.168.129.1:51593, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.024471] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.254813] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255288] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.255577] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255934] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.255975] swapper/0
+[ 8445.255984] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.255990] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.255995] Call Trace:
+[ 8445.256001]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.256016]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.256027]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.256035]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.256043]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.256052]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8445.256059]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.256066]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.256073]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8445.256081]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8445.256089]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8445.256098]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8445.256115]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8445.256124]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8445.256132]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8445.256141]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8445.256149]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8445.256156]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8445.256164]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8445.256173]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.256180]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.256189]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.256196]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.256203]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.256210]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8445.256217]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.256225]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.256235]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.256242]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.256250]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.256279]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.256298]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.256306]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.256315]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.256323]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.256331]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.256338]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.256345]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.256353]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.256358]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.256368]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.256375]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.256382]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.256390]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.256398]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.256407]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.256414]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.256420]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.256427]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.256434]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.256442]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.256450] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.256548] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.256670] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.256887] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.256992] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.257066] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257152] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8445.257170] [LI] 192.168.129.1:51594 -> 192.168.129.10:12573, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257186] swapper/0
+[ 8445.257198] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8445.257223] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8445.257229] Call Trace:
+[ 8445.257236]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8445.257252]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8445.257264]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8445.257274]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8445.257283]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8445.257292]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8445.257301]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8445.257311]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8445.257320]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8445.257329]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8445.257338]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8445.257350]  [<ffffffff9ec60f90>] ? native_apic_msr_write+0x30/0x40
+[ 8445.257359]  [<ffffffff9ec60ed3>] ? x2apic_send_IPI_self+0x23/0x30
+[ 8445.257368]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8445.257378]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8445.257388]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8445.257400]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8445.257420]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8445.257432]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8445.257443]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8445.257452]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8445.257461]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8445.257470]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8445.257478]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8445.257487]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8445.257496]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8445.257505]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8445.257515]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8445.257524]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8445.257535]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8445.257573]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8445.257594]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8445.257613]  [<ffffffffc04841dc>] ? e1000_clean+0x37c/0x8e0 [e1000]
+[ 8445.257623]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8445.257634]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8445.257643]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8445.257652]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8445.257661]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8445.257670]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8445.257679]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8445.257685]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8445.257700]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8445.257708]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8445.257717]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8445.257727]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8445.257736]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8445.257748]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8445.257757]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8445.257766]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8445.257774]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8445.257784]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8445.257793]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8445.257803] [LO] 192.168.129.10:12573 -> 192.168.129.1:51594, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8445.257872] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.470970] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.511005] swapper/2
+[ 8480.511039] CPU: 2 PID: 0 Comm: swapper/2 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.511059] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.511075] Call Trace:
+[ 8480.511095]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.511140]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.511169]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.511196]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.511223]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.511250]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.511275]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.511300]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8480.511327]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8480.511355]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8480.511379]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8480.511405]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8480.511430]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8480.511459]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8480.511485]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8480.511509]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8480.511536]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.511562]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.511587]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.511612]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.511637]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8480.511665]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8480.511681]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.511761]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.511789]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.511814]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.511840]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.511899]  [<ffffffff9ec57db7>] start_secondary+0x1f7/0x270
+[ 8480.511926]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.511958] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/2,0/0, cpu=2
+[ 8480.538467] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=2
+[ 8480.538989] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539012] swapper/0
+[ 8480.539021] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.539028] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.539034] Call Trace:
+[ 8480.539041]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.539059]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.539069]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.539079]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.539089]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.539098]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8480.539107]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.539115]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.539124]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8480.539133]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8480.539143]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8480.539151]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8480.539160]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8480.539170]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8480.539179]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8480.539197]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8480.539207]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.539216]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.539224]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.539233]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.539241]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.539251]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.539259]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.539268]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.539278]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.539287]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.539296]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.539326]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.539348]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.539380]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.539391]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.539400]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.539409]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.539418]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.539426]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.539436]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.539442]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.539454]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.539463]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.539471]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.539481]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.539490]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8480.539500]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8480.539509]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8480.539517]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8480.539525]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8480.539534]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8480.539543]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.539552] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539638] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.539664] swapper/0
+[ 8480.539673] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.539680] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.539685] Call Trace:
+[ 8480.539692]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.539705]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.539714]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.539723]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.539733]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.539742]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8480.539751]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.539759]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.539768]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8480.539778]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8480.539787]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8480.539796]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8480.539810]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8480.539820]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8480.539846]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8480.539860]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8480.539872]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8480.539884]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8480.539894]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8480.539904]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.539912]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.539921]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.539929]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.539938]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.539946]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.539955]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.539963]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.539973]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.539982]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.539991]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.540015]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.540036]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.540046]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.540056]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.540065]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.540073]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.540081]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.540090]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.540099]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.540105]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8480.540117]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8480.540126]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8480.540134]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8480.540142]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8480.540151]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8480.540160]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8480.540168]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8480.540176]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8480.540184]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8480.540193]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8480.540202]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8480.540211] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.540313] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8480.540493] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541287] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541428] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541529] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.541593] [LI] 192.168.129.1:51597 -> 192.168.129.10:44818, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.541611] [LO] 192.168.129.10:21 -> 192.168.129.1:51592, pkttype=PACKET_HOST, pid=vsftpd,42636/42636, cpu=1
+[ 8480.541614] X
+[ 8480.541621] CPU: 0 PID: 7897 Comm: X Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8480.541625] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8480.541628] Call Trace:
+[ 8480.541632]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8480.541644]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8480.541651]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8480.541658]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8480.541665]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8480.541671]  [<ffffffff9f27cc02>] ? __ip_select_ident+0x12/0xc0
+[ 8480.541677]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8480.541682]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8480.541689]  [<ffffffff9f2896f6>] ip_send_skb+0x16/0x50
+[ 8480.541695]  [<ffffffff9f289763>] ip_push_pending_frames+0x33/0x40
+[ 8480.541702]  [<ffffffff9f289b38>] ip_send_unicast_reply+0x288/0x2f0
+[ 8480.541710]  [<ffffffff9ec97fcf>] ? print_prefix+0x6f/0xb0
+[ 8480.541716]  [<ffffffff9ec980fa>] ? msg_print_text+0xea/0x1d0
+[ 8480.541722]  [<ffffffff9eca0387>] ? local_bh_enable+0x17/0x20
+[ 8480.541728]  [<ffffffff9ec99ee5>] ? console_unlock+0x265/0x4b0
+[ 8480.541735]  [<ffffffff9f2a607f>] tcp_v4_send_ack+0x23f/0x2a0
+[ 8480.541743]  [<ffffffff9f2aa918>] ? tcp_timewait_state_process+0x328/0x440
+[ 8480.541755]  [<ffffffff9f2a9988>] tcp_v4_rcv+0x378/0x9c0
+[ 8480.541764]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8480.541770]  [<ffffffff9f2784a8>] ? nf_iterate+0x98/0xe0
+[ 8480.541776]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8480.541783]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8480.541789]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8480.541795]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8480.541801]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8480.541807]  [<ffffffff9ece3c02>] ? find_busiest_group+0x142/0x990
+[ 8480.541813]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8480.541819]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8480.541841]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8480.541850]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8480.541857]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8480.541879]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8480.541897]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8480.541904]  [<ffffffff9eca125a>] ? irq_exit+0xda/0x110
+[ 8480.541911]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8480.541918]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8480.541924]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8480.541930]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8480.541936]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8480.541942]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8480.541949]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8480.541952]  <EOI>  [<ffffffff9ee56de3>] ? pollwake+0x73/0x90
+[ 8480.542003]  [<ffffffff9f36a0f5>] ? _raw_spin_unlock_irqrestore+0x15/0x20
+[ 8480.542010]  [<ffffffff9eccecbf>] __wake_up_sync_key+0x4f/0x60
+[ 8480.542018]  [<ffffffff9f21d43a>] sock_def_readable+0x3a/0x70
+[ 8480.542026]  [<ffffffff9f2f5f29>] unix_stream_sendmsg+0x219/0x430
+[ 8480.542033]  [<ffffffff9f21857d>] sock_aio_write+0x15d/0x180
+[ 8480.542041]  [<ffffffff9ee4067b>] do_sync_readv_writev+0x7b/0xd0
+[ 8480.542049]  [<ffffffff9ee422be>] do_readv_writev+0xce/0x260
+[ 8480.542056]  [<ffffffff9ecc5e92>] ? hrtimer_start+0x12/0x20
+[ 8480.542062]  [<ffffffff9ee424e5>] vfs_writev+0x35/0x60
+[ 8480.542068]  [<ffffffff9ee4269f>] SyS_writev+0x7f/0x110
+[ 8480.542075]  [<ffffffff9f374ddb>] system_call_fastpath+0x22/0x27
+[ 8480.542083] [LO] 192.168.129.10:44818 -> 192.168.129.1:51597, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8480.542154] [LI] 192.168.129.1:51592 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=X,7897/7897, cpu=0
+[ 8483.119975] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8483.120013] swapper/0
+[ 8483.120022] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8483.120028] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8483.120034] Call Trace:
+[ 8483.120040]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8483.120055]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8483.120064]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8483.120072]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8483.120081]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8483.120090]  [<ffffffff9eefbd02>] ? selinux_cred_transfer+0x2/0x30
+[ 8483.120097]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8483.120104]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8483.120112]  [<ffffffff9f286982>] ip_build_and_send_pkt+0x162/0x250
+[ 8483.120120]  [<ffffffff9f2a9454>] tcp_v4_send_synack+0x74/0xd0
+[ 8483.120128]  [<ffffffff9f2ab08c>] ? tcp_openreq_init_rwin+0xcc/0x210
+[ 8483.120136]  [<ffffffff9f2967b5>] tcp_conn_request+0x525/0x760
+[ 8483.120154]  [<ffffffffc0803fec>] ? get_unique_tuple+0x59c/0x670 [nf_nat]
+[ 8483.120163]  [<ffffffff9f2a6f1d>] tcp_v4_conn_request+0x4d/0x50
+[ 8483.120172]  [<ffffffff9f327965>] tcp_v6_conn_request+0x65/0x70
+[ 8483.120179]  [<ffffffff9f29e27c>] tcp_rcv_state_process+0x1ac/0xf50
+[ 8483.120187]  [<ffffffff9f28c5e6>] ? __inet_lookup_established+0x46/0x130
+[ 8483.120195]  [<ffffffff9f2a874b>] tcp_v4_do_rcv+0x17b/0x350
+[ 8483.120203]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8483.120212]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8483.120219]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8483.120227]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8483.120234]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8483.120241]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8483.120249]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8483.120257]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8483.120265]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8483.120274]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8483.120282]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8483.120312]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8483.120333]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8483.120342]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8483.120352]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8483.120379]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8483.120388]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8483.120395]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8483.120403]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8483.120411]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8483.120416]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8483.120427]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8483.120434]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8483.120442]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8483.120450]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8483.120458]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8483.120466]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8483.120473]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8483.120480]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8483.120487]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8483.120494]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8483.120502]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8483.120511] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8483.120640] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.160189] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=3
+[ 8485.161100] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.161152] swapper/0
+[ 8485.161170] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8485.161182] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8485.161191] Call Trace:
+[ 8485.161249]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8485.161296]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8485.161330]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8485.161350]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8485.161370]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8485.161387]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8485.161404]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8485.161420]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8485.161438]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8485.161457]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8485.161476]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8485.161493]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8485.161511]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8485.161530]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8485.161549]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8485.161584]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8485.161604]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8485.161621]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8485.161639]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8485.161655]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8485.161672]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8485.161690]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8485.161708]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8485.161728]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8485.161746]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8485.161765]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8485.161827]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8485.161880]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8485.161902]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8485.161923]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8485.161941]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8485.161959]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8485.161976]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8485.161993]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8485.162012]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8485.162021]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8485.162050]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8485.162066]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8485.162083]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8485.162102]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8485.162120]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8485.162138]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8485.162155]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8485.162172]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8485.162187]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8485.162254]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8485.162316]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8485.162345] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8485.162856] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=1
+[ 8485.164421] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=systemd-journal,3498/3498, cpu=0
+[ 8485.164724] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=2
+[ 8485.179274] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=ksoftirqd/0,3/3, cpu=0
+[ 8485.179830] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42924/42924, cpu=1
+[ 8485.180441] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=ksoftirqd/0,3/3, cpu=0
+[ 8485.220255] firefox
+[ 8485.220270] CPU: 0 PID: 42863 Comm: firefox Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8485.220279] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8485.220286] Call Trace:
+[ 8485.220294]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8485.220320]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8485.220335]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8485.220348]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8485.220361]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8485.220374]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8485.220385]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8485.220397]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8485.220410]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8485.220424]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8485.220435]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8485.220447]  [<ffffffff9f2a4c17>] tcp_delack_timer_handler+0x107/0x1f0
+[ 8485.220460]  [<ffffffff9f2a4d80>] tcp_delack_timer+0x80/0x90
+[ 8485.220474]  [<ffffffff9eca7f58>] call_timer_fn+0x38/0x110
+[ 8485.220486]  [<ffffffff9f2a4d00>] ? tcp_delack_timer_handler+0x1f0/0x1f0
+[ 8485.220497]  [<ffffffff9ecaa3bd>] run_timer_softirq+0x24d/0x300
+[ 8485.220511]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8485.220523]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8485.220536]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8485.220547]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8485.220560]  [<ffffffff9f3796c8>] smp_apic_timer_interrupt+0x48/0x60
+[ 8485.220573]  [<ffffffff9f375df2>] apic_timer_interrupt+0x162/0x170
+[ 8485.220579]  <EOI>  [<ffffffff9edb6df5>] ? __add_to_page_cache_locked+0xf5/0x190
+[ 8485.220599]  [<ffffffff9edb6ee7>] add_to_page_cache_lru+0x37/0xb0
+[ 8485.220613]  [<ffffffff9ee85e77>] mpage_readpages+0xd7/0x170
+[ 8485.220857]  [<ffffffffc0595000>] ? __xfs_get_blocks+0x6d0/0x6d0 [xfs]
+[ 8485.221013]  [<ffffffffc0595000>] ? __xfs_get_blocks+0x6d0/0x6d0 [xfs]
+[ 8485.221026]  [<ffffffff9ee0dcf8>] ? alloc_pages_current+0x98/0x110
+[ 8485.221196]  [<ffffffffc05940d8>] xfs_vm_readpages+0x38/0x80 [xfs]
+[ 8485.221260]  [<ffffffff9edc35ef>] __do_page_cache_readahead+0x1cf/0x260
+[ 8485.221273]  [<ffffffff9edc3c51>] ra_submit+0x21/0x30
+[ 8485.221285]  [<ffffffff9edb8ba5>] filemap_fault+0x105/0x490
+[ 8485.221298]  [<ffffffff9f366e72>] ? down_read+0x12/0x40
+[ 8485.221445]  [<ffffffffc059fd0e>] __xfs_filemap_fault+0x7e/0x1d0 [xfs]
+[ 8485.221461]  [<ffffffff9ecc2dc0>] ? wake_bit_function+0x40/0x40
+[ 8485.221611]  [<ffffffffc059ff0c>] xfs_filemap_fault+0x2c/0x30 [xfs]
+[ 8485.221624]  [<ffffffff9ede41da>] __do_fault.isra.59+0x8a/0x100
+[ 8485.221639]  [<ffffffff9ede478c>] do_read_fault.isra.61+0x4c/0x1b0
+[ 8485.221651]  [<ffffffff9ede9134>] handle_pte_fault+0x2f4/0xd10
+[ 8485.221669]  [<ffffffff9edebc6d>] handle_mm_fault+0x39d/0x9b0
+[ 8485.221682]  [<ffffffff9f36f5e3>] __do_page_fault+0x203/0x500
+[ 8485.221695]  [<ffffffff9f36f915>] do_page_fault+0x35/0x90
+[ 8485.221708]  [<ffffffff9f36b758>] page_fault+0x28/0x30
+[ 8485.221725] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=firefox,42863/42863, cpu=0
+[ 8490.928095] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.929016] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.929052] swapper/0
+[ 8490.929065] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: P           OE  ------------   3.10.0-957.el7.x86_64 #1
+[ 8490.929074] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 05/20/2014
+[ 8490.929082] Call Trace:
+[ 8490.929094]  <IRQ>  [<ffffffff9f361dc1>] dump_stack+0x19/0x1b
+[ 8490.929117]  [<ffffffffc08e92b2>] lo_filter+0x192/0x1a0 [mod1]
+[ 8490.929131]  [<ffffffff9f2784a8>] nf_iterate+0x98/0xe0
+[ 8490.929144]  [<ffffffff9f278598>] nf_hook_slow+0xa8/0x110
+[ 8490.929157]  [<ffffffff9f2867d6>] __ip_local_out_sk+0xf6/0x100
+[ 8490.929169]  [<ffffffff9f223402>] ? skb_release_data+0xa2/0x140
+[ 8490.929181]  [<ffffffff9f285e90>] ? ip_forward_options+0x1c0/0x1c0
+[ 8490.929192]  [<ffffffff9f2867fb>] ip_local_out_sk+0x1b/0x40
+[ 8490.929204]  [<ffffffff9f286bb4>] ip_queue_xmit+0x144/0x3c0
+[ 8490.929217]  [<ffffffff9f2a0f64>] tcp_transmit_skb+0x4e4/0x9e0
+[ 8490.929230]  [<ffffffff9f2a2fef>] tcp_send_ack+0x11f/0x170
+[ 8490.929242]  [<ffffffff9f29796b>] __tcp_ack_snd_check+0x6b/0x90
+[ 8490.929253]  [<ffffffff9f29daf7>] tcp_rcv_established+0x417/0x770
+[ 8490.929267]  [<ffffffff9f2a86da>] tcp_v4_do_rcv+0x10a/0x350
+[ 8490.929280]  [<ffffffff9f2a9dcc>] tcp_v4_rcv+0x7bc/0x9c0
+[ 8490.929302]  [<ffffffffc080b2ce>] ? ipv4_confirm+0x4e/0x100 [nf_conntrack_ipv4]
+[ 8490.929316]  [<ffffffff9f28285d>] ip_local_deliver_finish+0xbd/0x200
+[ 8490.929329]  [<ffffffff9f282b49>] ip_local_deliver+0x59/0xd0
+[ 8490.929341]  [<ffffffff9f2827a0>] ? ip_rcv_finish+0x370/0x370
+[ 8490.929353]  [<ffffffff9f2824c0>] ip_rcv_finish+0x90/0x370
+[ 8490.929365]  [<ffffffff9f282e79>] ip_rcv+0x2b9/0x410
+[ 8490.929377]  [<ffffffff9f282430>] ? inet_del_offload+0x40/0x40
+[ 8490.929390]  [<ffffffff9f2394f9>] __netif_receive_skb_core+0x729/0xa10
+[ 8490.929404]  [<ffffffff9f2397f8>] __netif_receive_skb+0x18/0x60
+[ 8490.929416]  [<ffffffff9f239880>] netif_receive_skb_internal+0x40/0xc0
+[ 8490.929429]  [<ffffffff9f23a508>] napi_gro_receive+0xd8/0x100
+[ 8490.929466]  [<ffffffffc048343b>] e1000_clean_rx_irq+0x2bb/0x510 [e1000]
+[ 8490.929493]  [<ffffffffc04840dd>] e1000_clean+0x27d/0x8e0 [e1000]
+[ 8490.929506]  [<ffffffff9ecdab94>] ? task_cputime+0x44/0x80
+[ 8490.929520]  [<ffffffff9f239e9f>] net_rx_action+0x26f/0x390
+[ 8490.929534]  [<ffffffff9eca0f05>] __do_softirq+0xf5/0x280
+[ 8490.929546]  [<ffffffff9f37832c>] call_softirq+0x1c/0x30
+[ 8490.929559]  [<ffffffff9ec2e675>] do_softirq+0x65/0xa0
+[ 8490.929570]  [<ffffffff9eca1285>] irq_exit+0x105/0x110
+[ 8490.929582]  [<ffffffff9f3795e6>] do_IRQ+0x56/0xf0
+[ 8490.929596]  [<ffffffff9f36b362>] common_interrupt+0x162/0x162
+[ 8490.929604]  <EOI>  [<ffffffff9f369a20>] ? __cpuidle_text_start+0x8/0x8
+[ 8490.929622]  [<ffffffff9f369c26>] ? native_safe_halt+0x6/0x10
+[ 8490.929633]  [<ffffffff9f369a3e>] default_idle+0x1e/0xc0
+[ 8490.929645]  [<ffffffff9ec366f0>] arch_cpu_idle+0x20/0xc0
+[ 8490.929658]  [<ffffffff9ecfc3ba>] cpu_startup_entry+0x14a/0x1e0
+[ 8490.929673]  [<ffffffff9f34feb7>] rest_init+0x77/0x80
+[ 8490.929686]  [<ffffffff9f9861c6>] start_kernel+0x44b/0x46c
+[ 8490.929697]  [<ffffffff9f985b7b>] ? repair_env_string+0x5c/0x5c
+[ 8490.929708]  [<ffffffff9f985120>] ? early_idt_handler_array+0x120/0x120
+[ 8490.929720]  [<ffffffff9f98572f>] x86_64_start_reservations+0x24/0x26
+[ 8490.929731]  [<ffffffff9f985885>] x86_64_start_kernel+0x154/0x177
+[ 8490.929742]  [<ffffffff9ec000d5>] start_cpu+0x5/0x14
+[ 8490.929752] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.929967] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.933836] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
+[ 8490.934074] [LO] 192.168.129.10:21 -> 192.168.129.1:51598, pkttype=PACKET_HOST, pid=vsftpd,42956/42956, cpu=1
+[ 8490.974014] [LI] 192.168.129.1:51598 -> 192.168.129.10:21, pkttype=PACKET_HOST, pid=swapper/0,0/0, cpu=0
