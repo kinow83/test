@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message test_req {
+ int32 id = 1;
+ string name = 2;
+ string query = 3;
+}
+
+message test_res {
+ int32 id = 1;
+ int32 code = 2;
+ string msg = 3;
+}
