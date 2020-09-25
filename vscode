@@ -1,0 +1,13 @@
+extension 필수: 
+ - Remote Development
+인트라넷에서 remote SSH 연동:
+ - vscode 커밋 ID 필요: about 메뉴에 나옴
+ - https://update.code.visualstudio.com/commit:c7d83e57cd18f18026a8162d042843bda1bcf21f/server-linux-x64/stable
+ - vscode의 커밋 ID를 넣어 vscode-server-linux-x64.tar.gz 다운받음
+ - ssh 서버(개발서버) 접속 (root인 경우)
+  - cd /root/.vscode-server/bin/
+  - rm -fr *
+  - cp /root/vscode-server-linux-x64.tar.gz .
+  - tar vfxz vscode-server-linux-x64.tar.gz --strip-components=1
+  - ps -ef |grep vscode-server : 프로세스 kill
+  - vscode에서 remote SSH 
