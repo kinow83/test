@@ -9,3 +9,6 @@ make menuconfig
 scripts/config --disable SYSTEM_TRUSTED_KEYS
 make modules -j 4
 make modules -j 4 M=drivers/net/wireless/ath/ath10k
+
+
+https://starrykss.tistory.com/1722
