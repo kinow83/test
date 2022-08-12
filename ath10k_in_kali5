@@ -1,0 +1,11 @@
+
+apt install linux-source
+apt source linux-source
+
+cd /usr/src/<kernel-source>
+cp /lib/modules/5.18.0-kali5-amd64/build/Module.symvers .
+cp -v cp /boot/config-5.18.0-kali5-amd64 .config
+make menuconfig
+scripts/config --disable SYSTEM_TRUSTED_KEYS
+make modules -j 4
+make modules -j 4 M=drivers/net/wireless/ath/ath10k
