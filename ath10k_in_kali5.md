@@ -64,3 +64,27 @@ https://hiaurea.tistory.com/32
 해결 : dnf --enablerepo=powertools install dwarves
       apt install dwarves
 ```
+
+## ath10k driver source analysis
+```
+1. [pic.c] static struct pci_driver ath10k_pci_driver = {
+  .probe = ath10k_pci_probe,
+}
+
+2. [pic.c] static int ath10k_pci_probe(struct pci_dev *pdev,
+			    const struct pci_device_id *pci_dev) {
+  ret = ath10k_pci_init_irq(ar);
+}
+
+3. [pic.c] static int ath10k_pci_init_irq(struct ath10k *ar) {
+  ath10k_pci_init_napi(ar);
+}
+
+4. [pic.c] void ath10k_pci_init_napi(struct ath10k *ar) {
+	netif_napi_add(&ar->napi_dev, &ar->napi, ath10k_pci_napi_poll, ATH10K_NAPI_BUDGET);
+}
+
+5. static int ath10k_pci_napi_poll(struct napi_struct *ctx, int budget) {
+  done = ath10k_htt_txrx_compl_task(ar, budget);
+}
+```
