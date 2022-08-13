@@ -41,6 +41,16 @@ linux-source-5.18/kali-rolling,now 5.18.5-1kali6 all [installed,automatic]
 # tail -f  /var/log/syslog <- printk debug
 ```
 
+## Debugging
+ref: https://wireless.wiki.kernel.org/en/users/drivers/ath10k/debug
+```
+make menuconfig
+Device Drivers -->
+	Network device support -->
+		Wireless LAN -->
+			Atheros ath10k XXXXXX
+```
+
 ## Errors
 Error#1
 ```
